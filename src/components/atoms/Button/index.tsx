@@ -7,7 +7,7 @@ import { FaSolidXmark } from "solid-icons/fa";
 import { buttonStyles } from "./styles";
 import type { ButtonProps } from "./types";
 
-export function Button<T extends ValidComponent = "button">(
+export default function Button<T extends ValidComponent = "button">(
 	props: PolymorphicProps<T, ButtonProps<T>>,
 ) {
 	const [local, variantProps, others] = splitProps(

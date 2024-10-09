@@ -1,2 +1,6 @@
-const dict = {} as const;
+import errors from "./errors";
+
+const dict = {
+	errors,
+} as const;
 export default dict;

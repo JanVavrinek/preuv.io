@@ -1,8 +1,8 @@
 import type { ButtonRootProps } from "@kobalte/core/button";
+import type { SlotProp } from "@utils/styles";
 import type { JSX, ValidComponent } from "solid-js";
 import type { VariantProps } from "tailwind-variants";
 import type { buttonStyles } from "./styles";
-import type { SlotProp } from "@utils/styles";
 
 export type ButtonVariants = VariantProps<typeof buttonStyles>;
 
