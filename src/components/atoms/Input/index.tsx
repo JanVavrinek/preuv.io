@@ -58,12 +58,14 @@ export default function Input<T, U, W extends ValidComponent = "div">(
 			{...others}
 		>
 			<Show when={local.label}>
-				<TextField.Label class="pl-2">{local.label}</TextField.Label>
+				<TextField.Label class="pl-2 dark:text-pv-blue-200">
+					{local.label}
+				</TextField.Label>
 			</Show>
-			<div class="relative flex h-14 flex-row items-center rounded-2xl border-4 border-pv-blue-900 bg-pv-blue-100 px-2 transition-all duration-300 group-data-[invalid]:border-pv-red-400">
+			<div class="focus-within:-translate-x-[5px] focus-within:-translate-y-[5px] relative flex h-14 flex-row items-center rounded-2xl border-4 border-pv-blue-900 bg-pv-blue-100 transition-all duration-300 focus-within:shadow-lg focus-within:shadow-pv-blue-950 group-data-[invalid]:border-pv-red-400 dark:border-pv-blue-950 dark:bg-pv-blue-600 dark:text-pv-blue-200">
 				<TextField.Input
 					type={type()}
-					class="h-full w-full border-none bg-transparent outline-none"
+					class="h-full w-full border-none bg-transparent px-2 outline-none"
 					placeholder={local.placeholder}
 					{...inputProps.inputProps}
 				/>
