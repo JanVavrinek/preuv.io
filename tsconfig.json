@@ -18,7 +18,9 @@
 		"paths": {
 			"@utils/*": ["./src/lib/utils/*"],
 			"@lib/*": ["./src/lib/*"],
-			"@atoms/*": ["./src/components/atoms/*"]
+			"@atoms/*": ["./src/components/atoms/*"],
+			"@molecules/*": ["./src/components/molecules/*"],
+			"@contexts/*": ["./src/contexts/*"]
 		}
 	}
 }

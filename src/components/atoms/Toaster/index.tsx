@@ -12,7 +12,7 @@ const Toast: VoidComponent<{
 }> = (props) => (
 	<KToast
 		toastId={props.toastId}
-		class="relative overflow-hidden rounded-2xl border-4 border-pv-blue-900 bg-white shadow-md shadow-pv-blue-900 dark:border-pv-blue-950 dark:bg-pv-blue-800 dark:shadow-pv-blue-950"
+		class="relative overflow-hidden rounded-2xl border bg-white shadow-md shadow-pv-blue-900 dark:bg-pv-blue-800 dark:shadow-pv-blue-950"
 		classList={{
 			[style.toaster__root]: true,
 		}}
@@ -61,7 +61,7 @@ const promise = <T, U extends object = object>(
 	toaster.promise(p, (props) => (
 		<KToast
 			toastId={props.toastId}
-			class="relative overflow-hidden rounded-2xl border-4 border-pv-blue-900 bg-white shadow-md shadow-pv-blue-900 dark:border-pv-blue-950 dark:bg-pv-blue-800 dark:shadow-pv-blue-950"
+			class="relative overflow-hidden rounded-2xl border bg-white shadow-md shadow-pv-blue-900 dark:bg-pv-blue-800 dark:shadow-pv-blue-950"
 			classList={{
 				[style.toaster__root]: true,
 			}}

@@ -2,27 +2,30 @@ import Button from "@atoms/Button";
 import Input from "@atoms/Input";
 import { toast } from "@atoms/Toaster";
 import useI18n from "@lib/i18n/hooks/useI18n";
-import { pb } from "@lib/pocketbase";
 import { type LoginSchema, loginSchema } from "@lib/schemas/routes/auth";
+import supabase from "@lib/supabase";
 import { type SubmitHandler, createForm, zodForm } from "@modular-forms/solid";
 import { Title } from "@solidjs/meta";
+import { useNavigate } from "@solidjs/router";
 
 export default function SignInView() {
 	const { c } = useI18n();
+	const navigate = useNavigate();
 	const [loginForm, { Form, Field }] = createForm<LoginSchema>({
 		validate: zodForm(loginSchema),
 	});
 
 	const handleSubmit: SubmitHandler<LoginSchema> = async (values) => {
-		const p = pb
-			.collection("users")
-			.authWithPassword(values.email, values.password);
-
+		const p = supabase.auth.signInWithPassword({
+			email: values.email,
+			password: values.password,
+		});
 		toast.promise(p, {
 			loading: { title: c.auth.signIn.toasts.sigIn.loading() },
 			success: () => ({ title: c.auth.signIn.toasts.sigIn.success() }),
 			error: () => ({ title: c.auth.signIn.toasts.sigIn.error() }),
 		});
+		p.then(() => navigate("/app/dashboard"));
 	};
 
 	return (
