@@ -3,7 +3,6 @@ import { Show, type ValidComponent, createMemo, splitProps } from "solid-js";
 
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
 import { runIfFn } from "@utils/styles";
-import { FaSolidXmark } from "solid-icons/fa";
 import { buttonStyles } from "./styles";
 import type { ButtonProps } from "./types";
 
@@ -35,9 +34,7 @@ export default function Button<T extends ValidComponent = "button">(
 					class: [local.slotClasses?.icon],
 				})}
 			>
-				<Show when={icon()} fallback={<FaSolidXmark class="" />}>
-					{icon()}
-				</Show>
+				<Show when={icon()}>{icon()}</Show>
 			</span>
 			{local.children}
 		</KButton>

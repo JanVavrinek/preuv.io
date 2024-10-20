@@ -1,1 +1,12 @@
 # preuv.io
+
+## Environment variables
+
+```
+VITE_JWT_SECRET=""
+VITE_SUPABASE="" # url of your supabase instance
+VITE_SUPABASE_ANON_KEY=""
+VITE_BASE_URL="http://localhost:3000" # the root url of your app 
+VITE_DB_URL="" # postgres connection string
+VITE_EMAIL_CONFIRM_REDIRECT="http://localhost:3000/auth/signin" # the url and a path
+```

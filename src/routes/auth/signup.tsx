@@ -6,22 +6,24 @@ import { type LoginSchema, loginSchema } from "@lib/schemas/routes/auth";
 import supabase from "@lib/supabase";
 import { type SubmitHandler, createForm, zodForm } from "@modular-forms/solid";
 import { Title } from "@solidjs/meta";
-import { A, useNavigate } from "@solidjs/router";
-import type { AuthTokenResponsePassword } from "@supabase/supabase-js";
+import { A } from "@solidjs/router";
+import type { AuthResponse } from "@supabase/supabase-js";
 
-export default function SignInView() {
+export default function SignUpView() {
 	const { c } = useI18n();
-	const navigate = useNavigate();
-	const [loginForm, { Form, Field }] = createForm<LoginSchema>({
+	const [signUpForm, { Form, Field }] = createForm<LoginSchema>({
 		validate: zodForm(loginSchema),
 	});
 
 	const handleSubmit: SubmitHandler<LoginSchema> = async (values) => {
-		const p = new Promise<AuthTokenResponsePassword["data"]>((res, rej) => {
+		const p = new Promise<AuthResponse["data"]>((res, rej) => {
 			supabase.auth
-				.signInWithPassword({
+				.signUp({
 					email: values.email,
 					password: values.password,
+					options: {
+						emailRedirectTo: import.meta.env.VITE_EMAIL_CONFIRM_REDIRECT,
+					},
 				})
 				.then((data) => {
 					if (data.error) rej(data.error.status);
@@ -29,17 +31,16 @@ export default function SignInView() {
 				});
 		});
 		toast.promise<number>(p, {
-			loading: { title: c.auth.signIn.toasts.sigIn.loading() },
-			success: () => ({ title: c.auth.signIn.toasts.sigIn.success() }),
-			error: (e) => ({ title: c.auth.signIn.toasts.sigIn.error(e ?? 0) }),
+			loading: { title: c.auth.signUp.toasts.signUp.loading() },
+			error: (e) => ({ title: c.auth.signUp.toasts.signUp.error(e ?? 0) }),
+			success: () => ({ title: c.auth.signUp.toasts.signUp.success() }),
 		});
-		p.then(() => navigate("/app/dashboard"));
 	};
 
 	return (
 		<div class="flex flex-col gap-5">
-			<Title>{c.auth.signIn.title()}</Title>
-			<h1 class="font-bold text-4xl">{c.auth.signIn.title()}</h1>
+			<Title>{c.auth.signUp.title()}</Title>
+			<h1 class="font-bold text-4xl">{c.auth.signUp.title()}</h1>
 			<Form onSubmit={handleSubmit} class="flex flex-col gap-2">
 				<Field name="email">
 					{(field, props) => (
@@ -68,15 +69,14 @@ export default function SignInView() {
 						/>
 					)}
 				</Field>
-
-				<Button disabled={loginForm.invalid} type="submit">
-					Sign In
+				<Button disabled={signUpForm.invalid} type="submit">
+					{c.auth.signUp.title()}
 				</Button>
 			</Form>
-			<A class="flex justify-center gap-1 p-1" href="/auth/signup">
-				{c.auth.signIn.noAccount()}
+			<A class="flex justify-center gap-1 p-1" href="/auth/signin">
+				{c.auth.signUp.haveAccount()}
 				<span class="font-semibold text-pv-navy-500">
-					{c.auth.signUp.title()}
+					{c.auth.signIn.title()}
 				</span>
 			</A>
 		</div>

@@ -1,10 +1,12 @@
-import { type ParentProps, createContext } from "solid-js";
+import { client } from "@lib/trpc/client";
+import { useNavigate } from "@solidjs/router";
+import { type ParentProps, Show, createContext, onMount } from "solid-js";
 import { type SetStoreFunction, createStore } from "solid-js/store";
 import type { User } from "./types";
 
 const EMPTY_USER: User = {
-	email: "",
-	username: "",
+	id: "",
+	name: "",
 };
 
 export const userContext = createContext<{
@@ -17,10 +19,25 @@ export const userContext = createContext<{
 
 export default function UserProvider(props: ParentProps) {
 	const [user, setUser] = createStore<User>({ ...EMPTY_USER });
+	const navigate = useNavigate();
+
+	onMount(async () => {
+		let foundUser: User | undefined = undefined;
+		try {
+			foundUser = await client.user.getCurrent.query();
+		} catch {
+			try {
+				foundUser = await client.user.createCurrent.mutate();
+			} catch {
+				navigate("/auth/login");
+			}
+		}
+		if (foundUser) setUser(foundUser);
+	});
 
 	return (
 		<userContext.Provider value={{ user, setUser }}>
-			{props.children}
+			<Show when={user.id.length}>{props.children}</Show>
 		</userContext.Provider>
 	);
 }

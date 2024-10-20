@@ -1,22 +1,27 @@
+import Dropdown from "@atoms/Dropdown";
 import { Tabs } from "@kobalte/core/tabs";
 import { A, useLocation } from "@solidjs/router";
 import { createSignal } from "solid-js";
 
 const ITEM_CLASS =
-	"w-full relative flex flex-row gap-5 p-4 text-pv-blue-300 hover:text-pv-blue-200 transition-all duration-150 data-[selected]:text-white";
+	"w-full relative flex flex-row gap-5 p-4 text-pv-blue-700 hover:text-pv-blue-600 hover:bg-pv-navy-200 data-[highlighted]:bg-transparent transition-all duration-150 data-[selected]:text-white hover:rounded-full";
 export default function Sidebar() {
 	const location = useLocation();
 	const [value, setValue] = createSignal(location.pathname ?? "/app/dashboard");
+
 	return (
 		<Tabs
 			as="nav"
 			orientation="vertical"
-			class="h-dvh w-full max-w-72"
+			class="flex h-dvh w-full max-w-72 flex-col gap-4 border border-pv-blue-200 bg-pv-blue-50 py-4 shadow-lg"
 			value={value()}
 			onChange={setValue}
 			defaultValue="/app/dashboard"
 		>
-			<Tabs.List class="relative z-0 flex h-full w-full flex-col gap-4 bg-pv-blue-50 p-5 shadow-lg dark:bg-gray-800 ">
+			<A href="/app/dashboard" class="text-center text-4xl text-pv-blue-300">
+				preuv.io
+			</A>
+			<Tabs.List class="relative z-0 flex h-full w-full flex-col gap-4 p-5 ">
 				<Tabs.Trigger
 					value="/app/dashboard"
 					href="/app/dashboard"
@@ -37,6 +42,11 @@ export default function Sidebar() {
 					<div class="h-full w-full rounded-full bg-pv-navy-500" />
 				</Tabs.Indicator>
 			</Tabs.List>
+			<div class="px-5">
+				<Dropdown items={[]} class="w-full">
+					org
+				</Dropdown>
+			</div>
 		</Tabs>
 	);
 }

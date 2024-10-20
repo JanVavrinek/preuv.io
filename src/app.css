@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 @font-face {
-	font-family: "Bricolage";
-	src: url("/fonts/bricolage.ttf") format("truetype");
+	font-family: "SpaceGrotesk";
+	src: url("/fonts/space.ttf") format("truetype");
 	font-display: swap;
 }
 
 :root {
 	--app-font-size: medium;
 	font-size: var(--app-font-size);
-	font-family: "Bricolage", serif;
+	font-family: "SpaceGrotesk", serif;
 }
