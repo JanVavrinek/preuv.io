@@ -1,8 +1,8 @@
 import supabase from "@lib/supabase";
 import { createTRPCClient, httpBatchLink, loggerLink } from "@trpc/client";
+import superjson from "superjson";
 import { LocalStorageKey } from "../../consts";
 import type { AppRouter } from "./router";
-
 export const client = createTRPCClient<AppRouter>({
 	links: [
 		loggerLink(),
@@ -21,6 +21,7 @@ export const client = createTRPCClient<AppRouter>({
 				if (!token) return headers;
 				return { ...headers, Authorization: `Bearer ${token}` };
 			},
+			transformer: superjson,
 		}),
 	],
 });

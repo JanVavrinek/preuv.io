@@ -29,5 +29,9 @@
 }
 
 .item {
-	@apply p-2 min-h-7 flex flex-row items-center hover:bg-pv-blue-50 rounded-md cursor-pointer;
+	@apply p-2 min-h-7 flex flex-row items-center hover:bg-pv-blue-50 rounded-md cursor-pointer data-[disabled]:opacity-75 data-[disabled]:cursor-not-allowed;
+}
+
+.arrow {
+	@apply ml-3;
 }

@@ -4,10 +4,8 @@ import { toast } from "@atoms/Toaster";
 import { userContext } from "@contexts/User";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
-import {
-	type UserUpdateMutationInputSchema,
-	userUpdateMutationInputSchema as schema,
-} from "@lib/trpc/routers/user/schemas";
+import { userUpdateMutationInputSchema as schema } from "@lib/trpc/routers/user/schemas";
+import type { UserUpdateMutationInputSchema } from "@lib/trpc/routers/user/types";
 import { type SubmitHandler, createForm, zodForm } from "@modular-forms/solid";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
 import { useContext } from "solid-js";

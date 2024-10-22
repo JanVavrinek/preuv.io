@@ -48,7 +48,7 @@ export default function Dropdown(props: ParentProps<DropdownProps>) {
 											class={styles.item}
 										>
 											{item.label}
-											<FaSolidAngleRight />
+											<FaSolidAngleRight class={styles.arrow} />
 										</DropdownMenu.SubTrigger>
 										<DropdownMenu.Portal>
 											<DropdownMenu.SubContent class={styles.content}>

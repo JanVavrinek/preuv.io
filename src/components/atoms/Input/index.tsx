@@ -62,7 +62,7 @@ export default function Input<T, U, W extends ValidComponent = "div">(
 					{local.label}
 				</TextField.Label>
 			</Show>
-			<div class=" focus-within:-translate-y-[5px] relative flex h-14 flex-row items-center rounded-2xl border border-pv-blue-200 bg-pv-blue-100 transition-all duration-300 focus-within:shadow-lg group-data-[invalid]:border-pv-red-400">
+			<div class=" focus-within:-translate-y-1 relative flex h-14 flex-row items-center rounded-2xl border border-pv-blue-200 bg-pv-blue-100 transition-all duration-300 focus-within:shadow-lg group-data-[invalid]:border-pv-red-400">
 				<TextField.Input
 					type={type()}
 					class="h-full w-full border-none bg-transparent px-2 outline-none"

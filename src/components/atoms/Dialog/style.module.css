@@ -1,0 +1,61 @@
+@keyframes overlayShow {
+	from {
+		backdrop-filter: blur(0) saturate(1);
+		opacity: 0;
+	}
+
+	to {
+		backdrop-filter: blur(8px) saturate(0.6);
+		opacity: 1;
+	}
+}
+
+@keyframes overlayHide {
+	from {
+		backdrop-filter: blur(8px) saturate(0.6);
+		opacity: 1;
+	}
+
+	to {
+		backdrop-filter: blur(0) saturate(1);
+		opacity: 0;
+	}
+}
+
+@keyframes dialogShow {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes dialogHide {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+.dialog__overlay {
+	@apply fixed inset-0 h-dvh w-dvw;
+	background: radial-gradient(#0000001c, #000000a0);
+	animation: overlayHide .2s ease forwards;
+
+	&:is([data-expanded]) {
+		animation: overlayShow .2s ease forwards;
+	}
+}
+
+.dialog__content {
+	animation: dialogHide .2s ease forwards;
+
+	&:is([data-expanded]) {
+		animation: dialogShow .2s ease forwards;
+	}
+}

@@ -26,8 +26,8 @@ export async function getUsersOrganizations(
 		.from(organization)
 		.offset(offset)
 		.limit(limit)
-		.leftJoin(role, eq(role.organization_id, organization.id))
-		.leftJoin(member, eq(role.id, member.role_id));
+		.innerJoin(role, eq(role.organization_id, organization.id))
+		.innerJoin(member, eq(role.id, member.role_id));
 	if (organizationId)
 		query.where(
 			and(eq(member.user_id, userId), eq(organization.id, organizationId)),
