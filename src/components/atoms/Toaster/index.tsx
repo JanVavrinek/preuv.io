@@ -34,19 +34,8 @@ const Toast: VoidComponent<{
 	</KToast>
 );
 
-const show = (
-	title: JSX.Element,
-	description?: JSX.Element,
-	type: ToastType = ToastType.DEFAULT,
-) =>
-	toaster.show((props) => (
-		<Toast
-			description={description}
-			title={title}
-			toastId={props.toastId}
-			type={type}
-		/>
-	));
+const show = (title: JSX.Element, description?: JSX.Element, type: ToastType = ToastType.DEFAULT) =>
+	toaster.show((props) => <Toast description={description} title={title} toastId={props.toastId} type={type} />);
 
 const promise = <T, U extends object = object>(
 	p: Promise<U | undefined> | (() => Promise<U | undefined>),
@@ -68,12 +57,8 @@ const promise = <T, U extends object = object>(
 				<div class="flex items-center gap-2">
 					<KToast.Title class="text-xl">
 						<Switch fallback={options.loading.title}>
-							<Match when={props.state === "rejected"}>
-								{options.error(props.error).title}
-							</Match>
-							<Match when={props.state === "fulfilled"}>
-								{options.success(props.data).title}
-							</Match>
+							<Match when={props.state === "rejected"}>{options.error(props.error).title}</Match>
+							<Match when={props.state === "fulfilled"}>{options.success(props.data).title}</Match>
 						</Switch>
 					</KToast.Title>
 				</div>
@@ -87,24 +72,18 @@ const promise = <T, U extends object = object>(
 			<Switch
 				fallback={
 					<Show when={options.loading.description}>
-						<KToast.Description class="p-2">
-							{options.loading.description}
-						</KToast.Description>
+						<KToast.Description class="p-2">{options.loading.description}</KToast.Description>
 					</Show>
 				}
 			>
 				<Match when={props.state === "rejected"}>
 					<Show when={options.error(props.error).description}>
-						<KToast.Description class="p-2">
-							{options.error(props.error).description}
-						</KToast.Description>
+						<KToast.Description class="p-2">{options.error(props.error).description}</KToast.Description>
 					</Show>
 				</Match>
 				<Match when={props.state === "fulfilled"}>
 					<Show when={options.success(props.data).description}>
-						<KToast.Description class="p-2">
-							{options.success(props.data).description}
-						</KToast.Description>
+						<KToast.Description class="p-2">{options.success(props.data).description}</KToast.Description>
 					</Show>
 				</Match>
 			</Switch>

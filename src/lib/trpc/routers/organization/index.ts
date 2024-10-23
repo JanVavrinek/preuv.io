@@ -18,20 +18,13 @@ export default router({
 		.use(isAuthorized)
 		.input(paginationSchema)
 		.query(async (opts) => {
-			return getUsersOrganizations(
-				opts.ctx.user.sub,
-				undefined,
-				opts.input.offset,
-				opts.input.limit,
-			);
+			return getUsersOrganizations(opts.ctx.user.sub, undefined, opts.input.offset, opts.input.limit);
 		}),
 	getOne: procedure
 		.use(isAuthorized)
 		.input(organizationSelectModelSchema.shape.id)
 		.query(async (opts) => {
-			return (
-				await getUsersOrganizations(opts.ctx.user.sub, opts.input, 0, 1)
-			).at(0);
+			return (await getUsersOrganizations(opts.ctx.user.sub, opts.input, 0, 1)).at(0);
 		}),
 	create: procedure
 		.use(isAuthorized)
@@ -43,32 +36,39 @@ export default router({
 				organization: OrganizationSelectModel;
 				role: RoleSelectModel;
 			}> => {
-				const org = (
-					await db
-						.insert(organization)
-						.values({ name: opts.input.organizationName })
-						.returning()
-				).at(0);
-				if (!org) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
-				const createdRole = (
-					await db
-						.insert(role)
-						.values({
-							name: opts.input.ownerRoleName,
-							permissions: [],
-							owner: true,
-							organization_id: org.id,
-						})
-						.returning()
-				).at(0);
-				if (!createdRole)
-					throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+				const res = await db.transaction(async (tx) => {
+					const org = (await tx.insert(organization).values({ name: opts.input.organizationName }).returning()).at(0);
 
-				await db.insert(member).values({
-					user_id: opts.ctx.user.sub,
-					role_id: createdRole.id,
+					if (!org) {
+						tx.rollback();
+						return;
+					}
+
+					const createdRole = (
+						await tx
+							.insert(role)
+							.values({
+								name: opts.input.ownerRoleName,
+								permissions: [],
+								owner: true,
+								organization_id: org.id,
+							})
+							.returning()
+					).at(0);
+
+					if (!createdRole) {
+						tx.rollback();
+						return;
+					}
+
+					await tx.insert(member).values({
+						user_id: opts.ctx.user.sub,
+						role_id: createdRole.id,
+					});
+					return { organization: org, role: createdRole };
 				});
-				return { organization: org, role: createdRole };
+				if (!res) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+				return res;
 			},
 		),
 });

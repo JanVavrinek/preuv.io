@@ -13,15 +13,12 @@ import { useContext } from "solid-js";
 export default function AccountView() {
 	const { c } = useI18n();
 	const { user, setUser } = useContext(userContext);
-	const [updateForm, { Field, Form }] =
-		createForm<UserUpdateMutationInputSchema>({
-			validate: zodForm(schema),
-			initialValues: user,
-		});
+	const [updateForm, { Field, Form }] = createForm<UserUpdateMutationInputSchema>({
+		validate: zodForm(schema),
+		initialValues: user,
+	});
 
-	const handleSubmit: SubmitHandler<UserUpdateMutationInputSchema> = async (
-		values,
-	) => {
+	const handleSubmit: SubmitHandler<UserUpdateMutationInputSchema> = async (values) => {
 		const p = client.user.updateCurrent.mutate(values);
 
 		toast.promise(p, {
@@ -52,10 +49,7 @@ export default function AccountView() {
 							/>
 						)}
 					</Field>
-					<Button
-						type="submit"
-						disabled={updateForm.invalid || updateForm.submitting}
-					>
+					<Button type="submit" disabled={updateForm.invalid || updateForm.submitting}>
 						{c.generic.actions.save()}
 					</Button>
 				</Form>

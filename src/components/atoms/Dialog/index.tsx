@@ -6,11 +6,7 @@ import { dialogStyles } from "./styles";
 import type { DialogProps } from "./types";
 
 export function Dialog(props: DialogProps) {
-	const [variantProps, local] = splitProps(props as DialogProps, [
-		"class",
-		"children",
-		"slotClasses",
-	]);
+	const [variantProps, local] = splitProps(props as DialogProps, ["class", "children", "slotClasses"]);
 
 	const styles = createMemo(() => dialogStyles(variantProps));
 
@@ -27,10 +23,7 @@ export function Dialog(props: DialogProps) {
 					>
 						<div class="flex w-full flex-row items-center justify-between gap-3 rounded-tl-xl rounded-tr-xl border-pv-blue-200 border-b p-3">
 							<div class="flex flex-col">
-								<Show
-									when={typeof local.title === "string" && local.title}
-									fallback={local.title}
-								>
+								<Show when={typeof local.title === "string" && local.title} fallback={local.title}>
 									<KDialog.Title
 										class={styles().title({
 											class: [variantProps.slotClasses?.title],
@@ -39,12 +32,7 @@ export function Dialog(props: DialogProps) {
 										{local.title}
 									</KDialog.Title>
 								</Show>
-								<Show
-									when={
-										typeof local.description === "string" && local.description
-									}
-									fallback={local.description}
-								>
+								<Show when={typeof local.description === "string" && local.description} fallback={local.description}>
 									<KDialog.Description
 										class={styles().description({
 											class: [variantProps.slotClasses?.description],

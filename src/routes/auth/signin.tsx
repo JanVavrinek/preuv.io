@@ -75,9 +75,7 @@ export default function SignInView() {
 			</Form>
 			<A class="flex justify-center gap-1 p-1" href="/auth/signup">
 				{c.auth.signIn.noAccount()}
-				<span class="font-semibold text-pv-navy-500">
-					{c.auth.signUp.title()}
-				</span>
+				<span class="font-semibold text-pv-navy-500">{c.auth.signUp.title()}</span>
 			</A>
 		</div>
 	);

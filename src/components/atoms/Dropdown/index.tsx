@@ -42,11 +42,7 @@ export default function Dropdown(props: ParentProps<DropdownProps>) {
 							>
 								{(subItems) => (
 									<DropdownMenu.Sub gutter={4}>
-										<DropdownMenu.SubTrigger
-											disabled={item.disabled}
-											onSelect={item.onSelect}
-											class={styles.item}
-										>
+										<DropdownMenu.SubTrigger disabled={item.disabled} onSelect={item.onSelect} class={styles.item}>
 											{item.label}
 											<FaSolidAngleRight class={styles.arrow} />
 										</DropdownMenu.SubTrigger>
@@ -55,7 +51,7 @@ export default function Dropdown(props: ParentProps<DropdownProps>) {
 												<For each={subItems}>
 													{(subItem) => (
 														<DropdownMenu.Item
-															onclick={subItem.onSelect}
+															onSelect={subItem.onSelect}
 															disabled={subItem.disabled}
 															class={styles.item}
 															as={item.href ? A : undefined}

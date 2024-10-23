@@ -17,15 +17,7 @@ export interface InputProps<T, U, W extends ValidComponent = "div">
 	icon?: JSX.Element;
 	class?: string;
 	parseResult?: z.SafeParseReturnType<T, U>;
-	type?:
-		| "text"
-		| "email"
-		| "tel"
-		| "password"
-		| "url"
-		| "number"
-		| "date"
-		| string;
+	type?: "text" | "email" | "tel" | "password" | "url" | "number" | "date" | string;
 	placeholder?: string;
 	label?: JSX.Element;
 	description?: JSX.Element;
@@ -33,14 +25,8 @@ export interface InputProps<T, U, W extends ValidComponent = "div">
 	inputProps?: {
 		name?: string;
 		ref: (element: HTMLInputElement | HTMLTextAreaElement) => void;
-		onInput: JSX.EventHandler<
-			HTMLInputElement | HTMLTextAreaElement,
-			InputEvent
-		>;
+		onInput: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, InputEvent>;
 		onChange: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, Event>;
-		onBlur: JSX.EventHandler<
-			HTMLInputElement | HTMLTextAreaElement,
-			FocusEvent
-		>;
+		onBlur: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, FocusEvent>;
 	};
 }

@@ -11,18 +11,14 @@ import { type SubmitHandler, createForm, zodForm } from "@modular-forms/solid";
 import { type VoidProps, batch, useContext } from "solid-js";
 import type { CreateOrganizationProps } from "./types";
 
-export default function CreateOrganization(
-	props: VoidProps<CreateOrganizationProps>,
-) {
+export default function CreateOrganization(props: VoidProps<CreateOrganizationProps>) {
 	const { c } = useI18n();
 	const [orgForm, { Form, Field }] = createForm({
 		validate: zodForm(schema),
 	});
 	const { setOrganizations } = useContext(organizationsContext);
 
-	const handleSubmit: SubmitHandler<OrganizationCreateMutationInput> = async (
-		values,
-	) => {
+	const handleSubmit: SubmitHandler<OrganizationCreateMutationInput> = async (values) => {
 		const p = client.organization.create.mutate(values);
 		toast.promise(p, {
 			loading: { title: c.generic.toasts.loading() },

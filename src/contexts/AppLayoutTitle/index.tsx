@@ -1,10 +1,4 @@
-import {
-	type Accessor,
-	type ParentProps,
-	type Setter,
-	createContext,
-	createSignal,
-} from "solid-js";
+import { type Accessor, type ParentProps, type Setter, createContext, createSignal } from "solid-js";
 
 export const appLayoutTitleContext = createContext<{
 	setTitle: Setter<string>;
@@ -16,9 +10,5 @@ export const appLayoutTitleContext = createContext<{
 
 export function AppLayoutTitleProvider(props: ParentProps) {
 	const [title, setTitle] = createSignal("");
-	return (
-		<appLayoutTitleContext.Provider value={{ title, setTitle }}>
-			{props.children}
-		</appLayoutTitleContext.Provider>
-	);
+	return <appLayoutTitleContext.Provider value={{ title, setTitle }}>{props.children}</appLayoutTitleContext.Provider>;
 }

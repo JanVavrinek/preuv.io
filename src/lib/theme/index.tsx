@@ -1,16 +1,5 @@
-import {
-	getCookie as clientGetCookie,
-	setCookie as clientSetCookie,
-	cookieExists,
-	removeCookie,
-} from "@utils/cookies";
-import {
-	type Accessor,
-	type ParentProps,
-	createContext,
-	createSignal,
-	onMount,
-} from "solid-js";
+import { getCookie as clientGetCookie, setCookie as clientSetCookie, cookieExists, removeCookie } from "@utils/cookies";
+import { type Accessor, type ParentProps, createContext, createSignal, onMount } from "solid-js";
 import { isServer } from "solid-js/web";
 import { CookieKey } from "../../consts";
 import { appThemeSchema } from "./schemas";
@@ -32,8 +21,7 @@ export function AppThemeProvider(props: ParentProps) {
 		if (!theme) {
 			removeCookie(CookieKey.THEME);
 			if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-				if (!document.body.classList.contains("dark"))
-					document.body.classList.add("dark");
+				if (!document.body.classList.contains("dark")) document.body.classList.add("dark");
 			}
 		} else {
 			clientSetCookie(CookieKey.THEME, theme);
@@ -45,10 +33,7 @@ export function AppThemeProvider(props: ParentProps) {
 		let theme: AppTheme | undefined;
 		if (isServer) return theme;
 		try {
-			if (
-				!cookieExists(CookieKey.THEME) &&
-				window.matchMedia("(prefers-color-scheme: dark)").matches
-			) {
+			if (!cookieExists(CookieKey.THEME) && window.matchMedia("(prefers-color-scheme: dark)").matches) {
 				document.body.classList.add("dark");
 				return;
 			}
@@ -64,9 +49,5 @@ export function AppThemeProvider(props: ParentProps) {
 
 	onMount(getTheme);
 
-	return (
-		<appThemeContext.Provider value={{ theme, setTheme: updateTheme }}>
-			{props.children}
-		</appThemeContext.Provider>
-	);
+	return <appThemeContext.Provider value={{ theme, setTheme: updateTheme }}>{props.children}</appThemeContext.Provider>;
 }

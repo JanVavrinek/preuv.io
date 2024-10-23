@@ -12,35 +12,27 @@ export default router({
 		.use(isAuthorized)
 		.use(getCurrentUser)
 		.query(async (opts): Promise<UserSelectModel> => opts.ctx.currentUser),
-	createCurrent: procedure
-		.use(isAuthorized)
-		.mutation(async (opts): Promise<UserSelectModel> => {
-			const foundUser = (
-				await db.select().from(user).where(eq(user.id, opts.ctx.user.sub))
-			).at(0);
-			if (foundUser) return foundUser;
-			const createdUser = (
-				await db
-					.insert(user)
-					.values({
-						id: opts.ctx.user.sub,
-						name: opts.ctx.user.email.split("@")[0],
-					})
-					.returning()
-			).at(0);
-			if (!createdUser) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
-			return createdUser;
-		}),
+	createCurrent: procedure.use(isAuthorized).mutation(async (opts): Promise<UserSelectModel> => {
+		const foundUser = (await db.select().from(user).where(eq(user.id, opts.ctx.user.sub))).at(0);
+		if (foundUser) return foundUser;
+		const createdUser = (
+			await db
+				.insert(user)
+				.values({
+					id: opts.ctx.user.sub,
+					name: opts.ctx.user.email.split("@")[0],
+				})
+				.returning()
+		).at(0);
+		if (!createdUser) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+		return createdUser;
+	}),
 	updateCurrent: procedure
 		.input(userUpdateMutationInputSchema)
 		.use(isAuthorized)
 		.mutation(async (opts): Promise<UserSelectModel | undefined> => {
 			return (
-				await db
-					.update(user)
-					.set({ name: opts.input.name })
-					.where(eq(user.id, opts.ctx.user.sub))
-					.returning()
+				await db.update(user).set({ name: opts.input.name }).where(eq(user.id, opts.ctx.user.sub)).returning()
 			).at(0);
 		}),
 });

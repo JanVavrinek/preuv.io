@@ -8,10 +8,7 @@ export type DialogVariants = VariantProps<typeof dialogStyles>;
 
 export type DialogSlots = keyof (typeof dialogStyles)["slots"];
 
-export interface DialogProps
-	extends DialogRootProps,
-		DialogVariants,
-		SlotProp<DialogSlots> {
+export interface DialogProps extends DialogRootProps, DialogVariants, SlotProp<DialogSlots> {
 	/** The children of the element */
 	children?: JSX.Element;
 

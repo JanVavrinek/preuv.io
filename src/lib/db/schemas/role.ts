@@ -17,10 +17,7 @@ export enum RolePermissions {
 	MEMBER_UPDATE = "member:update",
 }
 
-export const rolePermissions = t.pgEnum(
-	"permissions",
-	enumToPgEnum(RolePermissions),
-);
+export const rolePermissions = t.pgEnum("permissions", enumToPgEnum(RolePermissions));
 
 export const role = t.pgTable("roles", {
 	id: t.serial().primaryKey(),

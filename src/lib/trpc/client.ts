@@ -10,14 +10,10 @@ export const client = createTRPCClient<AppRouter>({
 			url: `${import.meta.env.VITE_BASE_URL}/api/trpc`,
 			async headers() {
 				let headers = {};
-				const activeOrganization = localStorage.getItem(
-					LocalStorageKey.ACTIVE_ORGANIZATION,
-				);
-				if (activeOrganization)
-					headers = { "organization-id": activeOrganization };
+				const activeOrganization = localStorage.getItem(LocalStorageKey.ACTIVE_ORGANIZATION);
+				if (activeOrganization) headers = { "organization-id": activeOrganization };
 
-				const token = (await supabase.auth.getSession()).data.session
-					?.access_token;
+				const token = (await supabase.auth.getSession()).data.session?.access_token;
 				if (!token) return headers;
 				return { ...headers, Authorization: `Bearer ${token}` };
 			},

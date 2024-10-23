@@ -13,11 +13,7 @@ export default createHandler(() => (
 					<link rel="icon" href="/favicon.ico" />
 					{assets}
 				</head>
-				<body
-					class={
-						getCookie(getEvent(), CookieKey.THEME) === "dark" ? "dark" : ""
-					}
-				>
+				<body class={getCookie(getEvent(), CookieKey.THEME) === "dark" ? "dark" : ""}>
 					<div id="app">{children}</div>
 					{scripts}
 				</body>

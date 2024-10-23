@@ -6,9 +6,7 @@ import { runIfFn } from "@utils/styles";
 import { buttonStyles } from "./styles";
 import type { ButtonProps } from "./types";
 
-export default function Button<T extends ValidComponent = "button">(
-	props: PolymorphicProps<T, ButtonProps<T>>,
-) {
+export default function Button<T extends ValidComponent = "button">(props: PolymorphicProps<T, ButtonProps<T>>) {
 	const [local, variantProps, others] = splitProps(
 		props as ButtonProps,
 		["class", "children", "slotClasses", "icon"],

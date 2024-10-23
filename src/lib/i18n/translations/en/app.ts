@@ -20,6 +20,9 @@ const app = {
 			name: "Role name",
 			owner: "Owner",
 		},
+		edit: {
+			title: "Edit organization",
+		},
 	},
 };
 

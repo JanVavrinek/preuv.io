@@ -2,10 +2,7 @@ export function isFunction(fn: unknown): fn is () => unknown {
 	return typeof fn === "function";
 }
 
-export function runIfFn<T, U>(
-	valueOrFn: T | ((...fnArgs: U[]) => T),
-	...args: U[]
-): T {
+export function runIfFn<T, U>(valueOrFn: T | ((...fnArgs: U[]) => T), ...args: U[]): T {
 	return isFunction(valueOrFn) ? valueOrFn(...args) : valueOrFn;
 }
 

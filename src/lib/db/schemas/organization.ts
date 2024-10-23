@@ -13,8 +13,6 @@ export type OrganizationSelectModel = InferSelectModel<typeof organization>;
 export type OrganizationInsertModel = InferInsertModel<typeof organization>;
 
 export const organizationSelectModelSchema = createSelectSchema(organization);
-export const organizationInsertModelSchema = createInsertSchema(
-	organization,
-).extend({
+export const organizationInsertModelSchema = createInsertSchema(organization).extend({
 	name: z.string().min(3),
 });
