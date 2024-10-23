@@ -17,8 +17,9 @@ export async function getUsersOrganizations(
 	organizationId?: OrganizationSelectModel["id"],
 	offset = 0,
 	limit = 20,
+	con?: Parameters<Parameters<typeof db.transaction>[0]>[0],
 ) {
-	const query = db
+	const query = (con ?? db)
 		.select({ organization, role })
 		.from(organization)
 		.offset(offset)

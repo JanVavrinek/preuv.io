@@ -1,7 +1,7 @@
 import supabase from "@lib/supabase";
 import { createTRPCClient, httpBatchLink, loggerLink } from "@trpc/client";
 import superjson from "superjson";
-import { LocalStorageKey } from "../../consts";
+import { HeaderKeys, LocalStorageKey } from "../../consts";
 import type { AppRouter } from "./router";
 export const client = createTRPCClient<AppRouter>({
 	links: [
@@ -11,7 +11,7 @@ export const client = createTRPCClient<AppRouter>({
 			async headers() {
 				let headers = {};
 				const activeOrganization = localStorage.getItem(LocalStorageKey.ACTIVE_ORGANIZATION);
-				if (activeOrganization) headers = { "organization-id": activeOrganization };
+				if (activeOrganization) headers = { [HeaderKeys.ORGANIZATION_ID]: activeOrganization };
 
 				const token = (await supabase.auth.getSession()).data.session?.access_token;
 				if (!token) return headers;

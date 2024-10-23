@@ -6,7 +6,7 @@ import { type LoginSchema, loginSchema } from "@lib/schemas/routes/auth";
 import supabase from "@lib/supabase";
 import { type SubmitHandler, createForm, zodForm } from "@modular-forms/solid";
 import { Title } from "@solidjs/meta";
-import { A, useNavigate } from "@solidjs/router";
+import { A, useNavigate, useSearchParams } from "@solidjs/router";
 import type { AuthTokenResponsePassword } from "@supabase/supabase-js";
 
 export default function SignInView() {
@@ -15,6 +15,7 @@ export default function SignInView() {
 	const [loginForm, { Form, Field }] = createForm<LoginSchema>({
 		validate: zodForm(loginSchema),
 	});
+	const [params] = useSearchParams<{ return_path?: string }>();
 
 	const handleSubmit: SubmitHandler<LoginSchema> = async (values) => {
 		const p = new Promise<AuthTokenResponsePassword["data"]>((res, rej) => {
@@ -33,7 +34,7 @@ export default function SignInView() {
 			success: () => ({ title: c.auth.signIn.toasts.sigIn.success() }),
 			error: (e) => ({ title: c.auth.signIn.toasts.sigIn.error(e ?? 0) }),
 		});
-		p.then(() => navigate("/app/dashboard"));
+		p.then(() => navigate(params.return_path ?? "/app/dashboard"));
 	};
 
 	return (

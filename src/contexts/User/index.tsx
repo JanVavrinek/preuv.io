@@ -1,5 +1,5 @@
 import { client } from "@lib/trpc/client";
-import { useNavigate } from "@solidjs/router";
+import { useLocation, useNavigate } from "@solidjs/router";
 import { type ParentProps, Show, createContext, onMount } from "solid-js";
 import { type SetStoreFunction, createStore } from "solid-js/store";
 import type { User } from "./types";
@@ -20,6 +20,7 @@ export const userContext = createContext<{
 export default function UserProvider(props: ParentProps) {
 	const [user, setUser] = createStore<User>({ ...EMPTY_USER });
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	onMount(async () => {
 		let foundUser: User | undefined = undefined;
@@ -29,7 +30,7 @@ export default function UserProvider(props: ParentProps) {
 			try {
 				foundUser = await client.user.createCurrent.mutate();
 			} catch {
-				navigate("/auth/login");
+				navigate(`/auth/signin?return_path=${encodeURIComponent(location.pathname)}`);
 			}
 		}
 		if (foundUser) setUser(foundUser);

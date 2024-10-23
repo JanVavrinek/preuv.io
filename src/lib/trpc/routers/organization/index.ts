@@ -6,11 +6,14 @@ import {
 	organization,
 	organizationSelectModelSchema,
 } from "@lib/db/schemas/organization";
-import { type RoleSelectModel, role } from "@lib/db/schemas/role";
+import { RolePermissions, type RoleSelectModel, role } from "@lib/db/schemas/role";
 import { procedure, router } from "@lib/trpc/init";
 import { isAuthorized } from "@lib/trpc/middlewares";
+import { hasOrganization } from "@lib/trpc/middlewares/hasOrganization";
 import { paginationSchema } from "@lib/trpc/schemas/pagination";
 import { TRPCError } from "@trpc/server";
+import { hasPermission } from "@utils/permissions";
+import { eq } from "drizzle-orm";
 import { organizationCreateMutationInputSchema } from "./schemas";
 
 export default router({
@@ -71,4 +74,29 @@ export default router({
 				return res;
 			},
 		),
+	update: procedure
+		.use(isAuthorized)
+		.use(hasOrganization)
+		.input(organizationSelectModelSchema.pick({ name: true }))
+		.mutation(async (opts) => {
+			const update = await db.transaction(async (tx) => {
+				const res = (await getUsersOrganizations(opts.ctx.user.sub, opts.ctx.organizationId, 0, 1, tx)).at(0);
+				if (!hasPermission(RolePermissions.ORGANIZATION_UPDATE, res?.role))
+					throw new TRPCError({ code: "UNAUTHORIZED" });
+				const org = (
+					await tx
+						.update(organization)
+						.set({ name: opts.input.name })
+						.where(eq(organization.id, opts.ctx.organizationId))
+						.returning()
+				).at(0);
+				if (!org) {
+					tx.rollback();
+					return;
+				}
+				return org;
+			});
+			if (!update) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+			return update;
+		}),
 });
