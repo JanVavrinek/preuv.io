@@ -5,8 +5,8 @@ import { organizationsContext } from "@contexts/Organizations";
 import { organizationInsertModelSchema } from "@lib/db/schemas/organization";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
-import { type SubmitHandler, createForm, zodForm } from "@modular-forms/solid";
-import { useContext } from "solid-js";
+import { type SubmitHandler, createForm, setValue, zodForm } from "@modular-forms/solid";
+import { createEffect, useContext } from "solid-js";
 import type { z } from "zod";
 
 const schema = organizationInsertModelSchema.pick({ name: true });
@@ -19,6 +19,10 @@ export default function General() {
 			name: activeOrganization()?.organization.name,
 		},
 	});
+
+	createEffect(() =>
+		setValue(organizationForm, "name", activeOrganization()?.organization.name ?? "", { shouldDirty: false }),
+	);
 
 	const handleSubmit: SubmitHandler<z.infer<typeof schema>> = async (values) => {
 		const p = client.organization.update.mutate(values);
@@ -53,7 +57,10 @@ export default function General() {
 					/>
 				)}
 			</Field>
-			<Button type="submit" disabled={organizationForm.invalid || organizationForm.submitting}>
+			<Button
+				type="submit"
+				disabled={organizationForm.invalid || organizationForm.submitting || !organizationForm.dirty}
+			>
 				{c.generic.actions.save()}
 			</Button>
 		</Form>
