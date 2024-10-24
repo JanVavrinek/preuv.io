@@ -1,5 +1,6 @@
-import type { AppRouter } from "@lib/trpc/router";
+import type { OrganizationSelectModel } from "@lib/db/schemas/organization";
+import type { RoleSelectModel } from "@lib/db/schemas/role";
 
-export type Organization = NonNullable<Awaited<ReturnType<AppRouter["organization"]["getOne"]>>>["organization"];
+export type Organization = OrganizationSelectModel;
 
-export type Role = NonNullable<Awaited<ReturnType<AppRouter["organization"]["getOne"]>>>["role"];
+export type Role = RoleSelectModel;

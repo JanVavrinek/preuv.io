@@ -96,7 +96,7 @@ export default router({
 				}
 				return org;
 			});
-			if (!update) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+			if (!update) throw new TRPCError({ code: "NOT_FOUND" });
 			return update;
 		}),
 });
