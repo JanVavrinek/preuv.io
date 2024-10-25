@@ -16,8 +16,9 @@ const schema = roleSelectModelSchema.pick({
 });
 
 export default function EditRole(props: VoidProps<EditRoleProps>) {
-	const [open, setOpen] = createSignal(false);
 	const { c } = useI18n();
+	const [open, setOpen] = createSignal(false);
+	const [permissions, setPermissions] = createSignal(props.role.permissions);
 	const [roleForm, { Field, Form }] = createForm({
 		validate: zodForm(schema),
 		initialValues: {
@@ -29,7 +30,7 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 		const p = client.role.update.mutate({
 			id: props.role.id,
 			name: values.name,
-			permissions: props.role.permissions,
+			permissions: permissions(),
 		});
 		toast.promise(p, {
 			loading: { title: c.generic.toasts.loading() },
@@ -39,6 +40,11 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 
 		props.onUpdated(await p);
 		setOpen(false);
+	};
+
+	const handleTogglePermission = (permission: RolePermissions, toggle: boolean) => {
+		if (toggle) setPermissions((s) => [...s, permission]);
+		else setPermissions((s) => s.filter((p) => p !== permission));
 	};
 
 	return (
@@ -80,7 +86,11 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 											{c.app.organization.roles.permissions.names[p()]()}
 										</td>
 										<td class="py-2 pr-2 pl-3 group-even:bg-pv-blue-100 group-last-of-type:rounded-br-xl">
-											<Toggle />
+											<Toggle
+												checked={permissions().includes(p()) || !!props.role.owner}
+												onChange={(v) => handleTogglePermission(p(), v)}
+												disabled={!!props.role.owner}
+											/>
 										</td>
 									</tr>
 								)}
