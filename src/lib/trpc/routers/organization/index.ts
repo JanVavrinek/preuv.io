@@ -39,13 +39,10 @@ export default router({
 				organization: OrganizationSelectModel;
 				role: RoleSelectModel;
 			}> => {
-				const res = await db.transaction(async (tx) => {
+				return await db.transaction(async (tx) => {
 					const org = (await tx.insert(organization).values({ name: opts.input.organizationName }).returning()).at(0);
 
-					if (!org) {
-						tx.rollback();
-						return;
-					}
+					if (!org) throw new TRPCError({ code: "NOT_FOUND" });
 
 					const createdRole = (
 						await tx
@@ -59,10 +56,7 @@ export default router({
 							.returning()
 					).at(0);
 
-					if (!createdRole) {
-						tx.rollback();
-						return;
-					}
+					if (!createdRole) throw new TRPCError({ code: "NOT_FOUND" });
 
 					await tx.insert(member).values({
 						user_id: opts.ctx.user.sub,
@@ -70,8 +64,6 @@ export default router({
 					});
 					return { organization: org, role: createdRole };
 				});
-				if (!res) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
-				return res;
 			},
 		),
 	update: procedure

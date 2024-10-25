@@ -22,9 +22,9 @@ export default function AccountView() {
 		const p = client.user.updateCurrent.mutate(values);
 
 		toast.promise(p, {
-			loading: { title: c.generic.toasts.loading() },
-			success: () => ({ title: c.generic.toasts.success() }),
-			error: () => ({ title: c.generic.toasts.error() }),
+			loading: { title: c.generic.toasts.saving.loading() },
+			success: () => ({ title: c.generic.toasts.saving.success() }),
+			error: () => ({ title: c.generic.toasts.saving.error() }),
 		});
 
 		const res = await p;

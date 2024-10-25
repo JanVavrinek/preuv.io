@@ -38,7 +38,8 @@ const show = (title: JSX.Element, description?: JSX.Element, type: ToastType = T
 	toaster.show((props) => <Toast description={description} title={title} toastId={props.toastId} type={type} />);
 
 const promise = <T, U extends object = object>(
-	p: Promise<U | undefined> | (() => Promise<U | undefined>),
+	// biome-ignore lint/suspicious/noConfusingVoidType: no reason to return undefined from api if there is really nothing to return
+	p: Promise<U | undefined | void> | (() => Promise<U | undefined | void>),
 	options: {
 		loading: { title: JSX.Element; description?: JSX.Element };
 		success: (data?: U) => { title: JSX.Element; description?: JSX.Element };
@@ -58,7 +59,7 @@ const promise = <T, U extends object = object>(
 					<KToast.Title class="text-xl">
 						<Switch fallback={options.loading.title}>
 							<Match when={props.state === "rejected"}>{options.error(props.error).title}</Match>
-							<Match when={props.state === "fulfilled"}>{options.success(props.data).title}</Match>
+							<Match when={props.state === "fulfilled"}>{options.success(props.data ?? undefined).title}</Match>
 						</Switch>
 					</KToast.Title>
 				</div>
@@ -82,8 +83,8 @@ const promise = <T, U extends object = object>(
 					</Show>
 				</Match>
 				<Match when={props.state === "fulfilled"}>
-					<Show when={options.success(props.data).description}>
-						<KToast.Description class="p-2">{options.success(props.data).description}</KToast.Description>
+					<Show when={options.success(props.data ?? undefined).description}>
+						<KToast.Description class="p-2">{options.success(props.data ?? undefined).description}</KToast.Description>
 					</Show>
 				</Match>
 			</Switch>

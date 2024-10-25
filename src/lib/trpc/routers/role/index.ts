@@ -1,5 +1,5 @@
 import { db } from "@lib/db";
-import { getUsersOrganizations } from "@lib/db/queries/organization";
+import { getUsersRoleAndOrganization } from "@lib/db/queries/role";
 import {} from "@lib/db/schemas/organization";
 import { RolePermissions, role, roleSelectModelSchema } from "@lib/db/schemas/role";
 import { procedure, router } from "@lib/trpc/init";
@@ -34,8 +34,8 @@ export default router({
 		.input(roleSelectModelSchema.pick({ name: true, permissions: true, id: true }))
 		.mutation(async (opts) => {
 			return await db.transaction(async (tx) => {
-				const res = (await getUsersOrganizations(opts.ctx.user.sub, opts.ctx.organizationId, 0, 1, tx)).at(0);
-				if (!hasPermission(RolePermissions.ROLE_UPDATE, res?.role)) throw new TRPCError({ code: "UNAUTHORIZED" });
+				const res = await getUsersRoleAndOrganization(opts.ctx.user.sub, opts.ctx.organizationId, tx);
+				if (!hasPermission(RolePermissions.ROLE_UPDATE, res.role)) throw new TRPCError({ code: "UNAUTHORIZED" });
 
 				const updateRole = (
 					await tx
@@ -45,10 +45,21 @@ export default router({
 						.returning()
 				).at(0);
 				if (!updateRole) {
-					tx.rollback();
 					throw new TRPCError({ code: "NOT_FOUND" });
 				}
 				return updateRole;
+			});
+		}),
+
+	delete: procedure
+		.use(isAuthorized)
+		.use(hasOrganization)
+		.input(roleSelectModelSchema.shape.id)
+		.mutation(async (opts) => {
+			await db.transaction(async (tx) => {
+				const res = await getUsersRoleAndOrganization(opts.ctx.user.sub, opts.ctx.organizationId, tx);
+				if (!hasPermission(RolePermissions.ROLE_DELETE, res.role)) throw new TRPCError({ code: "UNAUTHORIZED" });
+				await db.delete(role).where(eq(role.id, opts.input));
 			});
 		}),
 });

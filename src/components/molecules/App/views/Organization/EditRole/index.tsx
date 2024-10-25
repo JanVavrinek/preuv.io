@@ -4,13 +4,15 @@ import { Dialog } from "@atoms/Dialog";
 import Input from "@atoms/Input";
 import { toast } from "@atoms/Toaster";
 import Toggle from "@atoms/Toggle";
+import { Dialog as KDialog } from "@kobalte/core/dialog";
 import { RolePermissions, roleSelectModelSchema } from "@lib/db/schemas/role";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import { createForm, zodForm } from "@modular-forms/solid";
+import ConfirmDelete from "@molecules/common/ConfirmDelete";
+import { FaSolidTrash } from "solid-icons/fa";
 import { type ComponentProps, Index, type VoidProps, createSignal } from "solid-js";
 import type { EditRoleProps } from "./types";
-
 const schema = roleSelectModelSchema.pick({
 	name: true,
 });
@@ -33,9 +35,9 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 			permissions: permissions(),
 		});
 		toast.promise(p, {
-			loading: { title: c.generic.toasts.loading() },
-			success: () => ({ title: c.generic.toasts.success() }),
-			error: () => ({ title: c.generic.toasts.error() }),
+			loading: { title: c.generic.toasts.saving.loading() },
+			success: () => ({ title: c.generic.toasts.saving.success() }),
+			error: () => ({ title: c.generic.toasts.saving.error() }),
 		});
 
 		props.onUpdated(await p);
@@ -45,6 +47,18 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 	const handleTogglePermission = (permission: RolePermissions, toggle: boolean) => {
 		if (toggle) setPermissions((s) => [...s, permission]);
 		else setPermissions((s) => s.filter((p) => p !== permission));
+	};
+
+	const handleDelete = async () => {
+		const p = client.role.delete.mutate(props.role.id);
+		toast.promise(p, {
+			loading: { title: c.generic.toasts.saving.loading() },
+			success: () => ({ title: c.generic.toasts.saving.success() }),
+			error: () => ({ title: c.generic.toasts.saving.error() }),
+		});
+		await p;
+		props.onDeleted();
+		setOpen(false);
 	};
 
 	return (
@@ -97,6 +111,13 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 							</Index>
 						</tbody>
 					</table>
+				</Collapsible>
+				<Collapsible triggerChildren={c.generic.common.dangerZone()}>
+					<ConfirmDelete onConfirm={handleDelete}>
+						<KDialog.Trigger as={Button} variant="danger" icon={<FaSolidTrash />} class="mt-2 gap-2">
+							{c.generic.actions.delete()}
+						</KDialog.Trigger>
+					</ConfirmDelete>
 				</Collapsible>
 				<Button type="submit" disabled={roleForm.invalid || roleForm.submitting}>
 					{c.generic.actions.save()}

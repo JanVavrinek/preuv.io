@@ -2,7 +2,7 @@ import { tv } from "tailwind-variants";
 
 export const buttonStyles = tv({
 	slots: {
-		root: "hover:-translate-y-[5px] flex h-12 items-center justify-center rounded-3xl active:rounded-2xl border  px-2 transition-all duration-150 hover:shadow-lg disabled:translate-x-0 disabled:translate-y-0 disabled:cursor-not-allowed disabled:shadow-none disabled:contrast-50 font-semibold delay-150 text-pv-navy-50",
+		root: "hover:-translate-y-[5px] flex h-12 items-center justify-center rounded-3xl active:rounded-2xl px-2 transition-all duration-150 hover:shadow-lg disabled:translate-x-0 disabled:translate-y-0 disabled:cursor-not-allowed disabled:shadow-none disabled:contrast-50 font-semibold delay-150 text-pv-navy-50",
 		icon: "",
 	},
 	variants: {

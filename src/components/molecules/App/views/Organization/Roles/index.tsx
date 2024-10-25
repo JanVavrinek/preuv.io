@@ -58,6 +58,7 @@ export default function Roles() {
 												{c.generic.actions.edit()}
 											</Button>
 										}
+										onDeleted={() => setRoles("items", (s) => s.filter((r) => r.id !== role.id))}
 									/>
 								</td>
 							</tr>
