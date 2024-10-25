@@ -32,6 +32,9 @@ const app = {
 			title: "Edit organization",
 			general: "General organization settings",
 		},
+		members: {
+			title: "Members",
+		},
 	},
 };
 

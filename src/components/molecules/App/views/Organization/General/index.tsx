@@ -1,4 +1,5 @@
 import Button from "@atoms/Button";
+import Collapsible from "@atoms/Collapsible";
 import Input from "@atoms/Input";
 import { toast } from "@atoms/Toaster";
 import { organizationsContext } from "@contexts/Organizations";
@@ -43,26 +44,28 @@ export default function General() {
 	};
 
 	return (
-		<Form class="flex flex-col gap-2" onSubmit={handleSubmit}>
-			<Field name="name">
-				{(field, props) => (
-					<Input
-						inputProps={props}
-						value={field.value}
-						required
-						label={c.app.organization.name()}
-						parseResult={schema.shape[field.name].safeParse(field.value)}
-						showErrors={!!field.error.length}
-						placeholder={c.app.organization.organizationPlaceholder()}
-					/>
-				)}
-			</Field>
-			<Button
-				type="submit"
-				disabled={organizationForm.invalid || organizationForm.submitting || !organizationForm.dirty}
-			>
-				{c.generic.actions.save()}
-			</Button>
-		</Form>
+		<Collapsible triggerChildren={c.app.organization.edit.general()} defaultOpen>
+			<Form class="flex flex-col gap-2" onSubmit={handleSubmit}>
+				<Field name="name">
+					{(field, props) => (
+						<Input
+							inputProps={props}
+							value={field.value}
+							required
+							label={c.app.organization.name()}
+							parseResult={schema.shape[field.name].safeParse(field.value)}
+							showErrors={!!field.error.length}
+							placeholder={c.app.organization.organizationPlaceholder()}
+						/>
+					)}
+				</Field>
+				<Button
+					type="submit"
+					disabled={organizationForm.invalid || organizationForm.submitting || !organizationForm.dirty}
+				>
+					{c.generic.actions.save()}
+				</Button>
+			</Form>
+		</Collapsible>
 	);
 }

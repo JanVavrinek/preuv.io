@@ -72,14 +72,14 @@ export default router({
 		.input(organizationSelectModelSchema.pick({ name: true }))
 		.mutation(async (opts) => {
 			const update = await db.transaction(async (tx) => {
-				const res = (await getUsersOrganizations(opts.ctx.user.sub, opts.ctx.organizationId, 0, 1, tx)).at(0);
-				if (!hasPermission(RolePermissions.ORGANIZATION_UPDATE, res?.role))
+				if (!hasPermission(RolePermissions.ORGANIZATION_UPDATE, opts.ctx.role.role))
 					throw new TRPCError({ code: "UNAUTHORIZED" });
+
 				const org = (
 					await tx
 						.update(organization)
 						.set({ name: opts.input.name })
-						.where(eq(organization.id, opts.ctx.organizationId))
+						.where(eq(organization.id, opts.ctx.role.organization.id))
 						.returning()
 				).at(0);
 				if (!org) {
