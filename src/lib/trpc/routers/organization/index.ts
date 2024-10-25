@@ -73,7 +73,7 @@ export default router({
 		.mutation(async (opts) => {
 			const update = await db.transaction(async (tx) => {
 				if (!hasPermission(RolePermissions.ORGANIZATION_UPDATE, opts.ctx.role.role))
-					throw new TRPCError({ code: "UNAUTHORIZED" });
+					throw new TRPCError({ code: "FORBIDDEN" });
 
 				const org = (
 					await tx

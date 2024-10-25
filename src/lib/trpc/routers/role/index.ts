@@ -34,8 +34,7 @@ export default router({
 		.input(roleSelectModelSchema.pick({ name: true, permissions: true, id: true }))
 		.mutation(async (opts) => {
 			return await db.transaction(async (tx) => {
-				if (!hasPermission(RolePermissions.ROLE_UPDATE, opts.ctx.role.role))
-					throw new TRPCError({ code: "UNAUTHORIZED" });
+				if (!hasPermission(RolePermissions.ROLE_UPDATE, opts.ctx.role.role)) throw new TRPCError({ code: "FORBIDDEN" });
 
 				const updateRole = await tx.query.role.findFirst({
 					where: and(eq(role.id, opts.input.id), eq(role.organization_id, opts.ctx.role.organization.id)),
@@ -62,8 +61,7 @@ export default router({
 		.input(roleSelectModelSchema.shape.id)
 		.mutation(async (opts) => {
 			await db.transaction(async (tx) => {
-				if (!hasPermission(RolePermissions.ROLE_DELETE, opts.ctx.role.role))
-					throw new TRPCError({ code: "UNAUTHORIZED" });
+				if (!hasPermission(RolePermissions.ROLE_DELETE, opts.ctx.role.role)) throw new TRPCError({ code: "FORBIDDEN" });
 
 				const deletionRole = await tx.query.role.findFirst({
 					where: and(
@@ -85,8 +83,7 @@ export default router({
 		.use(hasOrganization)
 		.input(roleInsertModelSchema.pick({ name: true, permissions: true }))
 		.mutation(async (opts) => {
-			if (!hasPermission(RolePermissions.ROLE_CREATE, opts.ctx.role.role))
-				throw new TRPCError({ code: "UNAUTHORIZED" });
+			if (!hasPermission(RolePermissions.ROLE_CREATE, opts.ctx.role.role)) throw new TRPCError({ code: "FORBIDDEN" });
 			const newRole = (
 				await db
 					.insert(role)
