@@ -1,14 +1,14 @@
 import { db } from "@lib/db";
 import { getUsersRoleAndOrganization } from "@lib/db/queries/role";
 import {} from "@lib/db/schemas/organization";
-import { RolePermissions, role, roleSelectModelSchema } from "@lib/db/schemas/role";
+import { RolePermissions, role, roleInsertModelSchema, roleSelectModelSchema } from "@lib/db/schemas/role";
 import { procedure, router } from "@lib/trpc/init";
 import { isAuthorized } from "@lib/trpc/middlewares";
 import { hasOrganization } from "@lib/trpc/middlewares/hasOrganization";
 import { paginationSchema } from "@lib/trpc/schemas/pagination";
 import { TRPCError } from "@trpc/server";
 import { hasPermission } from "@utils/permissions";
-import { count, eq } from "drizzle-orm";
+import { and, asc, count, eq, isNull } from "drizzle-orm";
 
 export default router({
 	getMany: procedure
@@ -22,7 +22,8 @@ export default router({
 					.from(role)
 					.where(eq(role.organization_id, opts.ctx.organizationId))
 					.offset(opts.input.offset)
-					.limit(opts.input.limit),
+					.limit(opts.input.limit)
+					.orderBy(asc(role.id)),
 				db.select({ count: count() }).from(role).where(eq(role.organization_id, opts.ctx.organizationId)),
 			]);
 
@@ -37,20 +38,25 @@ export default router({
 				const res = await getUsersRoleAndOrganization(opts.ctx.user.sub, opts.ctx.organizationId, tx);
 				if (!hasPermission(RolePermissions.ROLE_UPDATE, res.role)) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-				const updateRole = (
+				const updateRole = await tx.query.role.findFirst({
+					where: and(eq(role.id, opts.input.id), eq(role.organization_id, res.organization.id)),
+					columns: { id: true, owner: true },
+				});
+				if (!updateRole) throw new TRPCError({ code: "NOT_FOUND" });
+
+				const updatedRole = (
 					await tx
 						.update(role)
-						.set({ name: opts.input.name, permissions: opts.input.permissions })
-						.where(eq(role.id, opts.input.id))
+						.set({ name: opts.input.name, permissions: updateRole.owner ? [] : opts.input.permissions })
+						.where(eq(role.id, updateRole.id))
 						.returning()
 				).at(0);
-				if (!updateRole) {
-					throw new TRPCError({ code: "NOT_FOUND" });
-				}
-				return updateRole;
+
+				if (!updatedRole) throw new TRPCError({ code: "NOT_FOUND" });
+
+				return updatedRole;
 			});
 		}),
-
 	delete: procedure
 		.use(isAuthorized)
 		.use(hasOrganization)
@@ -59,7 +65,36 @@ export default router({
 			await db.transaction(async (tx) => {
 				const res = await getUsersRoleAndOrganization(opts.ctx.user.sub, opts.ctx.organizationId, tx);
 				if (!hasPermission(RolePermissions.ROLE_DELETE, res.role)) throw new TRPCError({ code: "UNAUTHORIZED" });
-				await db.delete(role).where(eq(role.id, opts.input));
+
+				const deletionRole = await tx.query.role.findFirst({
+					where: and(eq(role.id, opts.input), eq(role.organization_id, res.organization.id), isNull(role.owner)),
+				});
+				if (!deletionRole) throw new TRPCError({ code: "NOT_FOUND" });
+				await tx
+					.delete(role)
+					.where(and(eq(role.id, opts.input), isNull(role.owner), eq(role.organization_id, res.organization.id)));
+			});
+		}),
+	create: procedure
+		.use(isAuthorized)
+		.use(hasOrganization)
+		.input(roleInsertModelSchema.pick({ name: true, permissions: true }))
+		.mutation(async (opts) => {
+			return db.transaction(async (tx) => {
+				const res = await getUsersRoleAndOrganization(opts.ctx.user.sub, opts.ctx.organizationId, tx);
+				if (!hasPermission(RolePermissions.ROLE_CREATE, res.role)) throw new TRPCError({ code: "UNAUTHORIZED" });
+				const newRole = (
+					await db
+						.insert(role)
+						.values({
+							name: opts.input.name,
+							permissions: opts.input.permissions,
+							organization_id: opts.ctx.organizationId,
+						})
+						.returning()
+				).at(0);
+				if (!newRole) throw new TRPCError({ code: "BAD_REQUEST" });
+				return newRole;
 			});
 		}),
 });

@@ -4,7 +4,7 @@ import type { Role } from "@contexts/Organizations/types";
 import { Dialog } from "@kobalte/core/dialog";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
-import { FaSolidGear } from "solid-icons/fa";
+import { FaSolidGear, FaSolidPlus } from "solid-icons/fa";
 import { For, Show, createEffect, createSignal, on } from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
 import useAsync from "../../../../../../hooks/useSignOut/useAsync";
@@ -66,7 +66,17 @@ export default function Roles() {
 					</For>
 				</tbody>
 			</table>
-			<Pagination count={Math.max(1, Math.ceil(roles.total / LIMIT))} page={page()} onPageChange={setPage} />
+			<div class="flex flex-wrap justify-between gap-2">
+				<EditRole
+					onUpdated={(r) => setRoles("items", (s) => [...s, r])}
+					openTrigger={
+						<Button icon={<FaSolidPlus />} class="gap-2" as={Dialog.Trigger}>
+							{c.generic.actions.add()}
+						</Button>
+					}
+				/>
+				<Pagination count={Math.max(1, Math.ceil(roles.total / LIMIT))} page={page()} onPageChange={setPage} />
+			</div>
 		</div>
 	);
 }

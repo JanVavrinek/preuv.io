@@ -4,6 +4,8 @@ const generic = {
 		edit: "Edit",
 		delete: "Delete",
 		close: "Close",
+		add: "Add new",
+		create: "Create new",
 	},
 	toasts: {
 		saving: {

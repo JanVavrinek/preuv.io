@@ -26,6 +26,7 @@ const app = {
 				title: "Permissions",
 				names: permissions,
 			},
+			new: "Create new role",
 		},
 		edit: {
 			title: "Edit organization",
