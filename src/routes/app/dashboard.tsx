@@ -45,4 +45,3 @@ export default function DashboardView() {
 		</>
 	);
 }
-// @collection.roles:auth.organization ?= id && @collection.roles:auth.id ?= @collection.members.role

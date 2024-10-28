@@ -13,5 +13,14 @@ const permissions: Record<RolePermissions, string> = {
 	"role:create": "Create role",
 	"role:delete": "Delete role",
 	"role:update": "Update role",
+	"form:create": "Create form",
+	"form:delete": "Delete form",
+	"form:update": "Update form",
+	"submitter:create": "Create testimonial submitter",
+	"submitter:delete": "Delete testimonial submitter",
+	"submitter:update": "Update testimonial submitter",
+	"testimonial:create": "Create testimonial",
+	"testimonial:delete": "Delete testimonial",
+	"testimonial:update": "Update testimonial",
 };
 export default permissions;

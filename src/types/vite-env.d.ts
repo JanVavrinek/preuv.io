@@ -9,6 +9,7 @@ interface ImportMetaEnv {
 	 * # This key should never be exposed to clients!
 	 */
 	readonly VITE_SUPABASE_SERVICE_KEY: string;
+	readonly VITE_STORAGE_BUCKET: string;
 }
 
 interface ImportMeta {
