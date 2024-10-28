@@ -7,7 +7,7 @@ export default function PermissionsGuard(props: ParentProps<PermissionsGuardProp
 
 	return (
 		<Show when={check(props.permissions)} fallback={props.fallback}>
-			{props.permissions}
+			{props.children}
 		</Show>
 	);
 }

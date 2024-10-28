@@ -20,7 +20,10 @@
 			"@lib/*": ["./src/lib/*"],
 			"@atoms/*": ["./src/components/atoms/*"],
 			"@molecules/*": ["./src/components/molecules/*"],
-			"@contexts/*": ["./src/contexts/*"]
+			"@contexts/*": ["./src/contexts/*"],
+			"@hooks/*": ["./src/hooks/*"],
+			"@consts/*": ["./src/consts/*"],
+			"@assets/*": ["./src/assets/*"]
 		}
 	}
 }

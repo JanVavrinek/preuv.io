@@ -60,6 +60,7 @@ export default function Sidebar() {
 									disabled: o.organization.id === organizations.active,
 									onSelect: () => setOrganizations("active", o.organization.id),
 								})),
+								disabled: !organizations.organizations.length,
 							},
 							...(organizations.active
 								? [

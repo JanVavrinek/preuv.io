@@ -1,14 +1,17 @@
 import Button from "@atoms/Button";
 import Collapsible from "@atoms/Collapsible";
 import Pagination from "@atoms/Pagination";
+import PermissionsGuard from "@atoms/PermissionsGuard";
+import { organizationsContext } from "@contexts/Organizations";
 import type { Role } from "@contexts/Organizations/types";
 import { Dialog } from "@kobalte/core/dialog";
+import { RolePermissions } from "@lib/db/schemas/role";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import { FaSolidGear, FaSolidPlus } from "solid-icons/fa";
-import { For, Show, createEffect, createSignal, on } from "solid-js";
+import { For, Show, batch, createEffect, createSignal, on, useContext } from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
-import useAsync from "../../../../../../hooks/useSignOut/useAsync";
+import useAsync from "../../../../../../hooks/useAsync";
 import EditRole from "../EditRole";
 
 const LIMIT = 20;
@@ -18,11 +21,26 @@ export default function Roles() {
 	const [roles, setRoles] = createStore<{ items: Role[]; total: number }>({ items: [], total: 0 });
 	const [page, setPage] = createSignal(1);
 	const { handler, loading } = useAsync(client.role.getMany.query);
+	const { activeOrganization } = useContext(organizationsContext);
+
+	const handleFetch = () => {
+		if (loading()) return;
+		handler({ limit: LIMIT, offset: (page() - 1) * LIMIT }).then(setRoles);
+	};
+
+	createEffect(on(page, handleFetch));
 
 	createEffect(
-		on(page, () => {
-			if (loading()) return;
-			handler({ limit: LIMIT, offset: (page() - 1) * LIMIT }).then(setRoles);
+		on(activeOrganization, () => {
+			batch(() => {
+				setPage((s) => {
+					if (s === 1) handleFetch();
+					return 1;
+				});
+				setRoles("items", []);
+				setRoles("total", 0);
+				handleFetch();
+			});
 		}),
 	);
 
@@ -69,14 +87,16 @@ export default function Roles() {
 					</tbody>
 				</table>
 				<div class="flex flex-wrap justify-between gap-2">
-					<EditRole
-						onUpdated={(r) => setRoles("items", (s) => [...s, r])}
-						openTrigger={
-							<Button icon={<FaSolidPlus />} class="gap-2" as={Dialog.Trigger}>
-								{c.generic.actions.add()}
-							</Button>
-						}
-					/>
+					<PermissionsGuard permissions={[RolePermissions.ROLE_CREATE]}>
+						<EditRole
+							onUpdated={(r) => setRoles("items", (s) => [...s, r])}
+							openTrigger={
+								<Button icon={<FaSolidPlus />} class="gap-2" as={Dialog.Trigger}>
+									{c.generic.actions.add()}
+								</Button>
+							}
+						/>
+					</PermissionsGuard>
 					<Pagination count={Math.max(1, Math.ceil(roles.total / LIMIT))} page={page()} onPageChange={setPage} />
 				</div>
 			</div>

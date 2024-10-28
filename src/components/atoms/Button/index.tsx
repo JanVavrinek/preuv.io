@@ -26,14 +26,16 @@ export default function Button<T extends ValidComponent = "button">(props: Polym
 			})}
 			{...others}
 		>
-			<span
-				aria-hidden="true"
-				class={styles().icon({
-					class: [local.slotClasses?.icon],
-				})}
-			>
-				<Show when={icon()}>{icon()}</Show>
-			</span>
+			<Show when={icon()}>
+				<span
+					aria-hidden="true"
+					class={styles().icon({
+						class: [local.slotClasses?.icon],
+					})}
+				>
+					{icon()}
+				</span>
+			</Show>
 			{local.children}
 		</KButton>
 	);

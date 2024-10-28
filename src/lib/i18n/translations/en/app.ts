@@ -34,7 +34,17 @@ const app = {
 		},
 		members: {
 			title: "Members",
+			leave: "Leave",
 		},
+	},
+	invite: {
+		title: "Invites",
+		text: "You have been invited to",
+		join: "Join",
+		decline: "Decline",
+		create: "Invite members",
+		add: "Add invite",
+		noInvites: "There are no invites",
 	},
 };
 

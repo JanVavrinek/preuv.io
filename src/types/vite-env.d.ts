@@ -5,6 +5,10 @@ interface ImportMetaEnv {
 	readonly VITE_BASE_URL: string;
 	readonly VITE_DB_URL: string;
 	readonly VITE_EMAIL_CONFIRM_REDIRECT: string;
+	/**
+	 * # This key should never be exposed to clients!
+	 */
+	readonly VITE_SUPABASE_SERVICE_KEY: string;
 }
 
 interface ImportMeta {

@@ -21,6 +21,7 @@ export default router({
 				.values({
 					id: opts.ctx.user.sub,
 					name: opts.ctx.user.email.split("@")[0],
+					email: opts.ctx.user.email,
 				})
 				.returning()
 		).at(0);

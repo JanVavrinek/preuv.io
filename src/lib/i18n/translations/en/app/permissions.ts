@@ -2,7 +2,8 @@ import type { RolePermissions } from "@lib/db/schemas/role";
 
 const permissions: Record<RolePermissions, string> = {
 	"member:delete": "Delete member",
-	"member:invite": "Invite member",
+	"invite:create": "Invite member",
+	"invite:delete": "Delete invite",
 	"member:update": "Update member",
 	"organization:transfer": "Transfer organization",
 	"organization:update": "Update organization",

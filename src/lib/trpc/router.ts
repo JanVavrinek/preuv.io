@@ -1,4 +1,5 @@
 import { router } from "./init";
+import invite from "./routers/invite";
 import member from "./routers/member";
 import organization from "./routers/organization";
 import role from "./routers/role";
@@ -9,6 +10,7 @@ export const appRouter = router({
 	organization,
 	role,
 	member,
+	invite,
 });
 
 export type AppRouter = typeof appRouter;

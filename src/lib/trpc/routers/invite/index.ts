@@ -1,15 +1,12 @@
 import { db } from "@lib/db";
 import { invite } from "@lib/db/schemas/invite";
-import { organization } from "@lib/db/schemas/organization";
-import { RolePermissions } from "@lib/db/schemas/role";
+import { member } from "@lib/db/schemas/member";
+import { organization, organizationSelectModelSchema } from "@lib/db/schemas/organization";
 import { procedure, router } from "@lib/trpc/init";
 import { isAuthorized } from "@lib/trpc/middlewares";
-import { hasOrganization } from "@lib/trpc/middlewares/hasOrganization";
 import { paginationSchema } from "@lib/trpc/schemas/pagination";
 import { TRPCError } from "@trpc/server";
-import { hasPermission } from "@utils/permissions";
-import { count, eq } from "drizzle-orm";
-import { inviteCreateMutationSchema } from "./schemas";
+import { and, count, eq } from "drizzle-orm";
 
 export default router({
 	getMany: procedure
@@ -34,11 +31,26 @@ export default router({
 			return { items, total: total.at(0)?.count ?? 0 };
 		}),
 
-	create: procedure
+	decline: procedure
 		.use(isAuthorized)
-		.use(hasOrganization)
-		.input(inviteCreateMutationSchema)
+		.input(organizationSelectModelSchema.shape.id)
 		.mutation(async (opts) => {
-			if (!hasPermission(RolePermissions.MEMBER_INVITE, opts.ctx.role.role)) throw new TRPCError({ code: "FORBIDDEN" });
+			await db.delete(invite).where(and(eq(invite.organization_id, opts.input), eq(invite.user_id, opts.ctx.user.sub)));
+		}),
+
+	accept: procedure
+		.use(isAuthorized)
+		.input(organizationSelectModelSchema.shape.id)
+		.mutation(async (opts) => {
+			await db.transaction(async (tx) => {
+				const invitation = await tx.query.invite.findFirst({
+					where: and(eq(invite.organization_id, opts.input), eq(invite.user_id, opts.ctx.user.sub)),
+				});
+				if (!invitation) throw new TRPCError({ code: "NOT_FOUND" });
+				await tx.insert(member).values({ user_id: opts.ctx.user.sub, role_id: invitation.role_id });
+				await tx
+					.delete(invite)
+					.where(and(eq(invite.organization_id, opts.input), eq(invite.user_id, opts.ctx.user.sub)));
+			});
 		}),
 });

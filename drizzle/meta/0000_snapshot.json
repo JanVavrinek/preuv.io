@@ -1,9 +1,94 @@
 {
-  "id": "894b4fca-5dc0-4752-8ffe-ad0256df195e",
+  "id": "ffed711c-4c9c-445d-97bf-12ec2676e35f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.invites": {
+      "name": "invites",
+      "schema": "",
+      "columns": {
+        "role_id": {
+          "name": "role_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "name": "organization_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "invites_role_id_roles_id_fk": {
+          "name": "invites_role_id_roles_id_fk",
+          "tableFrom": "invites",
+          "tableTo": "roles",
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "invites_user_id_users_id_fk": {
+          "name": "invites_user_id_users_id_fk",
+          "tableFrom": "invites",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "invites_organization_id_organizations_id_fk": {
+          "name": "invites_organization_id_organizations_id_fk",
+          "tableFrom": "invites",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "organization_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "invites_role_id_user_id_organization_id_pk": {
+          "name": "invites_role_id_user_id_organization_id_pk",
+          "columns": [
+            "role_id",
+            "user_id",
+            "organization_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "public.members": {
       "name": "members",
       "schema": "",
@@ -19,6 +104,13 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -127,6 +219,12 @@
           "name": "permissions",
           "type": "permissions[]",
           "primaryKey": false,
+          "notNull": true
+        },
+        "owner": {
+          "name": "owner",
+          "type": "boolean",
+          "primaryKey": false,
           "notNull": false
         }
       },
@@ -165,12 +263,26 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
       "checkConstraints": {}
     }
   },
@@ -179,15 +291,27 @@
       "name": "permissions",
       "schema": "public",
       "values": [
-        "organization:delete",
         "organization:update",
         "organization:transfer",
         "project:delete",
         "project:create",
         "project:update",
-        "member:invite",
         "member:delete",
-        "member:update"
+        "member:update",
+        "role:create",
+        "role:delete",
+        "role:update",
+        "invite:delete",
+        "invite:create",
+        "testimonial:create",
+        "testimonial:delete",
+        "testimonial:update",
+        "submitter:create",
+        "submitter:delete",
+        "submitter:update",
+        "form:create",
+        "form:delete",
+        "form:update"
       ]
     }
   },

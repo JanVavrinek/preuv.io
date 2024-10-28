@@ -2,6 +2,8 @@ import Button from "@atoms/Button";
 import Collapsible from "@atoms/Collapsible";
 import { Dialog } from "@atoms/Dialog";
 import Input from "@atoms/Input";
+import PermissionsGuard from "@atoms/PermissionsGuard";
+import useHasPermissions from "@atoms/PermissionsGuard/hooks/useHasPermissions";
 import { toast } from "@atoms/Toaster";
 import Toggle from "@atoms/Toggle";
 import { Dialog as KDialog } from "@kobalte/core/dialog";
@@ -27,6 +29,7 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 			name: props.role?.name,
 		},
 	});
+	const check = useHasPermissions();
 
 	const handleSubmit: ComponentProps<typeof Form>["onSubmit"] = async (values) => {
 		let p: Promise<RoleSelectModel>;
@@ -89,6 +92,7 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
 							placeholder={c.app.organization.roles.owner()}
+							readOnly={!check([RolePermissions.ROLE_UPDATE])}
 						/>
 					)}
 				</Field>
@@ -113,7 +117,7 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 											<Toggle
 												checked={permissions().includes(p()) || !!props.role?.owner}
 												onChange={(v) => handleTogglePermission(p(), v)}
-												disabled={!!props.role?.owner}
+												disabled={!!props.role?.owner || !check([RolePermissions.ROLE_UPDATE])}
 											/>
 										</td>
 									</tr>
@@ -122,18 +126,20 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 						</tbody>
 					</table>
 				</Collapsible>
-				<Show when={props.onDeleted && !props.role?.owner}>
+				<Show when={props.onDeleted && !props.role?.owner && check([RolePermissions.ROLE_DELETE])}>
 					<Collapsible triggerChildren={c.generic.common.dangerZone()}>
 						<ConfirmDelete onConfirm={handleDelete}>
-							<KDialog.Trigger as={Button} variant="danger" icon={<FaSolidTrash />} class="mt-2 gap-2">
+							<KDialog.Trigger as={Button} variant="danger" icon={<FaSolidTrash />} class="mt-2">
 								{c.generic.actions.delete()}
 							</KDialog.Trigger>
 						</ConfirmDelete>
 					</Collapsible>
 				</Show>
-				<Button type="submit" disabled={roleForm.invalid || roleForm.submitting}>
-					{c.generic.actions.save()}
-				</Button>
+				<PermissionsGuard permissions={[RolePermissions.ROLE_UPDATE]}>
+					<Button type="submit" disabled={roleForm.invalid || roleForm.submitting}>
+						{c.generic.actions.save()}
+					</Button>
+				</PermissionsGuard>
 			</Form>
 		</Dialog>
 	);

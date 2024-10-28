@@ -1,0 +1,22 @@
+@keyframes skeletonAnimation {
+	0% {
+		background-position: 0%;
+	}
+
+	100% {
+		background-position: -400%;
+	}
+}
+
+.skeleton[data-visible="true"]::after {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	content: "";
+	@apply bg-gradient-to-r from-pv-blue-300 via-pv-blue-200 to-pv-blue-300 bg-[length:200%];
+	animation: skeletonAnimation ease 4s infinite;
+}
+.skeleton[data-visible="true"] {
+	overflow: hidden;
+}

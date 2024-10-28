@@ -15,6 +15,7 @@ export const member = t.pgTable(
 			.uuid()
 			.references(() => user.id, { onDelete: "cascade" })
 			.notNull(),
+		created_at: t.timestamp().defaultNow().notNull(),
 	},
 	(table) => {
 		return {

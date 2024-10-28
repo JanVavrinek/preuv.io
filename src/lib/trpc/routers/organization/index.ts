@@ -14,6 +14,7 @@ import { paginationSchema } from "@lib/trpc/schemas/pagination";
 import { TRPCError } from "@trpc/server";
 import { hasPermission } from "@utils/permissions";
 import { eq } from "drizzle-orm";
+import invite from "./routers/invite";
 import { organizationCreateMutationInputSchema } from "./schemas";
 
 export default router({
@@ -91,4 +92,6 @@ export default router({
 			if (!update) throw new TRPCError({ code: "NOT_FOUND" });
 			return update;
 		}),
+
+	invite,
 });

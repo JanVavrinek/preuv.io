@@ -13,13 +13,27 @@ export enum RolePermissions {
 	PROJECT_CREATE = "project:create",
 	PROJECT_UPDATE = "project:update",
 	//member
-	MEMBER_INVITE = "member:invite",
 	MEMBER_DELETE = "member:delete",
 	MEMBER_UPDATE = "member:update",
 	//role
 	ROLE_CREATE = "role:create",
 	ROLE_DELETE = "role:delete",
 	ROLE_UPDATE = "role:update",
+	//invite
+	INVITE_DELETE = "invite:delete",
+	INVITE_CREATE = "invite:create",
+	//testimonial
+	TESTIMONIAL_CREATE = "testimonial:create",
+	TESTIMONIAL_DELETE = "testimonial:delete",
+	TESTIMONIAL_UPDATE = "testimonial:update",
+	//testimonial submitter
+	SUBMITTER_CREATE = "submitter:create",
+	SUBMITTER_DELETE = "submitter:delete",
+	SUBMITTER_UPDATE = "submitter:update",
+	//testimonial form
+	FORM_CREATE = "form:create",
+	FORM_DELETE = "form:delete",
+	FORM_UPDATE = "form:update",
 }
 
 export const rolePermissions = t.pgEnum("permissions", enumToPgEnum(RolePermissions));

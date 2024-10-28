@@ -1,0 +1,9 @@
+.content {
+	@apply flex flex-col rounded-xl border border-pv-blue-200 bg-white p-2 min-w-52 shadow-xl;
+	max-width: var(--kb-popper-content-available-width);
+	max-height: var(--kb-popper-content-available-height);
+}
+
+.item {
+	@apply p-2 min-h-7 flex flex-row items-center hover:bg-pv-blue-50 rounded-md cursor-pointer data-[disabled]:opacity-75 data-[disabled]:cursor-not-allowed;
+}

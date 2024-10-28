@@ -6,6 +6,7 @@ const generic = {
 		close: "Close",
 		add: "Add new",
 		create: "Create new",
+		remove: "Remove",
 	},
 	toasts: {
 		saving: {
