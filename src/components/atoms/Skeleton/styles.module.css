@@ -17,6 +17,7 @@
 	@apply bg-gradient-to-r from-pv-blue-300 via-pv-blue-200 to-pv-blue-300 bg-[length:200%];
 	animation: skeletonAnimation ease 4s infinite;
 }
+
 .skeleton[data-visible="true"] {
 	overflow: hidden;
 }

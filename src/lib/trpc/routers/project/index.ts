@@ -12,7 +12,6 @@ import {
 	StorageEntity,
 	createSignedUploadUrl,
 	createSignedUrl,
-	createSignedUrls,
 	storageObjectDelete,
 	storageObjectInfo,
 } from "@lib/supabase/storage";
@@ -20,9 +19,11 @@ import { procedure, router } from "@lib/trpc/init";
 import { isAuthorized } from "@lib/trpc/middlewares";
 import { hasOrganization } from "@lib/trpc/middlewares/hasOrganization";
 import { paginationSchema } from "@lib/trpc/schemas";
+import type { Collection } from "@lib/trpc/types";
 import { TRPCError } from "@trpc/server";
 import { hasPermission } from "@utils/permissions";
 import { and, asc, count, eq } from "drizzle-orm";
+import { mapProjectsWithImages } from "./mappers";
 import { updatePhotoMutationInputSchema } from "./schemas";
 
 const client = getServerSupabaseClient();
@@ -102,7 +103,7 @@ export default router({
 		.use(isAuthorized)
 		.use(hasOrganization)
 		.input(paginationSchema)
-		.query(async (opts) => {
+		.query(async (opts): Promise<Collection<ProjectSelectModel>> => {
 			const [projects, total] = await Promise.all([
 				db
 					.select()
@@ -113,18 +114,52 @@ export default router({
 					.orderBy(asc(project.id)),
 				db.select({ count: count() }).from(project).where(eq(project.organization_id, opts.ctx.role.organization.id)),
 			]);
-			const urls = await createSignedUrls(
-				client,
-				StorageEntity.PROJECT_COVER,
-				projects.filter((p) => p.image).map((p) => `${p.id}/${p.image}`),
-			);
 
+			const items = await mapProjectsWithImages(projects, client);
 			return {
-				items: projects.map((p) => ({
-					...p,
-					image: urls.data?.find((o) => o.path?.includes(`${p.id}/${p.image}`))?.signedUrl,
-				})),
+				items,
 				total: total.at(0)?.count ?? 0,
 			};
+		}),
+
+	getOne: procedure
+		.use(isAuthorized)
+		.use(hasOrganization)
+		.input(projectSelectModelSchema.shape.id)
+		.query(async (opts): Promise<ProjectSelectModel> => {
+			const found = await db.query.project.findFirst({
+				where: and(eq(project.id, opts.input), eq(project.organization_id, opts.ctx.role.organization.id)),
+			});
+			if (!found) throw new TRPCError({ code: "NOT_FOUND" });
+
+			const items = await mapProjectsWithImages([found], client);
+
+			return items[0];
+		}),
+
+	update: procedure
+		.use(isAuthorized)
+		.use(hasOrganization)
+		.input(
+			projectSelectModelSchema.pick({
+				name: true,
+				id: true,
+			}),
+		)
+		.mutation(async (opts): Promise<ProjectSelectModel> => {
+			if (!hasPermission(RolePermissions.PROJECT_UPDATE, opts.ctx.role.role))
+				throw new TRPCError({ code: "FORBIDDEN" });
+
+			const updated = (
+				await db
+					.update(project)
+					.set({ name: opts.input.name })
+					.where(and(eq(project.id, opts.input.id), eq(project.organization_id, opts.ctx.role.organization.id)))
+					.returning()
+			).at(0);
+			if (!updated) throw new TRPCError({ code: "NOT_FOUND" });
+			const items = await mapProjectsWithImages([updated], client);
+
+			return items[0];
 		}),
 });
