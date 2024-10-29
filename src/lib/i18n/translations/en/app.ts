@@ -46,6 +46,20 @@ const app = {
 		add: "Add invite",
 		noInvites: "There are no invites",
 	},
+	fallback: {
+		text: "Could not find what you are looking for",
+		back: "Go back to Dashboard",
+	},
+	project: {
+		edit: {
+			title: "General project settings",
+			name: "Project name",
+			placeholder: "My project",
+		},
+		create: {
+			title: "Create new project",
+		},
+	},
 };
 
 export default app;

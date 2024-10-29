@@ -7,11 +7,9 @@ export async function mapProjectsWithImages(
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	client: SupabaseClient<any, "public", any>,
 ) {
-	const urls = await createSignedUrls(
-		client,
-		StorageEntity.PROJECT_COVER,
-		projects.filter((p) => p.image).map((p) => `${p.id}/${p.image}`),
-	);
+	const objectNames = projects.filter((p) => p.image).map((p) => `${p.id}/${p.image}`);
+	if (!objectNames.length) return projects;
+	const urls = await createSignedUrls(client, StorageEntity.PROJECT_COVER, objectNames);
 
 	return projects.map((p) => ({
 		...p,
