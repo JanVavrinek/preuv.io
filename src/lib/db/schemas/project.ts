@@ -1,8 +1,10 @@
-import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import * as t from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { customer } from "./customer";
 import { organization } from "./organization";
+import { testimonial } from "./testimonial";
 
 export const project = t.pgTable("projects", {
 	id: t.uuid().defaultRandom().primaryKey(),
@@ -24,3 +26,8 @@ export const projectSelectModelSchema = createSelectSchema(project).extend({
 export const projectInsertModelSchema = createInsertSchema(project).extend({
 	name: z.string().min(3).max(255),
 });
+
+export const projectRelations = relations(project, ({ many }) => ({
+	customers: many(customer),
+	testimonials: many(testimonial),
+}));

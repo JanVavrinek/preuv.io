@@ -1,4 +1,5 @@
 import { router } from "./init";
+import customer from "./routers/customer";
 import invite from "./routers/invite";
 import member from "./routers/member";
 import organization from "./routers/organization";
@@ -13,6 +14,7 @@ export const appRouter = router({
 	member,
 	invite,
 	project,
+	customer,
 });
 
 export type AppRouter = typeof appRouter;

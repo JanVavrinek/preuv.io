@@ -60,6 +60,15 @@ const app = {
 			title: "Create new project",
 		},
 	},
+	customer: {
+		list: {
+			title: "Customers",
+		},
+		detail: {
+			name: "Customer name",
+			testimonialCount: "No. of testimonials",
+		},
+	},
 };
 
 export default app;
