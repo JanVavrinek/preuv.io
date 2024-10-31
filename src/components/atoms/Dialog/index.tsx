@@ -15,7 +15,7 @@ export function Dialog(props: DialogProps) {
 			{props.openTrigger}
 			<KDialog.Portal>
 				<KDialog.Overlay class={style.dialog__overlay} />
-				<div class="fixed inset-0 flex items-center justify-center p-2">
+				<div class="fixed inset-0 z-10 flex items-center justify-center p-2">
 					<KDialog.Content
 						class={styles().content({
 							class: [style.dialog__content, variantProps.slotClasses?.content],

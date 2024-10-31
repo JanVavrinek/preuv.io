@@ -13,7 +13,7 @@ export default function AppLayout(props: ParentProps) {
 		<AppLayoutTitleProvider>
 			<OrganizationsProvider>
 				<UserProvider>
-					<main class="flex h-dvh w-dvw flex-row ">
+					<main class="flex h-dvh w-dvw flex-row">
 						<Sidebar onOpen={setOpen} open={open()} />
 						<section
 							class="relative z-0 flex h-dvh w-full flex-col overflow-auto bg-pv-blue-100 transition-all duration-200 "

@@ -43,7 +43,7 @@
 }
 
 .dialog__overlay {
-	@apply fixed inset-0 h-dvh w-dvw;
+	@apply fixed inset-0 h-dvh w-dvw z-10;
 	background: radial-gradient(#0000001c, #000000a0);
 	animation: overlayHide .2s ease forwards;
 

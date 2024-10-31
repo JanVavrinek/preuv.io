@@ -3,9 +3,9 @@ import { organizationsContext } from "@contexts/Organizations";
 import { Button } from "@kobalte/core/button";
 import { Tabs } from "@kobalte/core/tabs";
 import useI18n from "@lib/i18n/hooks/useI18n";
-import { A, useLocation } from "@solidjs/router";
+import { A, useIsRouting, useLocation } from "@solidjs/router";
 import { FaSolidXmark } from "solid-icons/fa";
-import { Suspense, type VoidProps, createMemo, createSignal, lazy, useContext } from "solid-js";
+import { Suspense, type VoidProps, createEffect, createMemo, createSignal, lazy, useContext } from "solid-js";
 import type { SidebarProps } from "./types";
 const CreateOrganization = lazy(() => import("@molecules/App/CreateOrganization"));
 
@@ -17,6 +17,13 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 	const [value, setValue] = createSignal(location.pathname ?? "/app/dashboard");
 	const { organizations, setOrganizations } = useContext(organizationsContext);
 	const [open, setOpen] = createSignal(false);
+	const routing = useIsRouting();
+
+	createEffect(() => {
+		if (routing()) {
+			props.onOpen(false);
+		}
+	});
 
 	const activeOrganization = createMemo(() => {
 		return (
@@ -28,7 +35,7 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 	return (
 		<>
 			<div
-				class="fixed inset-0 z-10 h-dvh w-dvw cursor-pointer bg-black bg-opacity-20 opacity-100 backdrop-blur-sm transition-[left] duration-150 lg:hidden"
+				class="fixed inset-0 z-[1] h-dvh w-dvw cursor-pointer bg-black bg-opacity-20 opacity-100 backdrop-blur-sm transition-[left] duration-150 lg:hidden"
 				classList={{
 					"-left-full opacity-0": !props.open,
 				}}
@@ -37,7 +44,7 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 			<Tabs
 				as="nav"
 				orientation="vertical"
-				class="fixed z-10 flex h-dvh w-full max-w-72 flex-col gap-4 border border-pv-blue-200 bg-pv-blue-50 py-4 shadow-lg transition-all duration-500 lg:relative lg:left-0 lg:transition-none"
+				class="fixed z-[1] flex h-dvh w-full max-w-72 flex-col gap-4 border border-pv-blue-200 bg-pv-blue-50 py-4 shadow-lg transition-all duration-500 lg:relative lg:left-0 lg:transition-none"
 				value={value()}
 				onChange={setValue}
 				defaultValue="/app/dashboard"
@@ -50,22 +57,10 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 					preuv.io
 				</A>
 				<Tabs.List class="relative z-0 flex h-full w-full flex-col gap-4 p-5 ">
-					<Tabs.Trigger
-						value="/app/dashboard"
-						href="/app/dashboard"
-						as={A}
-						class={ITEM_CLASS}
-						onClick={() => props.onOpen(false)}
-					>
-						Dashboard
+					<Tabs.Trigger value="/app/dashboard" href="/app/dashboard" as={A} class={ITEM_CLASS}>
+						{c.app.dashboard.title()}
 					</Tabs.Trigger>
-					<Tabs.Trigger
-						value="/app/customers"
-						href="/app/customers"
-						as={A}
-						class={ITEM_CLASS}
-						onClick={() => props.onOpen(false)}
-					>
+					<Tabs.Trigger value="/app/customers" href="/app/customers" as={A} class={ITEM_CLASS}>
 						{c.app.customer.list.title()}
 					</Tabs.Trigger>
 					<Tabs.Indicator class="-z-10 pointer-events-none absolute top-0 left-0 w-full px-2 transition-all duration-150">
@@ -106,7 +101,7 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 			<Button
 				class="fixed top-2 right-2 z-10 rounded-full bg-pv-blue-50 bg-opacity-50 p-2 text-3xl text-pv-blue-700 transition-[top] delay-100 duration-300 lg:hidden"
 				classList={{
-					"-top-full": !props.open,
+					"!-top-full": !props.open,
 				}}
 				onclick={() => props.onOpen(false)}
 			>
