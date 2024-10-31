@@ -68,6 +68,9 @@ const app = {
 			name: "Customer name",
 			testimonialCount: "No. of testimonials",
 		},
+		create: {
+			title: "Create new customer",
+		},
 	},
 };
 

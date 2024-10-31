@@ -6,7 +6,6 @@ import { client } from "@lib/trpc/client";
 import type { ListCustomer } from "@lib/trpc/routers/customer/types";
 import type { Collection } from "@lib/trpc/types";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
-import { useNavigate } from "@solidjs/router";
 import { FaSolidGear } from "solid-icons/fa";
 import { For, createEffect, createSignal, on } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -18,7 +17,6 @@ export default function Customers() {
 	const [page, setPage] = createSignal(1);
 	const [customers, setCustomers] = createStore<Collection<ListCustomer>>({ items: [], total: -1 });
 	const { handler, loading } = useAsync(client.customer.getMany.query);
-	const navigate = useNavigate();
 
 	createEffect(
 		on(page, () => {
