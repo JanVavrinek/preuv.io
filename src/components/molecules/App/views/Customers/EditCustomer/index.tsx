@@ -34,10 +34,10 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 							inputProps={props}
 							value={field.value}
 							required
-							label={c.app.organization.roles.name()}
+							label={c.app.customer.detail.name()}
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
-							placeholder={c.app.organization.roles.owner()}
+							placeholder="Jane Doe"
 							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
 						/>
 					)}
@@ -48,10 +48,10 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 							inputProps={props}
 							value={field.value ?? ""}
 							required
-							label={c.app.organization.roles.name()}
+							label={c.app.customer.detail.company.label()}
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
-							placeholder={c.app.organization.roles.owner()}
+							placeholder={c.app.customer.detail.company.placeholder()}
 							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
 						/>
 					)}
@@ -62,10 +62,10 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 							inputProps={props}
 							value={field.value ?? ""}
 							required
-							label={c.app.organization.roles.name()}
+							label={c.app.customer.detail.title.label()}
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
-							placeholder={c.app.organization.roles.owner()}
+							placeholder={c.app.customer.detail.title.placeholder()}
 							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
 						/>
 					)}
@@ -76,10 +76,10 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 							inputProps={props}
 							value={field.value ?? ""}
 							required
-							label={c.app.organization.roles.name()}
+							label="URL"
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
-							placeholder={c.app.organization.roles.owner()}
+							placeholder="https://..."
 							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
 						/>
 					)}

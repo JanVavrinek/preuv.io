@@ -1,11 +1,13 @@
 import Button from "@atoms/Button";
 import Pagination from "@atoms/Pagination";
 import useAsync from "@hooks/useAsync";
+import { Dialog } from "@kobalte/core/dialog";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import type { ListCustomer } from "@lib/trpc/routers/customer/types";
 import type { Collection } from "@lib/trpc/types";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
+import EditCustomer from "@molecules/App/views/Customers/EditCustomer";
 import { FaSolidGear } from "solid-icons/fa";
 import { For, createEffect, createSignal, on } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -51,7 +53,15 @@ export default function Customers() {
 									</td>
 									<td class="py-2 pr-2 pl-3 group-even:bg-pv-blue-100">{customer.testimonial_count}</td>
 									<td class="py-2 pr-2 pl-3 group-even:bg-pv-blue-100 group-last-of-type:rounded-br-xl">
-										<Button icon={<FaSolidGear />}>{c.generic.actions.edit()}</Button>
+										<EditCustomer
+											customer={customer}
+											onUpdate={() => {}}
+											openTrigger={
+												<Dialog.Trigger as={Button} icon={<FaSolidGear />}>
+													{c.generic.actions.edit()}
+												</Dialog.Trigger>
+											}
+										/>
 									</td>
 								</tr>
 							)}

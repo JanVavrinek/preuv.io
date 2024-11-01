@@ -67,6 +67,14 @@ const app = {
 		detail: {
 			name: "Customer name",
 			testimonialCount: "No. of testimonials",
+			title: {
+				label: "Title",
+				placeholder: "Assistant (to) the Regional Manager",
+			},
+			company: {
+				label: "Company",
+				placeholder: "Dunder Mifflin",
+			},
 		},
 		create: {
 			title: "Create new customer",
