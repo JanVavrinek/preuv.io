@@ -78,6 +78,7 @@ const app = {
 		},
 		create: {
 			title: "Create new customer",
+			noProject: "Select a project",
 		},
 	},
 };

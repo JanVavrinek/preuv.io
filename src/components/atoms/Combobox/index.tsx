@@ -1,11 +1,15 @@
 import InterSectionObserver from "@atoms/IntersectionObserver";
 import { Combobox as KCombobox } from "@kobalte/core/combobox";
+import useI18n from "@lib/i18n/hooks/useI18n";
 import { FaSolidAngleDown } from "solid-icons/fa";
-import { Show, type VoidProps } from "solid-js";
+import { For, Show, type VoidProps, createMemo } from "solid-js";
 import styles from "./styles.module.css";
 import type { ComboboxItem, ComboboxProps } from "./types";
 
-export default function Combobox(props: VoidProps<ComboboxProps>) {
+export default function Combobox<T, U>(props: VoidProps<ComboboxProps<T, U>>) {
+	const { c } = useI18n();
+	const parseIssues = createMemo(() => (props.parseResult?.success ? undefined : props.parseResult?.error.issues));
+
 	return (
 		<KCombobox<ComboboxItem>
 			options={props.options}
@@ -48,6 +52,15 @@ export default function Combobox(props: VoidProps<ComboboxProps>) {
 					</Show>
 				</KCombobox.Content>
 			</KCombobox.Portal>
+			<Show when={!!parseIssues()?.length && props.showErrors}>
+				<ol class="flex flex-col gap-1 pl-2 text-pv-red-500 text-sm">
+					<For each={parseIssues()}>
+						{(issue) => (
+							<KCombobox.ErrorMessage as="li">{c.errors.zod[issue.code](issue as never)}</KCombobox.ErrorMessage>
+						)}
+					</For>
+				</ol>
+			</Show>
 		</KCombobox>
 	);
 }

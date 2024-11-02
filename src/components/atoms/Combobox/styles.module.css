@@ -1,5 +1,5 @@
 .content {
-	@apply flex flex-col rounded-xl border border-pv-blue-200 bg-white p-2 min-w-52 shadow-xl;
+	@apply flex flex-col rounded-xl border border-pv-blue-200 bg-white p-2 min-w-52 shadow-xl z-10;
 	max-width: var(--kb-popper-content-available-width);
 	max-height: var(--kb-popper-content-available-height);
 }

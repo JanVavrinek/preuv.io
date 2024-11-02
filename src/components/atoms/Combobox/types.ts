@@ -1,4 +1,5 @@
 import type { JSX } from "solid-js";
+import type { z } from "zod";
 
 export type ComboboxItem = {
 	label: string;
@@ -7,7 +8,7 @@ export type ComboboxItem = {
 	disabled?: boolean;
 };
 
-export type ComboboxProps = {
+export type ComboboxProps<T, U> = {
 	options: ComboboxItem[];
 	label?: string;
 	value?: ComboboxItem;
@@ -21,4 +22,6 @@ export type ComboboxProps = {
 		onBlur: JSX.EventHandler<HTMLSelectElement, FocusEvent>;
 	};
 	onReachEnd?: () => void;
+	parseResult?: z.SafeParseReturnType<T, U>;
+	showErrors?: boolean;
 };

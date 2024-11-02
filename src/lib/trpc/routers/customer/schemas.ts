@@ -1,3 +1,4 @@
-import { customerInsertModelSchema } from "@lib/db/schemas/customer";
+import { customerInsertModelSchema, customerSelectModelSchema } from "@lib/db/schemas/customer";
 
-export const customerUpdateMutationInputSchema = customerInsertModelSchema.omit({ created_at: true });
+export const customerUpdateMutationInputSchema = customerSelectModelSchema.omit({ created_at: true });
+export const customerCreateMutationInputSchema = customerInsertModelSchema.omit({ created_at: true, id: true });
