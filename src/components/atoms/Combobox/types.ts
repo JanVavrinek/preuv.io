@@ -24,4 +24,5 @@ export type ComboboxProps<T, U> = {
 	onReachEnd?: () => void;
 	parseResult?: z.SafeParseReturnType<T, U>;
 	showErrors?: boolean;
+	class?: string;
 };

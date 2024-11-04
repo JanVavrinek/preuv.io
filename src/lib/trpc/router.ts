@@ -5,6 +5,7 @@ import member from "./routers/member";
 import organization from "./routers/organization";
 import project from "./routers/project";
 import role from "./routers/role";
+import testimonial from "./routers/testimonial";
 import user from "./routers/user";
 
 export const appRouter = router({
@@ -15,6 +16,7 @@ export const appRouter = router({
 	invite,
 	project,
 	customer,
+	testimonial,
 });
 
 export type AppRouter = typeof appRouter;

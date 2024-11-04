@@ -3,6 +3,7 @@ import { Combobox as KCombobox } from "@kobalte/core/combobox";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { FaSolidAngleDown } from "solid-icons/fa";
 import { For, Show, type VoidProps, createMemo } from "solid-js";
+import { comboBoxStyles } from "./styles";
 import styles from "./styles.module.css";
 import type { ComboboxItem, ComboboxProps } from "./types";
 
@@ -25,7 +26,9 @@ export default function Combobox<T, U>(props: VoidProps<ComboboxProps<T, U>>) {
 					</KCombobox.ItemLabel>
 				</KCombobox.Item>
 			)}
-			class="flex flex-col gap-1"
+			class={comboBoxStyles().root({
+				class: props.class,
+			})}
 			value={props.value}
 			onChange={props.onChange}
 			fitViewport
