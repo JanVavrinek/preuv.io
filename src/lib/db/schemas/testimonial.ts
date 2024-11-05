@@ -8,7 +8,7 @@ import { project } from "./project";
 export const testimonial = t.pgTable("testimonials", {
 	id: t.uuid().defaultRandom().primaryKey(),
 	text: t.text().notNull(),
-	rating: t.numeric().notNull(),
+	rating: t.smallint().default(0).notNull(),
 	customer_id: t
 		.uuid()
 		.references(() => customer.id, { onDelete: "cascade" })
@@ -25,10 +25,12 @@ export type TestimonialSelectModel = InferSelectModel<typeof testimonial>;
 export type TestimonialInsertModel = InferInsertModel<typeof testimonial>;
 
 export const testimonialInsertModelSchema = createInsertSchema(testimonial).extend({
-	rating: z.number().min(0).max(5),
+	rating: z.number().int().min(1).max(5),
+	text: z.string().min(3).max(1024),
 });
 export const testimonialSelectModelSchema = createSelectSchema(testimonial).extend({
-	rating: z.number().min(0).max(5),
+	rating: z.number().int().min(1).max(5),
+	text: z.string().min(3).max(1024),
 });
 
 export const testimonialRelations = relations(testimonial, ({ one }) => ({

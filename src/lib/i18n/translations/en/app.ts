@@ -87,6 +87,9 @@ const app = {
 			title: "Testimonials",
 			noFound: "No testimonials found, try to adjust your filter",
 		},
+		create: {
+			title: "Create testimonial",
+		},
 	},
 };
 
