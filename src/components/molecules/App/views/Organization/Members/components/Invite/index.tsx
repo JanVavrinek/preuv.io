@@ -120,7 +120,7 @@ export default function Invite() {
 													label={c.auth.signIn.email()}
 													parseResult={schema.shape.invites.element.shape.email.safeParse(field.value)}
 													showErrors={!!field.error.length}
-													placeholder="jane@doe.com"
+													placeholder="jane@preuv.io"
 												/>
 											)}
 										</Field>

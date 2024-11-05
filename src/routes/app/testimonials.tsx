@@ -8,8 +8,10 @@ import { client } from "@lib/trpc/client";
 import type { ListTestimonial } from "@lib/trpc/routers/testimonial/types";
 import type { Collection } from "@lib/trpc/types";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
+import Testimonial from "@molecules/App/Testimonial";
+import TestimonialSkeleton from "@molecules/App/Testimonial/index.skeleton";
 import { useSearchParams } from "@solidjs/router";
-import { For, batch, createEffect, createMemo, createSignal, on, onMount } from "solid-js";
+import { For, Show, batch, createEffect, createMemo, createSignal, on, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
 const LIMIT = 20;
@@ -89,7 +91,7 @@ export default function Customers() {
 	return (
 		<div class="w-full flex-grow p-4">
 			<div class="flex min-h-full w-full flex-col gap-2 rounded-xl border border-pv-blue-200 bg-pv-blue-50 shadow-lg">
-				<AppLayoutTitle>{c.app.customer.list.title()}</AppLayoutTitle>
+				<AppLayoutTitle>{c.app.testimonial.list.title()}</AppLayoutTitle>
 				<div class="w-full border-pv-blue-200 border-b p-2">
 					<Combobox
 						value={projectValue() ?? undefined}
@@ -104,11 +106,28 @@ export default function Customers() {
 					/>
 				</div>
 				<div class="flex flex-col gap-2 p-5">
-					<For each={testimonials.items}>
+					<For
+						each={testimonials.items}
+						fallback={
+							<Show
+								when={!testimonials.items.length && testimonials.total === 0}
+								fallback={
+									<>
+										<TestimonialSkeleton />
+										<TestimonialSkeleton />
+									</>
+								}
+							>
+								<p class="py-4 text-center font-semibold text-pv-blue-500">{c.app.testimonial.list.noFound()}</p>
+							</Show>
+						}
+					>
 						{(testimonial) => (
-							<div class="rounded-xl border border-pv-blue-200 bg-pv-blue-100 p-2">
-								<p>{testimonial.testimonial.text}</p>
-							</div>
+							<Testimonial
+								customer={testimonial.customer}
+								project={testimonial.project}
+								testimonial={testimonial.testimonial}
+							/>
 						)}
 					</For>
 					<div class="flex items-center justify-between">

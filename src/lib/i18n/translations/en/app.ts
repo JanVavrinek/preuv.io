@@ -63,6 +63,7 @@ const app = {
 	customer: {
 		list: {
 			title: "Customers",
+			noFound: "No customers found, try to adjust your filter",
 		},
 		detail: {
 			name: "Customer name",
@@ -79,6 +80,12 @@ const app = {
 		create: {
 			title: "Create new customer",
 			noProject: "Select a project",
+		},
+	},
+	testimonial: {
+		list: {
+			title: "Testimonials",
+			noFound: "No testimonials found, try to adjust your filter",
 		},
 	},
 };

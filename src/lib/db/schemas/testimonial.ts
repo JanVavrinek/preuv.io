@@ -1,6 +1,7 @@
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import * as t from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 import { customer } from "./customer";
 import { project } from "./project";
 
@@ -17,13 +18,18 @@ export const testimonial = t.pgTable("testimonials", {
 		.references(() => project.id, { onDelete: "cascade" })
 		.notNull(),
 	created_at: t.timestamp().defaultNow().notNull(),
+	approved: t.boolean().default(false).notNull(),
 });
 
 export type TestimonialSelectModel = InferSelectModel<typeof testimonial>;
 export type TestimonialInsertModel = InferInsertModel<typeof testimonial>;
 
-export const testimonialSelectModelSchema = createSelectSchema(testimonial);
-export const testimonialInsertModelSchema = createInsertSchema(testimonial);
+export const testimonialInsertModelSchema = createInsertSchema(testimonial).extend({
+	rating: z.number().min(0).max(5),
+});
+export const testimonialSelectModelSchema = createSelectSchema(testimonial).extend({
+	rating: z.number().min(0).max(5),
+});
 
 export const testimonialRelations = relations(testimonial, ({ one }) => ({
 	project: one(project),

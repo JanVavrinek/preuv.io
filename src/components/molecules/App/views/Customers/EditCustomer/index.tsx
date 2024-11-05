@@ -122,6 +122,20 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 						/>
 					)}
 				</Field>
+				<Field name="email">
+					{(field, props) => (
+						<Input
+							inputProps={props}
+							value={field.value}
+							required
+							label="E-mail"
+							parseResult={schema.shape[field.name].safeParse(field.value)}
+							showErrors={!!field.error.length}
+							placeholder="jane@preuv.io"
+							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
+						/>
+					)}
+				</Field>
 				<Field name="project_id">
 					{(field, props) => (
 						<>

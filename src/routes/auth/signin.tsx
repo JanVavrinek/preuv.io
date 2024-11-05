@@ -51,7 +51,7 @@ export default function SignInView() {
 							label={c.auth.signIn.email()}
 							parseResult={loginSchema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
-							placeholder="jane@doe.com"
+							placeholder="jane@preuv.io"
 						/>
 					)}
 				</Field>

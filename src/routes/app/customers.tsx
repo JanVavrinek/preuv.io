@@ -112,7 +112,7 @@ export default function Customers() {
 					/>
 				</div>
 				<div class="flex flex-col gap-2 p-5">
-					<table class="w-full border-separate border-spacing-0 rounded-xl border border-pv-blue-200">
+					<table class="w-full border-separate border-spacing-0 rounded-t-xl border border-pv-blue-200">
 						<thead>
 							<tr>
 								<th class="rounded-tl-xl border-pv-blue-200 border-b bg-pv-blue-200 p-2 text-start">
@@ -183,6 +183,9 @@ export default function Customers() {
 							</For>
 						</tbody>
 					</table>
+					<Show when={!customers.items.length && customers.total === 0}>
+						<p class="py-4 text-center font-semibold text-pv-blue-500">{c.app.customer.list.noFound()}</p>
+					</Show>
 					<div class="flex items-center justify-between">
 						<PermissionsGuard permissions={[RolePermissions.CUSTOMER_CREATE]}>
 							<EditCustomer

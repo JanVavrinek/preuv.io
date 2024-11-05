@@ -8,6 +8,7 @@ import { testimonial } from "./testimonial";
 export const customer = t.pgTable("customers", {
 	id: t.uuid().defaultRandom().primaryKey(),
 	name: t.text().notNull(),
+	email: t.text().notNull(),
 	title: t.text(),
 	company: t.text(),
 	url: t.text(),
@@ -23,9 +24,11 @@ export type CustomerInsertModel = InferInsertModel<typeof customer>;
 
 export const customerSelectModelSchema = createSelectSchema(customer).extend({
 	name: z.string().min(3),
+	email: z.string().email(),
 });
 export const customerInsertModelSchema = createInsertSchema(customer).extend({
 	name: z.string().min(3),
+	email: z.string().email(),
 });
 
 export const customerRelations = relations(customer, ({ many, one }) => ({

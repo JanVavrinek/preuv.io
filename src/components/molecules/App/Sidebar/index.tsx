@@ -63,6 +63,9 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 					<Tabs.Trigger value="/app/customers" href="/app/customers" as={A} class={ITEM_CLASS}>
 						{c.app.customer.list.title()}
 					</Tabs.Trigger>
+					<Tabs.Trigger value="/app/testimonials" href="/app/testimonials" as={A} class={ITEM_CLASS}>
+						{c.app.testimonial.list.title()}
+					</Tabs.Trigger>
 					<Tabs.Indicator class="-z-10 pointer-events-none absolute top-0 left-0 w-full px-2 transition-all duration-150">
 						<div class="h-full w-full rounded-full bg-pv-navy-500" />
 					</Tabs.Indicator>

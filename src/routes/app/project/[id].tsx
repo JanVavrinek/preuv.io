@@ -5,9 +5,16 @@ import { client } from "@lib/trpc/client";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
 import DangerZone from "@molecules/App/views/Project/DangerZone";
 import Update from "@molecules/App/views/Project/Update";
-import { A, Navigate, useNavigate, useParams } from "@solidjs/router";
+import { A, Navigate, type RouteDefinition, useNavigate, useParams } from "@solidjs/router";
 import { FiExternalLink } from "solid-icons/fi";
 import { ErrorBoundary, Show, createSignal, onMount } from "solid-js";
+import { z } from "zod";
+
+export const route = {
+	matchFilters: {
+		id: (id) => z.string().uuid().safeParse(id).success,
+	},
+} satisfies RouteDefinition;
 
 function Inner() {
 	const { c } = useI18n();

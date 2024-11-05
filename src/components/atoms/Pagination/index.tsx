@@ -26,6 +26,7 @@ export default function Pagination<T extends ValidComponent = "nav">(
 			class={paginationStyles().root({
 				class: local.class,
 			})}
+			count={Math.max(1, other.count)}
 		>
 			<KPagination.Previous as={Button}>
 				<FaSolidAngleLeft />
