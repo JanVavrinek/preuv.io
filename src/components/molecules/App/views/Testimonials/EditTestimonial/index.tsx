@@ -4,7 +4,6 @@ import Combobox from "@atoms/Combobox";
 import type { ComboboxItem } from "@atoms/Combobox/types";
 import { Dialog } from "@atoms/Dialog";
 import Input from "@atoms/Input";
-import PermissionsGuard from "@atoms/PermissionsGuard";
 import useHasPermissions from "@atoms/PermissionsGuard/hooks/useHasPermissions";
 import { toast } from "@atoms/Toaster";
 import useAsync from "@hooks/useAsync";
@@ -15,8 +14,9 @@ import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import { testimonialCreateMutationInputSchema as schema } from "@lib/trpc/routers/testimonial/schemas";
 import type { ListTestimonial } from "@lib/trpc/routers/testimonial/types";
-import { createForm, getValue, reset, setValue, toCustom, zodForm } from "@modular-forms/solid";
+import { createForm, getErrors, getValue, reset, setValue, toCustom, zodForm } from "@modular-forms/solid";
 import ConfirmDelete from "@molecules/common/ConfirmDelete";
+import Rating from "@molecules/common/Rating";
 import { FaSolidTrash } from "solid-icons/fa";
 import { Show, type VoidProps, batch, createEffect, createSignal, on } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -29,7 +29,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 	const { c } = useI18n();
 	const check = useHasPermissions();
 	const [open, setOpen] = createSignal(false);
-	const [customerForm, { Field, Form }] = createForm({
+	const [testimonialForm, { Field, Form }] = createForm({
 		validate: zodForm(schema),
 		initialValues: props.testimonial?.testimonial,
 	});
@@ -82,7 +82,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 	};
 
 	const getProjectValue = (): ComboboxItem | undefined => {
-		const v = getValue(customerForm, "project_id");
+		const v = getValue(testimonialForm, "project_id");
 		if (!v) return;
 		const p = projects.items.find((i) => i.id === v);
 		if (!p) return;
@@ -94,7 +94,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 	createEffect(
 		on(open, (o) => {
 			if (o) handleLoadProjects();
-			else reset(customerForm);
+			else reset(testimonialForm);
 		}),
 	);
 
@@ -106,6 +106,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 			onOpenChange={setOpen}
 		>
 			<Form class="flex flex-col gap-2" onSubmit={handleSubmit}>
+				{String(JSON.stringify(getErrors(testimonialForm)))}
 				<Field name="text">
 					{(field, props) => (
 						<Input
@@ -115,7 +116,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 							label="Text"
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
-							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
+							readOnly={!check([RolePermissions.TESTIMONIAL_UPDATE])}
 						/>
 					)}
 				</Field>
@@ -129,10 +130,10 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 							inputProps={props}
 							value={field.value?.toISOString()}
 							required
-							label="E-mail"
+							label={c.generic.common.created()}
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
-							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
+							readOnly={!check([RolePermissions.TESTIMONIAL_UPDATE])}
 							type="date"
 						/>
 					)}
@@ -146,7 +147,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 									value: p.id,
 								}))}
 								value={getProjectValue()}
-								onChange={(v) => setValue(customerForm, "project_id", v?.value ?? "")}
+								onChange={(v) => setValue(testimonialForm, "project_id", v?.value ?? "")}
 								onReachEnd={handleLoadProjects}
 								label={c.app.project.edit.name()}
 								parseResult={schema.shape[field.name].safeParse(field.value)}
@@ -156,7 +157,29 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 						</>
 					)}
 				</Field>
-				<Show when={props.onDelete && check([RolePermissions.CUSTOMER_DELETE])}>
+				<Field name="customer_id">
+					{(field, props) => (
+						<>
+							<Combobox
+								options={projects.items.map<ComboboxItem>((p) => ({
+									label: p.name,
+									value: p.id,
+								}))}
+								value={getProjectValue()}
+								onChange={(v) => setValue(testimonialForm, "customer_id", v?.value ?? "")}
+								onReachEnd={handleLoadProjects}
+								label={c.app.customer.customer(1)}
+								parseResult={schema.shape[field.name].safeParse(field.value)}
+								showErrors={!!field.error.length}
+							/>
+							<input {...props} hidden />
+						</>
+					)}
+				</Field>
+				<Field name="rating" type="number" transform={toCustom((v) => Number(v), { on: "input" })}>
+					{(field, props) => <Rating inputProps={props} value={1} />}
+				</Field>
+				<Show when={props.onDelete && check([RolePermissions.TESTIMONIAL_DELETE])}>
 					<Collapsible triggerChildren={c.generic.common.dangerZone()}>
 						<ConfirmDelete onConfirm={handleDelete}>
 							<KDialog.Trigger as={Button} variant="danger" icon={<FaSolidTrash />} class="mt-2">
@@ -165,11 +188,14 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 						</ConfirmDelete>
 					</Collapsible>
 				</Show>
-				<PermissionsGuard permissions={[RolePermissions.ROLE_UPDATE]}>
-					<Button type="submit" disabled={customerForm.invalid || customerForm.submitting || !customerForm.dirty}>
+				<Show when={check([RolePermissions.TESTIMONIAL_CREATE]) || check([RolePermissions.TESTIMONIAL_UPDATE])}>
+					<Button
+						type="submit"
+						disabled={testimonialForm.invalid || testimonialForm.submitting || !testimonialForm.dirty}
+					>
 						{c.generic.actions.save()}
 					</Button>
-				</PermissionsGuard>
+				</Show>
 			</Form>
 		</Dialog>
 	);

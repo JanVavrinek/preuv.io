@@ -118,7 +118,7 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
 							placeholder="Jane Doe"
-							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
+							readOnly={!check([RolePermissions.CUSTOMER_UPDATE])}
 						/>
 					)}
 				</Field>
@@ -132,7 +132,7 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
 							placeholder="jane@preuv.io"
-							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
+							readOnly={!check([RolePermissions.CUSTOMER_UPDATE])}
 						/>
 					)}
 				</Field>
@@ -165,7 +165,7 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
 							placeholder={c.app.customer.detail.company.placeholder()}
-							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
+							readOnly={!check([RolePermissions.CUSTOMER_UPDATE])}
 						/>
 					)}
 				</Field>
@@ -179,7 +179,7 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
 							placeholder={c.app.customer.detail.title.placeholder()}
-							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
+							readOnly={!check([RolePermissions.CUSTOMER_UPDATE])}
 						/>
 					)}
 				</Field>
@@ -193,7 +193,7 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
 							placeholder="https://..."
-							readOnly={!check([RolePermissions.CUSTOMER_CREATE])}
+							readOnly={!check([RolePermissions.CUSTOMER_UPDATE])}
 						/>
 					)}
 				</Field>
@@ -206,7 +206,7 @@ export default function EditCustomer(props: VoidProps<EditCustomerProps>) {
 						</ConfirmDelete>
 					</Collapsible>
 				</Show>
-				<PermissionsGuard permissions={[RolePermissions.ROLE_UPDATE]}>
+				<PermissionsGuard permissions={[RolePermissions.CUSTOMER_UPDATE]}>
 					<Button type="submit" disabled={customerForm.invalid || customerForm.submitting || !customerForm.dirty}>
 						{c.generic.actions.save()}
 					</Button>

@@ -1,3 +1,4 @@
+import { pt } from "@lib/i18n/utils";
 import permissions from "./app/permissions";
 
 const app = {
@@ -81,6 +82,7 @@ const app = {
 			title: "Create new customer",
 			noProject: "Select a project",
 		},
+		customer: (count = 1) => `Customer${pt({ other: "s" }, count, "en")}`,
 	},
 	testimonial: {
 		list: {
@@ -89,6 +91,9 @@ const app = {
 		},
 		create: {
 			title: "Create testimonial",
+		},
+		detail: {
+			rating: "Rating",
 		},
 	},
 };

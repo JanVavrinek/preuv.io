@@ -1,8 +1,12 @@
+import Button from "@atoms/Button";
 import Combobox from "@atoms/Combobox";
 import type { ComboboxItem } from "@atoms/Combobox/types";
 import Pagination from "@atoms/Pagination";
+import PermissionsGuard from "@atoms/PermissionsGuard";
 import useAsync from "@hooks/useAsync";
+import { Dialog } from "@kobalte/core/dialog";
 import type { ProjectSelectModel } from "@lib/db/schemas/project";
+import { RolePermissions } from "@lib/db/schemas/role";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import type { ListTestimonial } from "@lib/trpc/routers/testimonial/types";
@@ -10,7 +14,9 @@ import type { Collection } from "@lib/trpc/types";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
 import Testimonial from "@molecules/App/Testimonial";
 import TestimonialSkeleton from "@molecules/App/Testimonial/index.skeleton";
+import EditTestimonial from "@molecules/App/views/Testimonials/EditTestimonial";
 import { useSearchParams } from "@solidjs/router";
+import { FaSolidPlus } from "solid-icons/fa";
 import { For, Show, batch, createEffect, createMemo, createSignal, on, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
@@ -131,6 +137,16 @@ export default function Customers() {
 						)}
 					</For>
 					<div class="flex items-center justify-between">
+						<PermissionsGuard permissions={[RolePermissions.TESTIMONIAL_CREATE]}>
+							<EditTestimonial
+								onUpdate={() => {}}
+								openTrigger={
+									<Dialog.Trigger as={Button} icon={<FaSolidPlus />}>
+										{c.generic.actions.create()}
+									</Dialog.Trigger>
+								}
+							/>
+						</PermissionsGuard>
 						<Pagination count={Math.ceil(testimonials.total / LIMIT)} page={page()} onPageChange={setPage} />
 					</div>
 				</div>
