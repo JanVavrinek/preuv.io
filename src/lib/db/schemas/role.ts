@@ -26,7 +26,7 @@ export enum RolePermissions {
 	TESTIMONIAL_CREATE = "testimonial:create",
 	TESTIMONIAL_DELETE = "testimonial:delete",
 	TESTIMONIAL_UPDATE = "testimonial:update",
-	//testimonial submitter
+	//customer
 	CUSTOMER_CREATE = "submitter:create",
 	CUSTOMER_DELETE = "submitter:delete",
 	CUSTOMER_UPDATE = "submitter:update",

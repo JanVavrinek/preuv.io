@@ -12,13 +12,14 @@ import type { ProjectSelectModel } from "@lib/db/schemas/project";
 import { RolePermissions } from "@lib/db/schemas/role";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
+import type { ListCustomer } from "@lib/trpc/routers/customer/types";
 import { testimonialCreateMutationInputSchema as schema } from "@lib/trpc/routers/testimonial/schemas";
 import type { ListTestimonial } from "@lib/trpc/routers/testimonial/types";
-import { createForm, getErrors, getValue, reset, setValue, toCustom, zodForm } from "@modular-forms/solid";
+import { createForm, getValue, reset, setValue, toCustom, zodForm } from "@modular-forms/solid";
 import ConfirmDelete from "@molecules/common/ConfirmDelete";
 import Rating from "@molecules/common/Rating";
 import { FaSolidTrash } from "solid-icons/fa";
-import { Show, type VoidProps, batch, createEffect, createSignal, on } from "solid-js";
+import { Show, type VoidProps, batch, createEffect, createMemo, createSignal, on } from "solid-js";
 import { createStore } from "solid-js/store";
 import type { FormSubmitHandler } from "../../../../../../types/forms";
 import type { EditTestimonialProps } from "./types";
@@ -31,13 +32,21 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 	const [open, setOpen] = createSignal(false);
 	const [testimonialForm, { Field, Form }] = createForm({
 		validate: zodForm(schema),
-		initialValues: props.testimonial?.testimonial,
+		initialValues: {
+			...props.testimonial?.testimonial,
+			rating: props.testimonial?.testimonial.rating ?? 1,
+		},
 	});
 	const [projects, setProjects] = createStore<{ items: ProjectSelectModel[]; total: number }>({
 		items: [],
 		total: -1,
 	});
+	const [customers, setCustomers] = createStore<{ items: ListCustomer[]; total: number }>({
+		items: [],
+		total: -1,
+	});
 	const { handler, loading } = useAsync(client.project.getMany.query);
+	const { handler: handlerCustomers, loading: loadingCustomers } = useAsync(client.customer.getMany.query);
 
 	const handleLoadProjects = () => {
 		if (loading() || projects.items.length === projects.total) return;
@@ -51,10 +60,28 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 			});
 		});
 	};
+	const handleLoadCustomers = () => {
+		if (loadingCustomers() || customers.items.length === customers.total) return;
+		handlerCustomers({
+			limit: LIMIT,
+			offset: customers.items.length,
+		}).then((res) => {
+			batch(() => {
+				setCustomers("items", res.items);
+				setCustomers("total", res.total);
+			});
+		});
+	};
 
 	const handleSubmit: FormSubmitHandler<typeof Form> = async (values) => {
 		let p: Promise<ListTestimonial> | undefined = undefined;
-		if (props.testimonial) p = client.testimonial.update.mutate({ ...values, id: props.testimonial?.testimonial.id });
+		if (props.testimonial)
+			p = client.testimonial.update.mutate({
+				...values,
+				id: props.testimonial.testimonial.id,
+				created_at: values.created_at ?? new Date(),
+				approved: values.approved ?? false,
+			});
 		else p = client.testimonial.create.mutate(values);
 
 		toast.promise(p, {
@@ -91,12 +118,31 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 			value: p.id,
 		};
 	};
+
+	const getCustomerValue = (): ComboboxItem | undefined => {
+		const v = getValue(testimonialForm, "customer_id");
+		if (!v) return;
+		const c = customers.items.find((i) => i.customer.id === v);
+		if (!c) return;
+		return {
+			label: c.customer.name,
+			value: c.customer.id,
+		};
+	};
+
 	createEffect(
 		on(open, (o) => {
-			if (o) handleLoadProjects();
-			else reset(testimonialForm);
+			if (o) {
+				handleLoadProjects();
+				handleLoadCustomers();
+			} else reset(testimonialForm);
 		}),
 	);
+
+	const readOnly = createMemo(() => {
+		if (props.testimonial) return !check([RolePermissions.TESTIMONIAL_UPDATE]);
+		return !check([RolePermissions.TESTIMONIAL_CREATE]);
+	});
 
 	return (
 		<Dialog
@@ -106,7 +152,6 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 			onOpenChange={setOpen}
 		>
 			<Form class="flex flex-col gap-2" onSubmit={handleSubmit}>
-				{String(JSON.stringify(getErrors(testimonialForm)))}
 				<Field name="text">
 					{(field, props) => (
 						<Input
@@ -116,7 +161,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 							label="Text"
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
-							readOnly={!check([RolePermissions.TESTIMONIAL_UPDATE])}
+							readOnly={readOnly()}
 						/>
 					)}
 				</Field>
@@ -133,7 +178,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 							label={c.generic.common.created()}
 							parseResult={schema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
-							readOnly={!check([RolePermissions.TESTIMONIAL_UPDATE])}
+							readOnly={readOnly()}
 							type="date"
 						/>
 					)}
@@ -152,6 +197,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 								label={c.app.project.edit.name()}
 								parseResult={schema.shape[field.name].safeParse(field.value)}
 								showErrors={!!field.error.length}
+								readOnly={readOnly()}
 							/>
 							<input {...props} hidden />
 						</>
@@ -161,23 +207,31 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 					{(field, props) => (
 						<>
 							<Combobox
-								options={projects.items.map<ComboboxItem>((p) => ({
-									label: p.name,
-									value: p.id,
+								options={customers.items.map<ComboboxItem>((p) => ({
+									label: p.customer.name,
+									value: p.customer.id,
 								}))}
-								value={getProjectValue()}
+								value={getCustomerValue()}
 								onChange={(v) => setValue(testimonialForm, "customer_id", v?.value ?? "")}
-								onReachEnd={handleLoadProjects}
+								onReachEnd={handleLoadCustomers}
 								label={c.app.customer.customer(1)}
 								parseResult={schema.shape[field.name].safeParse(field.value)}
 								showErrors={!!field.error.length}
+								readOnly={readOnly()}
 							/>
 							<input {...props} hidden />
+							{JSON.stringify(schema.shape[field.name].safeParse(field.value).error?.issues)}
 						</>
 					)}
 				</Field>
 				<Field name="rating" type="number" transform={toCustom((v) => Number(v), { on: "input" })}>
-					{(field, props) => <Rating inputProps={props} value={1} />}
+					{(field, props) => (
+						<Rating
+							inputProps={props}
+							value={Number(field.value)}
+							onValue={readOnly() ? undefined : (v) => setValue(testimonialForm, "rating", v)}
+						/>
+					)}
 				</Field>
 				<Show when={props.onDelete && check([RolePermissions.TESTIMONIAL_DELETE])}>
 					<Collapsible triggerChildren={c.generic.common.dangerZone()}>
@@ -188,7 +242,7 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 						</ConfirmDelete>
 					</Collapsible>
 				</Show>
-				<Show when={check([RolePermissions.TESTIMONIAL_CREATE]) || check([RolePermissions.TESTIMONIAL_UPDATE])}>
+				<Show when={!readOnly()}>
 					<Button
 						type="submit"
 						disabled={testimonialForm.invalid || testimonialForm.submitting || !testimonialForm.dirty}

@@ -28,6 +28,8 @@ const zodIssues: {
 	invalid_string: (i) => {
 		const errs: Record<string, string> = {
 			"no-spaces": "No space allowed",
+			project: "You must select a project",
+			customer: "You must select a customer",
 		};
 		return errs[i.message] ?? `Invalid ${i.validation}`;
 	},

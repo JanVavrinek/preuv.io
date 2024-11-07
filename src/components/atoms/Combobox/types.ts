@@ -25,4 +25,5 @@ export type ComboboxProps<T, U> = {
 	parseResult?: z.SafeParseReturnType<T, U>;
 	showErrors?: boolean;
 	class?: string;
+	readOnly?: boolean;
 };

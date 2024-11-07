@@ -27,10 +27,14 @@ export type TestimonialInsertModel = InferInsertModel<typeof testimonial>;
 export const testimonialInsertModelSchema = createInsertSchema(testimonial).extend({
 	rating: z.number().int().min(1).max(5),
 	text: z.string().min(3).max(1024),
+	project_id: z.string().uuid("project"),
+	customer_id: z.string().uuid("customer"),
 });
 export const testimonialSelectModelSchema = createSelectSchema(testimonial).extend({
 	rating: z.number().int().min(1).max(5),
 	text: z.string().min(3).max(1024),
+	project_id: z.string().uuid("project"),
+	customer_id: z.string().uuid("customer"),
 });
 
 export const testimonialRelations = relations(testimonial, ({ one }) => ({

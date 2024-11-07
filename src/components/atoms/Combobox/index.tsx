@@ -34,6 +34,7 @@ export default function Combobox<T, U>(props: VoidProps<ComboboxProps<T, U>>) {
 			fitViewport
 			preventScroll
 			onInputChange={props.onInputChange}
+			readOnly={props.readOnly}
 		>
 			<Show when={props.label}>
 				<KCombobox.Label class="pl-2 text-pv-blue-700">{props.label}</KCombobox.Label>
@@ -57,10 +58,8 @@ export default function Combobox<T, U>(props: VoidProps<ComboboxProps<T, U>>) {
 			</KCombobox.Portal>
 			<Show when={!!parseIssues()?.length && props.showErrors}>
 				<ol class="flex flex-col gap-1 pl-2 text-pv-red-500 text-sm">
-					<For each={parseIssues()}>
-						{(issue) => (
-							<KCombobox.ErrorMessage as="li">{c.errors.zod[issue.code](issue as never)}</KCombobox.ErrorMessage>
-						)}
+					<For each={parseIssues()} fallback="dasda">
+						{(issue) => <li>{c.errors.zod[issue.code](issue as never)}</li>}
 					</For>
 				</ol>
 			</Show>

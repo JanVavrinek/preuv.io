@@ -139,7 +139,12 @@ export default function Customers() {
 					<div class="flex items-center justify-between">
 						<PermissionsGuard permissions={[RolePermissions.TESTIMONIAL_CREATE]}>
 							<EditTestimonial
-								onUpdate={() => {}}
+								onUpdate={(t) => {
+									batch(() => {
+										setTestimonials("items", (s) => [...s, t]);
+										setTestimonials("total", (s) => s + 1);
+									});
+								}}
 								openTrigger={
 									<Dialog.Trigger as={Button} icon={<FaSolidPlus />}>
 										{c.generic.actions.create()}
