@@ -1,4 +1,6 @@
 import { db } from "@lib/db";
+import { selectCustomer } from "@lib/db/queries/customer";
+import { selectProject } from "@lib/db/queries/project";
 import { selectListTestimonial } from "@lib/db/queries/testimonial";
 import { customer } from "@lib/db/schemas/customer";
 import { project } from "@lib/db/schemas/project";
@@ -69,21 +71,12 @@ export default router({
 			if (!hasPermission(RolePermissions.TESTIMONIAL_CREATE, opts.ctx.role.role))
 				throw new TRPCError({ code: "FORBIDDEN" });
 			return await db.transaction(async (tx): Promise<ListTestimonial> => {
-				const foundCustomer = (
-					await tx
-						.select({ customer })
-						.from(customer)
-						.innerJoin(project, eq(customer.project_id, project.id))
-						.where(
-							and(eq(customer.id, opts.input.customer_id), eq(project.organization_id, opts.ctx.role.organization.id)),
-						)
-				).at(0)?.customer;
-				if (!foundCustomer) throw new TRPCError({ code: "NOT_FOUND" });
-
-				const foundProject = await tx.query.project.findFirst({
-					where: and(eq(project.id, opts.input.project_id), eq(project.organization_id, opts.ctx.role.organization.id)),
-				});
+				const foundProject = await selectProject(opts.input.project_id, opts.ctx.role.organization.id, tx);
 				if (!foundProject) throw new TRPCError({ code: "NOT_FOUND" });
+
+				const foundCustomer = (await selectCustomer(opts.input.customer_id, opts.ctx.role.organization.id, tx))
+					?.customer;
+				if (!foundCustomer) throw new TRPCError({ code: "NOT_FOUND" });
 
 				const returned = (await tx.insert(testimonial).values(opts.input).returning()).at(0);
 				if (!returned) throw new TRPCError({ code: "NOT_FOUND" });
@@ -124,7 +117,30 @@ export default router({
 		.use(isAuthorized)
 		.use(hasOrganization)
 		.input(testimonialSelectModelSchema)
-		.mutation(async () => {
-			throw new TRPCError({ code: "NOT_IMPLEMENTED" });
+		.mutation(async (opts): Promise<ListTestimonial> => {
+			if (!hasPermission(RolePermissions.TESTIMONIAL_UPDATE, opts.ctx.role.role))
+				throw new TRPCError({ code: "FORBIDDEN" });
+			return await db.transaction(async (tx): Promise<ListTestimonial> => {
+				const foundProject = await selectProject(opts.input.project_id, opts.ctx.role.organization.id, tx);
+				if (!foundProject) throw new TRPCError({ code: "NOT_FOUND" });
+
+				const foundCustomer = (await selectCustomer(opts.input.customer_id, opts.ctx.role.organization.id, tx))
+					?.customer;
+				if (!foundCustomer) throw new TRPCError({ code: "NOT_FOUND" });
+
+				const updated = (
+					await tx
+						.update(testimonial)
+						.set({ ...opts.input, id: undefined })
+						.where(and(eq(testimonial.id, opts.input.id), eq(testimonial.project_id, foundProject.id)))
+						.returning()
+				).at(0);
+				if (!updated) throw new TRPCError({ code: "NOT_FOUND" });
+				return {
+					testimonial: updated,
+					customer: foundCustomer,
+					project: foundProject,
+				};
+			});
 		}),
 });
