@@ -220,7 +220,6 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 								readOnly={readOnly()}
 							/>
 							<input {...props} hidden />
-							{JSON.stringify(schema.shape[field.name].safeParse(field.value).error?.issues)}
 						</>
 					)}
 				</Field>

@@ -5,7 +5,7 @@ import { Button } from "@kobalte/core/button";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { FaSolidUser } from "solid-icons/fa";
 import { RiSystemMenu4Line } from "solid-icons/ri";
-import { type VoidProps, useContext } from "solid-js";
+import { Show, type VoidProps, useContext } from "solid-js";
 import useSignOut from "../../../../hooks/useSignOut";
 import Invites from "./components/Invites";
 import type { HeaderProps } from "./types";
@@ -22,7 +22,12 @@ export default function Header(props: VoidProps<HeaderProps>) {
 				<Button class="p-2" onclick={props.onOpenSideBar}>
 					<RiSystemMenu4Line class="text-2xl lg:hidden" />
 				</Button>
-				<h1 class="font-bold text-pv-blue-500 text-xl md:text-2xl">{title()}</h1>
+				<div class="flex items-center gap-1">
+					<h1 class="font-bold text-pv-blue-500 text-xl md:text-2xl">{title.title}</h1>
+					<Show when={title.label}>
+						<div class="rounded-full bg-pv-blue-200 p-1 text-pv-blue-500 text-xs">{title.label}</div>
+					</Show>
+				</div>
 			</div>
 			<div class="flex items-center gap-4">
 				<Invites />

@@ -1,14 +1,17 @@
-import { type Accessor, type ParentProps, type Setter, createContext, createSignal } from "solid-js";
+import { type JSX, type ParentProps, createContext } from "solid-js";
+import { type SetStoreFunction, createStore } from "solid-js/store";
+
+type ContextData = { title: string; label?: JSX.Element };
 
 export const appLayoutTitleContext = createContext<{
-	setTitle: Setter<string>;
-	title: Accessor<string>;
+	setTitle: SetStoreFunction<ContextData>;
+	title: ContextData;
 }>({
-	title: () => "",
+	title: { title: "" },
 	setTitle: () => {},
 });
 
 export function AppLayoutTitleProvider(props: ParentProps) {
-	const [title, setTitle] = createSignal("");
+	const [title, setTitle] = createStore<ContextData>({ title: "" });
 	return <appLayoutTitleContext.Provider value={{ title, setTitle }}>{props.children}</appLayoutTitleContext.Provider>;
 }

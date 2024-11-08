@@ -97,7 +97,7 @@ export default function Customers() {
 	return (
 		<div class="w-full flex-grow p-4">
 			<div class="flex min-h-full w-full flex-col gap-2 rounded-xl border border-pv-blue-200 bg-pv-blue-50 shadow-lg">
-				<AppLayoutTitle>{c.app.customer.list.title()}</AppLayoutTitle>
+				<AppLayoutTitle label={Math.max(0, customers.total)}>{c.app.customer.list.title()}</AppLayoutTitle>
 				<div class="w-full border-pv-blue-200 border-b p-2">
 					<Combobox
 						value={projectValue() ?? undefined}
