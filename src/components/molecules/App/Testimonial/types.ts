@@ -1,11 +1,8 @@
-import type { CustomerSelectModel } from "@lib/db/schemas/customer";
-import type { ProjectSelectModel } from "@lib/db/schemas/project";
-import type { TestimonialSelectModel } from "@lib/db/schemas/testimonial";
+import type { ListTestimonial } from "@lib/trpc/routers/testimonial/types";
 
 export type TestimonialProps = {
-	testimonial: TestimonialSelectModel;
-	customer: CustomerSelectModel;
-	project: ProjectSelectModel;
+	testimonial: ListTestimonial;
+	onUpdate?: (testimonial: ListTestimonial) => void;
 
 	/** Custom classes applied to the element */
 	class?: string;

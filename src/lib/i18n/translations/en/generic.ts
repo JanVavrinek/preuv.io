@@ -24,6 +24,7 @@ const generic = {
 		all: "All",
 		dangerZone: "Danger zone",
 		created: "Created",
+		approved: "Approved",
 	},
 };
 export default generic;

@@ -6,6 +6,7 @@ import { Dialog } from "@atoms/Dialog";
 import Input from "@atoms/Input";
 import useHasPermissions from "@atoms/PermissionsGuard/hooks/useHasPermissions";
 import { toast } from "@atoms/Toaster";
+import Toggle from "@atoms/Toggle";
 import useAsync from "@hooks/useAsync";
 import { Dialog as KDialog } from "@kobalte/core/dialog";
 import type { ProjectSelectModel } from "@lib/db/schemas/project";
@@ -15,7 +16,7 @@ import { client } from "@lib/trpc/client";
 import type { ListCustomer } from "@lib/trpc/routers/customer/types";
 import { testimonialCreateMutationInputSchema as schema } from "@lib/trpc/routers/testimonial/schemas";
 import type { ListTestimonial } from "@lib/trpc/routers/testimonial/types";
-import { createForm, getValue, reset, setValue, toCustom, zodForm } from "@modular-forms/solid";
+import { createForm, getValue, reset, setValue, setValues, toCustom, zodForm } from "@modular-forms/solid";
 import ConfirmDelete from "@molecules/common/ConfirmDelete";
 import Rating from "@molecules/common/Rating";
 import { FaSolidTrash } from "solid-icons/fa";
@@ -135,7 +136,9 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 			if (o) {
 				handleLoadProjects();
 				handleLoadCustomers();
-			} else reset(testimonialForm);
+				reset(testimonialForm);
+				if (props.testimonial) setValues(testimonialForm, props.testimonial.testimonial);
+			}
 		}),
 	);
 
@@ -229,6 +232,17 @@ export default function EditTestimonial(props: VoidProps<EditTestimonialProps>) 
 							inputProps={props}
 							value={Number(field.value)}
 							onValue={readOnly() ? undefined : (v) => setValue(testimonialForm, "rating", v)}
+						/>
+					)}
+				</Field>
+				<Field name="approved" type="boolean">
+					{(_field, fieldProps) => (
+						<Toggle
+							label={c.generic.common.approved()}
+							disabled={readOnly()}
+							inputProps={fieldProps}
+							checked={getValue(testimonialForm, "approved")}
+							onChange={(v) => setValue(testimonialForm, "approved", v)}
 						/>
 					)}
 				</Field>

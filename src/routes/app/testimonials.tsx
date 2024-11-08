@@ -18,7 +18,7 @@ import EditTestimonial from "@molecules/App/views/Testimonials/EditTestimonial";
 import { useSearchParams } from "@solidjs/router";
 import { FaSolidPlus } from "solid-icons/fa";
 import { For, Show, batch, createEffect, createMemo, createSignal, on, onMount } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, reconcile } from "solid-js/store";
 
 const LIMIT = 20;
 
@@ -128,11 +128,10 @@ export default function Customers() {
 							</Show>
 						}
 					>
-						{(testimonial) => (
+						{(testimonial, index) => (
 							<Testimonial
-								customer={testimonial.customer}
-								project={testimonial.project}
-								testimonial={testimonial.testimonial}
+								testimonial={testimonial}
+								onUpdate={(t) => setTestimonials("items", index(), reconcile(t))}
 							/>
 						)}
 					</For>
