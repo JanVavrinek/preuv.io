@@ -1,6 +1,8 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { customerRelations } from "./schemas/customer";
+import { customer, customerRelations } from "./schemas/customer";
+import { form, formRelations } from "./schemas/form";
+import { formVisit, formVisitRelations } from "./schemas/formVisit";
 import { invite } from "./schemas/invite";
 import { member } from "./schemas/member";
 import { organization } from "./schemas/organization";
@@ -23,5 +25,10 @@ export const db = drizzle(client, {
 		testimonial,
 		testimonialRelations,
 		customerRelations,
+		form,
+		formRelations,
+		formVisit,
+		formVisitRelations,
+		customer,
 	},
 });

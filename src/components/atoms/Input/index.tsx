@@ -12,7 +12,21 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 	const { c } = useI18n();
 	const [local, inputProps, others] = splitProps(
 		props as InputProps<T, U>,
-		["class", "slotClasses", "icon", "type", "label", "placeholder", "parseResult", "description", "showErrors"],
+		[
+			"class",
+			"slotClasses",
+			"icon",
+			"type",
+			"label",
+			"placeholder",
+			"parseResult",
+			"description",
+			"showErrors",
+			"textArea",
+			"textAreaProps",
+			"minLength",
+			"maxLength",
+		],
 		["inputProps"],
 	);
 
@@ -33,13 +47,26 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 			<Show when={local.label}>
 				<TextField.Label class="pl-2 text-pv-blue-700">{local.label}</TextField.Label>
 			</Show>
-			<div class="focus-within:-translate-y-1 relative flex h-14 flex-row items-center rounded-2xl border border-pv-blue-200 bg-pv-blue-100 transition-all duration-300 focus-within:shadow-lg group-data-[invalid]:border-pv-red-400">
-				<TextField.Input
-					type={type()}
-					class="h-full w-full border-none bg-transparent px-2 outline-none"
-					placeholder={local.placeholder}
-					{...inputProps.inputProps}
-				/>
+			<div class="focus-within:-translate-y-1 relative flex min-h-14 flex-row items-center rounded-2xl border border-pv-blue-200 bg-pv-blue-100 transition-all duration-300 focus-within:shadow-lg group-data-[invalid]:border-pv-red-400">
+				<Show
+					when={local.textArea}
+					fallback={
+						<TextField.Input
+							type={type()}
+							class="h-full w-full border-none bg-transparent px-2 outline-none"
+							placeholder={local.placeholder}
+							{...inputProps.inputProps}
+						/>
+					}
+				>
+					<TextField.TextArea
+						type={type()}
+						class="h-full min-h-14 w-full border-none bg-transparent p-2 outline-none"
+						placeholder={local.placeholder}
+						{...local.textAreaProps}
+						{...inputProps.inputProps}
+					/>
+				</Show>
 
 				<Show when={local.type === "password"}>
 					<Button
@@ -57,6 +84,20 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 					</Button>
 				</Show>
 			</div>
+			<Show when={local.maxLength}>
+				<p class="text-right text-pv-blue-400 text-xs">
+					<span
+						classList={{
+							"text-pv-red-500 font-bold":
+								(others.value?.length ?? 0) > (local.maxLength ?? 0) ||
+								(others.value?.length ?? 0) < (local.minLength ?? 0),
+						}}
+					>
+						{others.value?.length}
+					</span>
+					/{local.maxLength}
+				</p>
+			</Show>
 			<Show when={!!parseIssues()?.length && local.showErrors}>
 				<ol class="flex flex-col gap-1 pl-2 text-pv-red-500 text-sm">
 					<For each={parseIssues()}>

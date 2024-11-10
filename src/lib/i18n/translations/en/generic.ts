@@ -7,6 +7,9 @@ const generic = {
 		add: "Add new",
 		create: "Create new",
 		remove: "Remove",
+		goHome: "Go home",
+		continue: "Continue",
+		back: "Back",
 	},
 	toasts: {
 		saving: {
@@ -25,6 +28,7 @@ const generic = {
 		dangerZone: "Danger zone",
 		created: "Created",
 		approved: "Approved",
+		name: "Name",
 	},
 };
 export default generic;

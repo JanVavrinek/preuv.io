@@ -1,4 +1,4 @@
-import type { TextFieldRootProps } from "@kobalte/core/text-field";
+import type { TextFieldRootProps, TextFieldTextAreaProps } from "@kobalte/core/text-field";
 import type { JSX, ValidComponent } from "solid-js";
 
 import type { SlotProp } from "@utils/styles";
@@ -22,6 +22,8 @@ export interface InputProps<T, U, W extends ValidComponent = "div">
 	label?: JSX.Element;
 	description?: JSX.Element;
 	showErrors?: boolean;
+	maxLength?: number;
+	minLength?: number;
 	inputProps?: {
 		name?: string;
 		ref: (element: HTMLInputElement | HTMLTextAreaElement) => void;
@@ -29,4 +31,6 @@ export interface InputProps<T, U, W extends ValidComponent = "div">
 		onChange: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, Event>;
 		onBlur: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, FocusEvent>;
 	};
+	textArea?: boolean;
+	textAreaProps?: Partial<TextFieldTextAreaProps<"textarea"> & HTMLTextAreaElement>;
 }
