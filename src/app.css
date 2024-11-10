@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+	font-family: "SpaceGrotesk";
+	src: url("/fonts/space.ttf") format("truetype");
+	font-display: swap;
+}
+
+:root {
+	--app-font-size: medium;
+	font-size: var(--app-font-size);
+	font-family: "SpaceGrotesk", serif;
+}

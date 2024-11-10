@@ -1,0 +1,53 @@
+@keyframes swipeOut {
+	from {
+		transform: translate(var(--kb-toast-swipe-end-x));
+	}
+	to {
+		transform: translate(100%);
+	}
+}
+
+@keyframes slideIn {
+	from {
+		transform: translate(100%) scale(0);
+		opacity: 0;
+	}
+
+	to {
+		transform: translate(0%);
+		opacity: 1;
+	}
+}
+
+@keyframes hide {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+.toaster__root {
+	&[data-opened=""] {
+		animation: slideIn 150ms ease-out;
+	}
+
+	&[data-closed=""] {
+		animation: hide 150ms ease-out;
+	}
+
+	&[data-swipe="move"] {
+		transform: translate(var(--kb-toast-swipe-move-x));
+	}
+
+	&[data-swipe="cancel"] {
+		transform: translate(0);
+		transition: transform 200ms ease-out;
+	}
+
+	&[data-swipe="end"] {
+		animation: swipeOut 100ms ease-out;
+	}
+}
