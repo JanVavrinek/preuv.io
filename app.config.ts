@@ -7,7 +7,7 @@ export default defineConfig({
 		server: {},
 	},
 	server: {
-		preset: "node-server",
+		preset: "node_server",
 		prerender: {
 			crawlLinks: true,
 		},
