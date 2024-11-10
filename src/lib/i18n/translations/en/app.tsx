@@ -4,6 +4,16 @@ import permissions from "./app/permissions";
 const app = {
 	dashboard: {
 		title: "Dashboard",
+		noOrganization: {
+			title: "You have no active organization",
+			subTitle: (
+				<>
+					You must be a part of an organization, either create one or join one.
+					<br />
+					If you've been invited to an organization you can check your invites by clicking the bell in top right corner
+				</>
+			),
+		},
 	},
 	header: {
 		signOut: "Sign out",

@@ -4,6 +4,7 @@ import type { ComboboxItem } from "@atoms/Combobox/types";
 import Pagination from "@atoms/Pagination";
 import PermissionsGuard from "@atoms/PermissionsGuard";
 import Skeleton from "@atoms/Skeleton";
+import { organizationsContext } from "@contexts/Organizations";
 import useAsync from "@hooks/useAsync";
 import { Dialog } from "@kobalte/core/dialog";
 import type { ProjectSelectModel } from "@lib/db/schemas/project";
@@ -14,10 +15,10 @@ import type { ListCustomer } from "@lib/trpc/routers/customer/types";
 import type { Collection } from "@lib/trpc/types";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
 import EditCustomer from "@molecules/App/views/Customers/EditCustomer";
-import { A, useSearchParams } from "@solidjs/router";
+import { A, useNavigate, useSearchParams } from "@solidjs/router";
 import { FaSolidGear, FaSolidPlus } from "solid-icons/fa";
 import { FiExternalLink } from "solid-icons/fi";
-import { For, Show, batch, createEffect, createMemo, createSignal, on, onMount } from "solid-js";
+import { For, Show, batch, createEffect, createMemo, createSignal, on, onMount, useContext } from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
 
 const LIMIT = 20;
@@ -29,6 +30,13 @@ export default function Customers() {
 	const { handler, loading } = useAsync(client.customer.getMany.query);
 	const { handler: projectHandler, loading: projectLoading } = useAsync(client.project.getMany.query);
 	const [params, setParams] = useSearchParams<{ projectId?: string }>();
+	const navigate = useNavigate();
+	const { activeOrganization } = useContext(organizationsContext);
+
+	onMount(() => {
+		if (!activeOrganization()) navigate("/app/dashboard");
+	});
+
 	const [projectValue, setProjectValue] = createSignal<ComboboxItem | null>({
 		value: "",
 		label: c.generic.common.all(),
