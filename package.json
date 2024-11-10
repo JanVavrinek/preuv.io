@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "type": "module",
   "license": "Apache-2.0",
+  "packageManager": "pnpm@9.12.3",
   "author": {
     "email": "janvavrinek1@gmail.com",
     "name": "Jan Vavřínek",
