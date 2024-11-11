@@ -1,11 +1,14 @@
-import Button from "@atoms/Button";
+import { toast } from "@atoms/Toaster";
 import useI18n from "@lib/i18n/hooks/useI18n";
+import { client } from "@lib/trpc/client";
+import type { ListForm } from "@lib/trpc/routers/form/types";
 import Danger from "@molecules/App/views/Form/components/Danger";
 import General from "@molecules/App/views/Form/components/General";
 import formContext, { FormProvider } from "@molecules/App/views/Form/contexts/Form";
-import { type RouteDefinition, useParams } from "@solidjs/router";
+import { type RouteDefinition, useNavigate, useParams } from "@solidjs/router";
 import { useContext } from "solid-js";
 import { z } from "zod";
+import type { FormSubmitHandler } from "../../../types/forms";
 
 export const route = {
 	matchFilters: {
@@ -15,13 +18,29 @@ export const route = {
 
 function Inner() {
 	const { c } = useI18n();
-	const { Form } = useContext(formContext);
+	const { Form, formData, setFormData } = useContext(formContext);
+	const navigate = useNavigate();
+
+	const handleSubmit: FormSubmitHandler<typeof Form> = async (values) => {
+		const id = formData()?.form.id;
+		let p: Promise<ListForm>;
+		if (id) p = client.form.update.mutate({ id, data: values });
+		else p = client.form.create.mutate(values);
+
+		toast.promise(p, {
+			loading: { title: c.generic.toasts.saving.loading() },
+			success: () => ({ title: c.generic.toasts.saving.success() }),
+			error: () => ({ title: c.generic.toasts.saving.error() }),
+		});
+		const res = await p;
+		if (!id) navigate(`/app/forms/${res.form.id}`);
+		setFormData(res);
+	};
 
 	return (
-		<Form class="flex flex-col gap-2 p-5">
+		<Form class="flex flex-col gap-2 p-5" onSubmit={handleSubmit} onError={(e) => console.log(e)}>
 			<General />
 			<Danger />
-			<Button type="submit"> {c.generic.actions.save()}</Button>
 		</Form>
 	);
 }

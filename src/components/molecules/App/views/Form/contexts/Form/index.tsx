@@ -7,7 +7,7 @@ import type { ListForm } from "@lib/trpc/routers/form/types";
 import { createForm, reset, setValues, zodForm } from "@modular-forms/solid";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
 import { useNavigate } from "@solidjs/router";
-import { type Accessor, createSignal, onCleanup } from "solid-js";
+import { type Accessor, type Setter, createSignal, onCleanup } from "solid-js";
 import { createMemo } from "solid-js";
 import { type ParentProps, createContext, onMount } from "solid-js";
 import type { z } from "zod";
@@ -35,12 +35,14 @@ const formContext = createContext<{
 	Form: typeof Form;
 	formData: Accessor<ListForm | undefined>;
 	hasPermission: Accessor<boolean>;
+	setFormData: Setter<ListForm | undefined>;
 }>({
 	form,
 	Field,
 	Form,
 	formData: () => undefined,
 	hasPermission: () => false,
+	setFormData: () => undefined,
 });
 
 export function FormProvider(props: ParentProps<{ id: string | "create" }>) {
@@ -77,7 +79,7 @@ export function FormProvider(props: ParentProps<{ id: string | "create" }>) {
 	});
 
 	return (
-		<formContext.Provider value={{ form, Field, Form, formData, hasPermission }}>
+		<formContext.Provider value={{ form, Field, Form, formData, hasPermission, setFormData }}>
 			<AppLayoutTitle>{title()}</AppLayoutTitle>
 			{props.children}
 		</formContext.Provider>

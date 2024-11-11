@@ -1,16 +1,18 @@
 import { db } from "@lib/db";
 import { selectForm, selectListForm } from "@lib/db/queries/form";
-import { form, formSelectModelSchema } from "@lib/db/schemas/form";
+import { form, formInsertModelSchema, formSelectModelSchema } from "@lib/db/schemas/form";
 import { formVisit } from "@lib/db/schemas/formVisit";
 import { type ProjectSelectModel, project } from "@lib/db/schemas/project";
 import { RolePermissions } from "@lib/db/schemas/role";
+import { urlSlugSchema } from "@lib/schemas/url";
 import { procedure, router } from "@lib/trpc/init";
 import { isAuthorized } from "@lib/trpc/middlewares";
 import { hasOrganization } from "@lib/trpc/middlewares/hasOrganization";
 import type { Collection } from "@lib/trpc/types";
 import { TRPCError } from "@trpc/server";
 import { hasPermission } from "@utils/permissions";
-import { and, count, desc, eq, sql, sum } from "drizzle-orm";
+import { and, count, desc, eq, not, sql, sum } from "drizzle-orm";
+import { z } from "zod";
 import { formGetManyQueryInputSchema, formUpdateMutationInputSchema } from "./schemas";
 import type { ListForm } from "./types";
 
@@ -110,6 +112,46 @@ export default router({
 				const found = await selectForm(opts.input, opts.ctx.role.organization.id, tx);
 				if (!found) throw new TRPCError({ code: "NOT_FOUND" });
 				await tx.delete(form).where(eq(form.id, found.form.id));
+			});
+		}),
+
+	slugCheck: procedure
+		.use(isAuthorized)
+		.input(z.object({ slug: urlSlugSchema, id: formSelectModelSchema.shape.id.optional() }))
+		.query(async (opts) => {
+			const found = await db.query.form.findFirst({
+				where: and(eq(form.slug, opts.input.slug), opts.input.id ? not(eq(form.id, opts.input.id)) : undefined),
+			});
+			return !found;
+		}),
+
+	create: procedure
+		.use(isAuthorized)
+		.use(hasOrganization)
+		.input(formInsertModelSchema.omit({ id: true, created_at: true }))
+		.mutation(async (opts): Promise<ListForm> => {
+			if (!hasPermission(RolePermissions.FORM_CREATE, opts.ctx.role.role)) throw new TRPCError({ code: "FORBIDDEN" });
+
+			return db.transaction(async (tx): Promise<ListForm> => {
+				const found = await tx.query.form.findFirst({
+					where: eq(form.slug, opts.input.slug),
+				});
+				if (found) throw new TRPCError({ code: "CONFLICT" });
+
+				const foundProject = await tx.query.project.findFirst({
+					where: and(eq(project.id, opts.input.project_id), eq(project.organization_id, opts.ctx.role.organization.id)),
+				});
+				if (!foundProject) throw new TRPCError({ code: "NOT_FOUND" });
+
+				const created = (await tx.insert(form).values(opts.input).returning()).at(0);
+				if (!created) throw new TRPCError({ code: "NOT_FOUND" });
+
+				return {
+					form: created,
+					project: foundProject,
+					total_visits: 0,
+					unique_visits: 0,
+				};
 			});
 		}),
 });

@@ -118,6 +118,14 @@ const app = {
 			share: "Share",
 			general: "General form settings",
 			name: "Form name",
+			namePlaceholder: "Delivery",
+			slug: "Slug",
+			slugPlaceholder: "form-name",
+			content: {
+				title: "Content",
+				welcome: "Welcome content",
+				thankyou: "Thank you content",
+			},
 		},
 		create: {
 			title: "Create new form",
