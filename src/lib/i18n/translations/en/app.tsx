@@ -116,6 +116,11 @@ const app = {
 			uniqueVisits: "Unique visits",
 			active: "Active",
 			share: "Share",
+			general: "General form settings",
+			name: "Form name",
+		},
+		create: {
+			title: "Create new form",
 		},
 	},
 };

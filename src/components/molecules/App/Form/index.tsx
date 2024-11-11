@@ -91,7 +91,7 @@ export default function Form(props: VoidProps<FormProps>) {
 						</ConfirmDelete>
 					</PermissionsGuard>
 					<PermissionsGuard permissions={[RolePermissions.FORM_UPDATE]}>
-						<Button as={A} href={`/app/form/${props.form.form.id}`} icon={<FaSolidGear />} disabled={loading()}>
+						<Button as={A} href={`/app/forms/${props.form.form.id}`} icon={<FaSolidGear />} disabled={loading()}>
 							{c.generic.actions.edit()}
 						</Button>
 					</PermissionsGuard>
