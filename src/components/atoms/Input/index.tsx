@@ -53,7 +53,7 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 					fallback={
 						<TextField.Input
 							type={type()}
-							class="h-full w-full border-none bg-transparent px-2 outline-none"
+							class="h-14 w-full border-none bg-transparent px-2 outline-none"
 							placeholder={local.placeholder}
 							{...inputProps.inputProps}
 						/>

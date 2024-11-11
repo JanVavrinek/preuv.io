@@ -7,7 +7,7 @@ export default function useHasPermissions() {
 
 	return (permissions: RolePermissions[]) => {
 		const org = activeOrganization();
-		if (!org) return;
+		if (!org) return false;
 		return org.role.owner ?? permissions.every((p) => org.role.permissions.includes(p));
 	};
 }

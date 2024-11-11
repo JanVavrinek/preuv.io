@@ -28,10 +28,12 @@ export const getForm = query(async (slug: string) => {
 		where: and(eq(formVisit.form_id, foundForm.id), eq(formVisit.ip, event?.clientAddress ?? "")),
 	});
 	if (!visit) {
-		db.insert(formVisit).values({
-			form_id: foundForm.id,
-			ip: event?.clientAddress ?? "",
-		});
+		db.insert(formVisit)
+			.values({
+				form_id: foundForm.id,
+				ip: event?.clientAddress ?? "",
+			})
+			.execute();
 	} else {
 		db.update(formVisit)
 			.set({

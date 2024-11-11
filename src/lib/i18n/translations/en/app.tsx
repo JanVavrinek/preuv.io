@@ -4,6 +4,16 @@ import permissions from "./app/permissions";
 const app = {
 	dashboard: {
 		title: "Dashboard",
+		noOrganization: {
+			title: "You have no active organization",
+			subTitle: (
+				<>
+					You must be a part of an organization, either create one or join one.
+					<br />
+					If you've been invited to an organization you can check your invites by clicking the bell in top right corner
+				</>
+			),
+		},
 	},
 	header: {
 		signOut: "Sign out",
@@ -94,6 +104,31 @@ const app = {
 		},
 		detail: {
 			rating: "Rating",
+		},
+	},
+	form: {
+		list: {
+			title: "Forms",
+			noFound: "No forms found, try to adjust your filter",
+		},
+		detail: {
+			totalVisits: "Total visits",
+			uniqueVisits: "Unique visits",
+			active: "Active",
+			share: "Share",
+			general: "General form settings",
+			name: "Form name",
+			namePlaceholder: "Delivery",
+			slug: "Slug",
+			slugPlaceholder: "form-name",
+			content: {
+				title: "Content",
+				welcome: "Welcome content",
+				thankyou: "Thank you content",
+			},
+		},
+		create: {
+			title: "Create new form",
 		},
 	},
 };

@@ -29,6 +29,11 @@ const generic = {
 		created: "Created",
 		approved: "Approved",
 		name: "Name",
+		clipboard: "Copied to clipboard",
+	},
+	mdEditor: {
+		preview: "Preview",
+		editor: "Editor",
 	},
 };
 export default generic;

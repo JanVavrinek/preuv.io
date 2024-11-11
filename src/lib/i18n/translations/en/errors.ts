@@ -30,15 +30,27 @@ const zodIssues: {
 			"no-spaces": "No space allowed",
 			project: "You must select a project",
 			customer: "You must select a customer",
+			slug: "Invalid slug format",
+			"slug-taken": "This slug is already taken",
 		};
 		return errs[i.message] ?? `Invalid ${i.validation}`;
 	},
 	custom: () => "",
 	invalid_arguments: () => "",
 	invalid_date: () => "",
-	invalid_enum_value: () => "",
+	invalid_enum_value: (i) => {
+		const errs: Record<string, string> = {
+			"slug-taken": "This slug is already taken",
+		};
+		return errs[i.message] ?? `Invalid value, expected ${i.options.join(", ")}`;
+	},
 	invalid_intersection_types: () => "",
-	invalid_literal: () => "",
+	invalid_literal: (i) => {
+		const errs: Record<string, string> = {
+			"slug-taken": "This slug is already taken",
+		};
+		return errs[i.message] ?? `Invalid value, expected ${i.expected}`;
+	},
 	invalid_return_type: () => "",
 	invalid_type: () => "",
 	invalid_union: () => "",

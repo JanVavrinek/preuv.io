@@ -1,5 +1,25 @@
 # preuv.io
 
+Currently a proof of concept **testimonial collection and management tool** made for the [SolidHack 2024](https://hack.solidjs.com/) competition.
+
+## Development
+
+### 1. Install packages with pnpm
+
+```sh
+pnpm install --frozen-lockfile
+```
+
+### 2. Start the dev server
+
+```sh
+pnpm dev
+```
+
+## Supabase
+
+The app is built using Supabase for auth, storage and db.
+
 ## Environment variables
 
 ```
@@ -11,3 +31,13 @@ VITE_DB_URL="" # postgres connection string
 VITE_EMAIL_CONFIRM_REDIRECT="http://localhost:3000/auth/signin" # the url and a path
 VITE_SUPABASE_SERVICE_KEY="" # This key should never be exposed to clients!
 ```
+
+## Deployment
+
+Docker is used to build and start the node server. 
+
+I'm using [coolify](https://github.com/coollabsio/coolify) to deploy it to [preuv.io](https://preuv.io) on a free tier oracle instance.
+
+Supabase is also selfhosted and running on the same instance.
+
+Currently using Clouflare R2 as the object storage solution.

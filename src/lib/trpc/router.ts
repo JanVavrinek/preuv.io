@@ -1,5 +1,6 @@
 import { router } from "./init";
 import customer from "./routers/customer";
+import form from "./routers/form";
 import invite from "./routers/invite";
 import member from "./routers/member";
 import organization from "./routers/organization";
@@ -17,6 +18,7 @@ export const appRouter = router({
 	project,
 	customer,
 	testimonial,
+	form,
 });
 
 export type AppRouter = typeof appRouter;

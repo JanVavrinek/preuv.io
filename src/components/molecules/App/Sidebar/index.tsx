@@ -10,13 +10,14 @@ import type { SidebarProps } from "./types";
 const CreateOrganization = lazy(() => import("@molecules/App/CreateOrganization"));
 
 const ITEM_CLASS =
-	"w-full relative flex flex-row gap-5 p-4 text-pv-blue-700 hover:text-pv-blue-600 hover:bg-pv-navy-200 data-[highlighted]:bg-transparent transition-all duration-150 data-[selected]:text-white hover:rounded-full";
+	"w-full relative flex flex-row gap-5 p-4 text-pv-blue-700 hover:text-pv-blue-600 hover:bg-pv-navy-200 data-[highlighted]:bg-transparent transition-all duration-150 data-[selected]:text-white hover:rounded-full data-[disabled]:pointer-events-none data-[disabled]:opacity-75";
+export const [openCreateOrganization, setOpenCreateOrganization] = createSignal(false);
+
 export default function Sidebar(props: VoidProps<SidebarProps>) {
 	const { c } = useI18n();
 	const location = useLocation();
 	const [value, setValue] = createSignal(location.pathname ?? "/app/dashboard");
 	const { organizations, setOrganizations } = useContext(organizationsContext);
-	const [open, setOpen] = createSignal(false);
 	const routing = useIsRouting();
 
 	createEffect(() => {
@@ -60,11 +61,26 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 					<Tabs.Trigger value="/app/dashboard" href="/app/dashboard" as={A} class={ITEM_CLASS}>
 						{c.app.dashboard.title()}
 					</Tabs.Trigger>
-					<Tabs.Trigger value="/app/customers" href="/app/customers" as={A} class={ITEM_CLASS}>
+					<Tabs.Trigger
+						value="/app/customers"
+						href="/app/customers"
+						as={A}
+						class={ITEM_CLASS}
+						disabled={!organizations.active}
+					>
 						{c.app.customer.list.title()}
 					</Tabs.Trigger>
-					<Tabs.Trigger value="/app/testimonials" href="/app/testimonials" as={A} class={ITEM_CLASS}>
+					<Tabs.Trigger
+						value="/app/testimonials"
+						href="/app/testimonials"
+						as={A}
+						class={ITEM_CLASS}
+						disabled={!organizations.active}
+					>
 						{c.app.testimonial.list.title()}
+					</Tabs.Trigger>
+					<Tabs.Trigger value="/app/forms" href="/app/forms" as={A} class={ITEM_CLASS} disabled={!organizations.active}>
+						{c.app.form.list.title()}
 					</Tabs.Trigger>
 					<Tabs.Indicator class="-z-10 pointer-events-none absolute top-0 left-0 w-full px-2 transition-all duration-150">
 						<div class="h-full w-full rounded-full bg-pv-navy-500" />
@@ -75,7 +91,7 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 						items={[
 							{
 								label: c.app.organization.create(),
-								onSelect: () => setOpen(true),
+								onSelect: () => setOpenCreateOrganization(true),
 							},
 							{
 								label: c.app.organization.change(),
@@ -111,7 +127,7 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 				<FaSolidXmark />
 			</Button>
 			<Suspense>
-				<CreateOrganization onOpenChange={setOpen} open={open()} />
+				<CreateOrganization onOpenChange={setOpenCreateOrganization} open={openCreateOrganization()} />
 			</Suspense>
 		</>
 	);
