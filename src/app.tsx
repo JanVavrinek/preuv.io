@@ -5,7 +5,7 @@ import "./app.css";
 import { Toast } from "@kobalte/core/toast";
 import I18nProvider from "@lib/i18n";
 import { AppThemeProvider } from "@lib/theme";
-import { MetaProvider } from "@solidjs/meta";
+import { MetaProvider, Title } from "@solidjs/meta";
 import { Portal } from "solid-js/web";
 
 export default function App() {
@@ -16,6 +16,7 @@ export default function App() {
 					<AppThemeProvider>
 						<MetaProvider>
 							<Suspense>{props.children}</Suspense>
+							<Title>preuv.io</Title>
 						</MetaProvider>
 						<Portal>
 							<Toast.Region limit={4}>

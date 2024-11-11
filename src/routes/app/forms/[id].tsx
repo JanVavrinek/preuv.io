@@ -9,7 +9,7 @@ import { z } from "zod";
 
 export const route = {
 	matchFilters: {
-		id: (id) => z.string().uuid().safeParse(id).success,
+		id: (id) => z.string().uuid().or(z.literal("create")).safeParse(id).success,
 	},
 } satisfies RouteDefinition;
 
