@@ -29,6 +29,7 @@ const generic = {
 		created: "Created",
 		approved: "Approved",
 		name: "Name",
+		clipboard: "Copied to clipboard",
 	},
 };
 export default generic;

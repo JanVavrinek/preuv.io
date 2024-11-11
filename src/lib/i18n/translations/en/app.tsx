@@ -114,6 +114,8 @@ const app = {
 		detail: {
 			totalVisits: "Total visits",
 			uniqueVisits: "Unique visits",
+			active: "Active",
+			share: "Share",
 		},
 	},
 };

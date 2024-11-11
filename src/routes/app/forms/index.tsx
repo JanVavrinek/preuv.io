@@ -1,15 +1,21 @@
+import Button from "@atoms/Button";
 import Combobox from "@atoms/Combobox";
 import type { ComboboxItem } from "@atoms/Combobox/types";
+import Pagination from "@atoms/Pagination";
+import PermissionsGuard from "@atoms/PermissionsGuard";
 import { organizationsContext } from "@contexts/Organizations";
 import useAsync from "@hooks/useAsync";
 import type { ProjectSelectModel } from "@lib/db/schemas/project";
+import { RolePermissions } from "@lib/db/schemas/role";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import type { ListForm } from "@lib/trpc/routers/form/types";
 import type { Collection } from "@lib/trpc/types";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
 import Form from "@molecules/App/Form";
-import { useNavigate, useSearchParams } from "@solidjs/router";
+import FormSkeleton from "@molecules/App/Form/index.skeleton";
+import { A, useNavigate, useSearchParams } from "@solidjs/router";
+import { FaSolidPlus } from "solid-icons/fa";
 import { For, Show, batch, createEffect, createMemo, createSignal, on, onMount, useContext } from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
 
@@ -112,12 +118,34 @@ export default function Forms() {
 					/>
 				</div>
 				<div class="flex flex-col gap-2 p-5">
-					<For each={forms.items}>
-						{(form, i) => <Form form={form} onUpdate={(f) => setForms("items", i(), reconcile(f))} />}
+					<For
+						each={forms.items}
+						fallback={
+							<Show when={forms.total === -1}>
+								<FormSkeleton />
+								<FormSkeleton />
+							</Show>
+						}
+					>
+						{(form, i) => (
+							<Form
+								form={form}
+								onUpdate={(f) => setForms("items", i(), reconcile(f))}
+								onDelete={() => setForms("items", (s) => s.filter((f) => f.form.id !== form.form.id))}
+							/>
+						)}
 					</For>
 					<Show when={!forms.items.length && forms.total === 0}>
 						<p class="py-4 text-center font-semibold text-pv-blue-500">{c.app.form.list.noFound()}</p>
 					</Show>
+					<div class="flex items-center justify-between">
+						<PermissionsGuard permissions={[RolePermissions.FORM_CREATE]}>
+							<Button icon={<FaSolidPlus />} as={A} href="/app/forms/create">
+								{c.generic.actions.create()}
+							</Button>
+						</PermissionsGuard>
+						<Pagination count={Math.ceil(forms.total / LIMIT)} page={page()} onPageChange={setPage} />
+					</div>
 				</div>
 			</div>
 		</div>
