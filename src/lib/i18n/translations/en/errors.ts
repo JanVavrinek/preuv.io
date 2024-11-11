@@ -30,6 +30,7 @@ const zodIssues: {
 			"no-spaces": "No space allowed",
 			project: "You must select a project",
 			customer: "You must select a customer",
+			slug: "Invalid slug format",
 		};
 		return errs[i.message] ?? `Invalid ${i.validation}`;
 	},

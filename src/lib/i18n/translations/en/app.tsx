@@ -106,6 +106,16 @@ const app = {
 			rating: "Rating",
 		},
 	},
+	form: {
+		list: {
+			title: "Forms",
+			noFound: "No forms found, try to adjust your filter",
+		},
+		detail: {
+			totalVisits: "Total visits",
+			uniqueVisits: "Unique visits",
+		},
+	},
 };
 
 export default app;
