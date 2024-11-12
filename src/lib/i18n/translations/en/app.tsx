@@ -142,6 +142,20 @@ const app = {
 			title: "Create new form",
 		},
 	},
+	widget: {
+		list: {
+			title: "Widgets",
+			noFound: "No widgets found, try to adjust your filter",
+		},
+		detail: {
+			name: "Widget name",
+			namePlaceholder: "Landing page",
+			general: "General widget settings",
+		},
+		create: {
+			title: "Create new widget",
+		},
+	},
 };
 
 export default app;

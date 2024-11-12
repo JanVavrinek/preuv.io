@@ -41,3 +41,14 @@ I'm using [coolify](https://github.com/coollabsio/coolify) to deploy it to [preu
 Supabase is also selfhosted and running on the same instance.
 
 Currently using Clouflare R2 as the object storage solution.
+
+
+## Future
+
+I had to cut a lot of corners because of my very limited time during October (just look at the spaces between commits :D) and it makes me 
+sad that I couldn't invest more time into this challenge.
+
+Hopefully I'm going to gather some feedback thanks to the [SolidHack 2024](https://hack.solidjs.com/) competition which I can later use to improve this project.
+
+I definitely need to hire a designer to tie it all together and write tests.
+

@@ -91,6 +91,15 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 					<Tabs.Trigger value="/app/forms" href="/app/forms" as={A} class={ITEM_CLASS} disabled={!organizations.active}>
 						{c.app.form.list.title()}
 					</Tabs.Trigger>
+					<Tabs.Trigger
+						value="/app/widgets"
+						href="/app/widgets"
+						as={A}
+						class={ITEM_CLASS}
+						disabled={!organizations.active}
+					>
+						{c.app.widget.list.title()}
+					</Tabs.Trigger>
 					<Tabs.Indicator class="-z-10 pointer-events-none absolute top-0 left-0 w-full px-2 transition-all duration-150">
 						<div class="h-full w-full rounded-full bg-pv-navy-500" />
 					</Tabs.Indicator>
