@@ -10,6 +10,8 @@ import { project, projectRelations } from "./schemas/project";
 import { role } from "./schemas/role";
 import { testimonial, testimonialRelations } from "./schemas/testimonial";
 import { user } from "./schemas/user";
+import { widget, widgetRelations } from "./schemas/widget";
+import { widgetTestimonial, widgetTestimonialRelations } from "./schemas/widgetTestimonials";
 
 const client = postgres(import.meta.env.VITE_DB_URL, { prepare: false });
 
@@ -30,5 +32,9 @@ export const db = drizzle(client, {
 		formVisit,
 		formVisitRelations,
 		customer,
+		widget,
+		widgetRelations,
+		widgetTestimonial,
+		widgetTestimonialRelations,
 	},
 });
