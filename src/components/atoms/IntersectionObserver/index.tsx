@@ -19,7 +19,7 @@ export default function InterSectionObserver(props: ParentProps<IntersectionObse
 	});
 
 	return (
-		<div ref={observer} class="w-full">
+		<div ref={observer} class={props.class ?? "w-full"}>
 			{props.children}
 			<div ref={observed} class="h-0 w-full" />
 		</div>

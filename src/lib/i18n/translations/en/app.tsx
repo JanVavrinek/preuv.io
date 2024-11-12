@@ -14,6 +14,13 @@ const app = {
 				</>
 			),
 		},
+		empty: {
+			title: "Looks like your dashboard is empty",
+			subTitle:
+				"You can start by creating a new project, then set up forms and finally collect testimonials from your customers",
+			createProject: "Create new project",
+		},
+		latestTestimonial: "Latest testimonial",
 	},
 	header: {
 		signOut: "Sign out",
@@ -69,6 +76,10 @@ const app = {
 		},
 		create: {
 			title: "Create new project",
+		},
+		list: {
+			title: "Projects",
+			noFound: "No projects found",
 		},
 	},
 	customer: {

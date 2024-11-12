@@ -24,8 +24,8 @@ export default function Header(props: VoidProps<HeaderProps>) {
 				</Button>
 				<div class="flex items-center gap-1">
 					<h1 class="font-bold text-pv-blue-500 text-xl md:text-2xl">{title.title}</h1>
-					<Show when={title.label}>
-						<div class="rounded-full bg-pv-blue-200 p-1 text-pv-blue-500 text-xs">{title.label}</div>
+					<Show when={title.label !== undefined}>
+						<div class="rounded-full bg-pv-blue-200 px-2 py-1 text-pv-blue-500 text-xs">{title.label}</div>
 					</Show>
 				</div>
 			</div>

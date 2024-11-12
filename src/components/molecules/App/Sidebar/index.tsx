@@ -62,6 +62,15 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 						{c.app.dashboard.title()}
 					</Tabs.Trigger>
 					<Tabs.Trigger
+						value="/app/projects"
+						href="/app/projects"
+						as={A}
+						class={ITEM_CLASS}
+						disabled={!organizations.active}
+					>
+						{c.app.project.list.title()}
+					</Tabs.Trigger>
+					<Tabs.Trigger
 						value="/app/customers"
 						href="/app/customers"
 						as={A}
