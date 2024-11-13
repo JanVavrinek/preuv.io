@@ -17,7 +17,7 @@ export const buttonStyles = tv({
 		{
 			variant: "success",
 			class: {
-				root: "bg-pv-green-500",
+				root: "bg-pv-green-500 text-pv-blue-900",
 			},
 		},
 		{

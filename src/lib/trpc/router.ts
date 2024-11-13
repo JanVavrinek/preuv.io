@@ -8,6 +8,7 @@ import project from "./routers/project";
 import role from "./routers/role";
 import testimonial from "./routers/testimonial";
 import user from "./routers/user";
+import widget from "./routers/widget";
 
 export const appRouter = router({
 	user,
@@ -19,6 +20,7 @@ export const appRouter = router({
 	customer,
 	testimonial,
 	form,
+	widget,
 });
 
 export type AppRouter = typeof appRouter;

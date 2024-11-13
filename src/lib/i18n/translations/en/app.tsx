@@ -1,5 +1,6 @@
 import { pt } from "@lib/i18n/utils";
 import permissions from "./app/permissions";
+import widgetTypes from "./app/widgetTypes";
 
 const app = {
 	dashboard: {
@@ -14,6 +15,13 @@ const app = {
 				</>
 			),
 		},
+		empty: {
+			title: "Looks like your dashboard is empty",
+			subTitle:
+				"You can start by creating a new project, then set up forms and finally collect testimonials from your customers",
+			createProject: "Create new project",
+		},
+		latestTestimonial: "Latest testimonial",
 	},
 	header: {
 		signOut: "Sign out",
@@ -69,6 +77,10 @@ const app = {
 		},
 		create: {
 			title: "Create new project",
+		},
+		list: {
+			title: "Projects",
+			noFound: "No projects found",
 		},
 	},
 	customer: {
@@ -129,6 +141,35 @@ const app = {
 		},
 		create: {
 			title: "Create new form",
+		},
+	},
+	widget: {
+		list: {
+			title: "Widgets",
+			noFound: "No widgets found, try to adjust your filter",
+		},
+		detail: {
+			name: "Widget name",
+			namePlaceholder: "Landing page",
+			general: "General widget settings",
+			design: {
+				title: "Design",
+				editor: {
+					types: {
+						title: "Type",
+						types: widgetTypes,
+					},
+					properties: {
+						accent: "Accent",
+					},
+				},
+			},
+			testimonial: {
+				add: "Add testimonials",
+			},
+		},
+		create: {
+			title: "Create new widget",
 		},
 	},
 };

@@ -50,6 +50,20 @@
       "when": 1731273101222,
       "tag": "0006_strange_donald_blake",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1731422156706,
+      "tag": "0007_cute_joshua_kane",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1731499831927,
+      "tag": "0008_wealthy_shotgun",
+      "breakpoints": true
     }
   ]
 }

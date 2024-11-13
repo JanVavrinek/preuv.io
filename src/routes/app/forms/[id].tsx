@@ -1,4 +1,5 @@
 import { toast } from "@atoms/Toaster";
+import { organizationsContext } from "@contexts/Organizations";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import type { ListForm } from "@lib/trpc/routers/form/types";
@@ -6,7 +7,7 @@ import Danger from "@molecules/App/views/Form/components/Danger";
 import General from "@molecules/App/views/Form/components/General";
 import formContext, { FormProvider } from "@molecules/App/views/Form/contexts/Form";
 import { type RouteDefinition, useNavigate, useParams } from "@solidjs/router";
-import { useContext } from "solid-js";
+import { onMount, useContext } from "solid-js";
 import { z } from "zod";
 import type { FormSubmitHandler } from "../../../types/forms";
 
@@ -47,6 +48,13 @@ function Inner() {
 
 export default function FormDetailView() {
 	const params = useParams<{ id: string }>();
+	const navigate = useNavigate();
+	const { activeOrganization } = useContext(organizationsContext);
+
+	onMount(() => {
+		if (!activeOrganization()) navigate("/app/dashboard");
+	});
+
 	return (
 		<FormProvider id={params.id}>
 			<div class="w-full flex-grow p-4">

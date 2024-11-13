@@ -92,7 +92,7 @@ export default function Roles() {
 							onUpdated={(r) => setRoles("items", (s) => [...s, r])}
 							openTrigger={
 								<Button icon={<FaSolidPlus />} class="gap-2" as={Dialog.Trigger}>
-									{c.generic.actions.add()}
+									{c.generic.actions.addNew()}
 								</Button>
 							}
 						/>

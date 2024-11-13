@@ -6,7 +6,7 @@ import { type LoginSchema, loginSchema } from "@lib/schemas/routes/auth";
 import supabase from "@lib/supabase";
 import { type SubmitHandler, createForm, zodForm } from "@modular-forms/solid";
 import { Title } from "@solidjs/meta";
-import { A } from "@solidjs/router";
+import { A, useNavigate } from "@solidjs/router";
 import type { AuthResponse } from "@supabase/supabase-js";
 
 export default function SignUpView() {
@@ -14,6 +14,7 @@ export default function SignUpView() {
 	const [signUpForm, { Form, Field }] = createForm<LoginSchema>({
 		validate: zodForm(loginSchema),
 	});
+	const navigate = useNavigate();
 
 	const handleSubmit: SubmitHandler<LoginSchema> = async (values) => {
 		const p = new Promise<AuthResponse["data"]>((res, rej) => {
@@ -35,6 +36,7 @@ export default function SignUpView() {
 			error: (e) => ({ title: c.auth.signUp.toasts.signUp.error(e ?? 0) }),
 			success: () => ({ title: c.auth.signUp.toasts.signUp.success() }),
 		});
+		p.then(() => navigate("/auth/signin"));
 	};
 
 	return (

@@ -11,5 +11,6 @@ export default defineConfig({
 		prerender: {
 			crawlLinks: true,
 		},
+		compatibilityDate: "2024-11-12",
 	},
 });

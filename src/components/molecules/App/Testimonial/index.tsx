@@ -16,6 +16,7 @@ import { FaSolidGear } from "solid-icons/fa";
 import { Show, type VoidProps } from "solid-js";
 import EditCustomer from "../views/Customers/EditCustomer";
 import EditTestimonial from "../views/Testimonials/EditTestimonial";
+import { testimonialStyles } from "./styles";
 import type { TestimonialProps } from "./types";
 
 export default function Testimonial(props: VoidProps<TestimonialProps>) {
@@ -37,7 +38,7 @@ export default function Testimonial(props: VoidProps<TestimonialProps>) {
 	};
 
 	return (
-		<div class="flex w-full flex-col gap-1 rounded-xl border border-pv-blue-200 bg-pv-blue-100 p-3">
+		<div class={testimonialStyles().root({ class: [props.class] })}>
 			<div class="flex items-center justify-between gap-2">
 				<EditCustomer
 					openTrigger={
@@ -80,17 +81,20 @@ export default function Testimonial(props: VoidProps<TestimonialProps>) {
 				<A href={`/app/project/${props.testimonial.project.id}`} class="w-max text-pv-navy-500">
 					{props.testimonial.project.name}
 				</A>
-				<PermissionsGuard permissions={[RolePermissions.TESTIMONIAL_UPDATE]}>
-					<EditTestimonial
-						onUpdate={(t) => props.onUpdate?.(t)}
-						openTrigger={
-							<Dialog.Trigger as={Button} icon={<FaSolidGear />}>
-								{c.generic.actions.edit()}
-							</Dialog.Trigger>
-						}
-						testimonial={props.testimonial}
-					/>
-				</PermissionsGuard>
+				<div class="flex flex-wrap gap-2">
+					<PermissionsGuard permissions={[RolePermissions.TESTIMONIAL_UPDATE]}>
+						<EditTestimonial
+							onUpdate={(t) => props.onUpdate?.(t)}
+							openTrigger={
+								<Dialog.Trigger as={Button} icon={<FaSolidGear />}>
+									{c.generic.actions.edit()}
+								</Dialog.Trigger>
+							}
+							testimonial={props.testimonial}
+						/>
+					</PermissionsGuard>
+					{props.actionsSlot}
+				</div>
 			</div>
 		</div>
 	);

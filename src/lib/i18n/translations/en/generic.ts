@@ -4,12 +4,13 @@ const generic = {
 		edit: "Edit",
 		delete: "Delete",
 		close: "Close",
-		add: "Add new",
+		addNew: "Add new",
 		create: "Create new",
 		remove: "Remove",
 		goHome: "Go home",
 		continue: "Continue",
 		back: "Back",
+		add: "Add",
 	},
 	toasts: {
 		saving: {

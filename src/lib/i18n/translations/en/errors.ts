@@ -32,6 +32,7 @@ const zodIssues: {
 			customer: "You must select a customer",
 			slug: "Invalid slug format",
 			"slug-taken": "This slug is already taken",
+			"invalid-color": "Invalid hex color code",
 		};
 		return errs[i.message] ?? `Invalid ${i.validation}`;
 	},
