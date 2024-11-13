@@ -2,17 +2,19 @@ import Button from "@atoms/Button";
 import Combobox from "@atoms/Combobox";
 import type { ComboboxItem } from "@atoms/Combobox/types";
 import Pagination from "@atoms/Pagination";
+import PermissionsGuard from "@atoms/PermissionsGuard";
 import Skeleton from "@atoms/Skeleton";
 import { organizationsContext } from "@contexts/Organizations";
 import useAsync from "@hooks/useAsync";
 import type { ProjectSelectModel } from "@lib/db/schemas/project";
+import { RolePermissions } from "@lib/db/schemas/role";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import type { ListWidget } from "@lib/trpc/routers/widget/types";
 import type { Collection } from "@lib/trpc/types";
 import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
 import { A, useNavigate, useSearchParams } from "@solidjs/router";
-import { FaSolidGear } from "solid-icons/fa";
+import { FaSolidGear, FaSolidPlus } from "solid-icons/fa";
 import { FiExternalLink } from "solid-icons/fi";
 import { For, Show, batch, createEffect, createMemo, createSignal, on, onMount, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
@@ -175,6 +177,11 @@ export default function Widgets() {
 						<p class="py-4 text-center font-semibold text-pv-blue-500">{c.app.widget.list.noFound()}</p>
 					</Show>
 					<div class="flex items-center justify-between">
+						<PermissionsGuard permissions={[RolePermissions.WIDGET_CREATE]}>
+							<Button icon={<FaSolidPlus />} as={A} href="/app/widgets/create/generic">
+								{c.generic.actions.create()}
+							</Button>
+						</PermissionsGuard>
 						<Pagination count={Math.ceil(widgets.total / LIMIT)} page={page()} onPageChange={setPage} />
 					</div>
 				</div>

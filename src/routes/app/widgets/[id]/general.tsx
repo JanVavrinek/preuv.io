@@ -12,12 +12,13 @@ import { RolePermissions } from "@lib/db/schemas/role";
 import { widgetSelectModelSchema } from "@lib/db/schemas/widget";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
-import { createForm, getValue, setValue, zodForm } from "@modular-forms/solid";
+import { createForm, getValue, getValues, setValue, zodForm } from "@modular-forms/solid";
 import widgetContext from "@molecules/App/views/Widget/context/Widget";
 import ConfirmDelete from "@molecules/common/ConfirmDelete";
+import { debounce } from "@solid-primitives/scheduled";
 import { useNavigate, useParams } from "@solidjs/router";
 import { FaSolidTrash } from "solid-icons/fa";
-import { Show, batch, onMount, useContext } from "solid-js";
+import { Show, batch, createEffect, onMount, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 const schema = widgetSelectModelSchema.pick({
@@ -30,7 +31,7 @@ const LIMIT = 20;
 export default function GeneralWidgetSettingsView() {
 	const params = useParams<{ id: string | "create" }>();
 	const { c } = useI18n();
-	const { widget, hasPermission } = useContext(widgetContext);
+	const { widget, hasPermission, setWidget } = useContext(widgetContext);
 	const [widgetForm, { Field, Form }] = createForm({
 		validate: zodForm(schema),
 		initialValues: {
@@ -84,6 +85,21 @@ export default function GeneralWidgetSettingsView() {
 
 		p.then(() => navigate(`/app/widgets?projectId=${widget.project.id}`));
 	};
+
+	const trigger = debounce((values: unknown) => {
+		const parse = schema.safeParse(values);
+		if (parse.error) return;
+		batch(() => {
+			setWidget("widget", "name", parse.data.name);
+			setWidget("widget", "project_id", parse.data.project_id);
+		});
+	}, 500);
+
+	createEffect(() => {
+		const vals = getValues(widgetForm);
+		trigger.clear();
+		trigger(vals);
+	});
 
 	return (
 		<div class="flex flex-col p-5">

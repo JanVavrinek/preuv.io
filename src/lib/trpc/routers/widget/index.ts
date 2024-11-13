@@ -11,7 +11,11 @@ import { TRPCError } from "@trpc/server";
 import { hasPermission } from "@utils/permissions";
 import { and, count, desc, eq } from "drizzle-orm";
 import testimonials from "./routers/testimonials";
-import { widgetGetManyQueryInputSchema, widgetUpdateMutationInputSchema } from "./schemas";
+import {
+	widgetCreateMutationInputSchema,
+	widgetGetManyQueryInputSchema,
+	widgetUpdateMutationInputSchema,
+} from "./schemas";
 import type { ListWidget } from "./types";
 
 export default router({
@@ -105,6 +109,24 @@ export default router({
 				await tx.delete(widget).where(eq(widget.id, found.widget.id));
 			});
 		}),
-
+	create: procedure
+		.use(isAuthorized)
+		.use(hasOrganization)
+		.input(widgetCreateMutationInputSchema)
+		.mutation(async (opts): Promise<ListWidget> => {
+			if (!hasPermission(RolePermissions.WIDGET_CREATE, opts.ctx.role.role)) throw new TRPCError({ code: "FORBIDDEN" });
+			return await db.transaction(async (tx) => {
+				const foundProject = await tx.query.project.findFirst({
+					where: and(eq(project.id, opts.input.project_id), eq(project.organization_id, opts.ctx.role.organization.id)),
+				});
+				if (!foundProject) throw new TRPCError({ code: "NOT_FOUND" });
+				const created = (await tx.insert(widget).values(opts.input).returning()).at(0);
+				if (!created) throw new TRPCError({ code: "NOT_FOUND" });
+				return {
+					project: foundProject,
+					widget: created,
+				};
+			});
+		}),
 	testimonials,
 });

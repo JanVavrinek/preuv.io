@@ -30,9 +30,11 @@ export type WidgetInsertModel = InferInsertModel<typeof widget>;
 
 export const widgetSelectModelSchema = createSelectSchema(widget).extend({
 	name: z.string().min(3),
+	options: z.unknown(),
 });
 export const widgetInsertModelSchema = createInsertSchema(widget).extend({
 	name: z.string().min(3),
+	options: z.unknown(),
 });
 
 export const widgetRelations = relations(widget, ({ one, many }) => ({
