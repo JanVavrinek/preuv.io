@@ -36,5 +36,12 @@ const auth = {
 			},
 		},
 	},
+	demo: (
+		<>
+			For demo purposes e-mails are automatically verified.
+			<br />
+			However features relying on e-mails do not work (for example reset password)
+		</>
+	),
 };
 export default auth;
