@@ -1,5 +1,6 @@
 import { pt } from "@lib/i18n/utils";
 import permissions from "./app/permissions";
+import widgetTypes from "./app/widgetTypes";
 
 const app = {
 	dashboard: {
@@ -151,6 +152,21 @@ const app = {
 			name: "Widget name",
 			namePlaceholder: "Landing page",
 			general: "General widget settings",
+			design: {
+				title: "Design",
+				editor: {
+					types: {
+						title: "Type",
+						types: widgetTypes,
+					},
+					properties: {
+						accent: "Accent",
+					},
+				},
+			},
+			testimonial: {
+				add: "Add testimonials",
+			},
 		},
 		create: {
 			title: "Create new widget",

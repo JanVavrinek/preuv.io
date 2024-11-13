@@ -162,7 +162,7 @@ export default function Widgets() {
 											</A>
 										</td>
 										<td class="py-2 pr-2 pl-3 group-even:bg-pv-blue-100 ">
-											<Button icon={<FaSolidGear />} as={A} href={`/app/widgets/${widget.widget.id}`}>
+											<Button icon={<FaSolidGear />} as={A} href={`/app/widgets/${widget.widget.id}/general`}>
 												{c.generic.actions.edit()}
 											</Button>
 										</td>

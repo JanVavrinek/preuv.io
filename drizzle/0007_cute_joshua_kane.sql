@@ -1,9 +1,11 @@
+CREATE TYPE "public"."widget_type" AS ENUM('simple', 'comments');--> statement-breakpoint
+
 CREATE TABLE IF NOT EXISTS "widgets" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"project_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"type" text NOT NULL,
+	"type" widget_type NOT NULL,
 	"options" json DEFAULT '{}'::json NOT NULL
 );
 --> statement-breakpoint

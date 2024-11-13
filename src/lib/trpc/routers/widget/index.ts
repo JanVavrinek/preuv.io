@@ -10,6 +10,7 @@ import type { Collection } from "@lib/trpc/types";
 import { TRPCError } from "@trpc/server";
 import { hasPermission } from "@utils/permissions";
 import { and, count, desc, eq } from "drizzle-orm";
+import testimonials from "./routers/testimonials";
 import { widgetGetManyQueryInputSchema, widgetUpdateMutationInputSchema } from "./schemas";
 import type { ListWidget } from "./types";
 
@@ -104,4 +105,6 @@ export default router({
 				await tx.delete(widget).where(eq(widget.id, found.widget.id));
 			});
 		}),
+
+	testimonials,
 });

@@ -81,17 +81,20 @@ export default function Testimonial(props: VoidProps<TestimonialProps>) {
 				<A href={`/app/project/${props.testimonial.project.id}`} class="w-max text-pv-navy-500">
 					{props.testimonial.project.name}
 				</A>
-				<PermissionsGuard permissions={[RolePermissions.TESTIMONIAL_UPDATE]}>
-					<EditTestimonial
-						onUpdate={(t) => props.onUpdate?.(t)}
-						openTrigger={
-							<Dialog.Trigger as={Button} icon={<FaSolidGear />}>
-								{c.generic.actions.edit()}
-							</Dialog.Trigger>
-						}
-						testimonial={props.testimonial}
-					/>
-				</PermissionsGuard>
+				<div class="flex flex-wrap gap-2">
+					<PermissionsGuard permissions={[RolePermissions.TESTIMONIAL_UPDATE]}>
+						<EditTestimonial
+							onUpdate={(t) => props.onUpdate?.(t)}
+							openTrigger={
+								<Dialog.Trigger as={Button} icon={<FaSolidGear />}>
+									{c.generic.actions.edit()}
+								</Dialog.Trigger>
+							}
+							testimonial={props.testimonial}
+						/>
+					</PermissionsGuard>
+					{props.actionsSlot}
+				</div>
 			</div>
 		</div>
 	);

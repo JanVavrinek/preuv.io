@@ -17,6 +17,7 @@
       "url": "https://janvavrinek.com"
     }
   ],
+  "homepage": "https://preuv.io",
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
