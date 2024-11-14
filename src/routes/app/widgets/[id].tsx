@@ -7,9 +7,9 @@ import type { ListTestimonial } from "@lib/trpc/routers/testimonial/types";
 import { widgetCreateMutationInputSchema, widgetUpdateMutationInputSchema } from "@lib/trpc/routers/widget/schemas";
 import type { ListWidget } from "@lib/trpc/routers/widget/types";
 import widgetContext, { WidgetProvider } from "@molecules/App/views/Widget/context/Widget";
-import { A, useNavigate, useParams } from "@solidjs/router";
-import { FiSave } from "solid-icons/fi";
-import { type ParentProps, Suspense, batch, createMemo, createSignal, onMount, useContext } from "solid-js";
+import { A, useMatch, useNavigate, useParams } from "@solidjs/router";
+import { FiMenu, FiSave } from "solid-icons/fi";
+import { type ParentProps, Show, Suspense, batch, createMemo, createSignal, onMount, useContext } from "solid-js";
 import { reconcile } from "solid-js/store";
 
 function Save() {
@@ -75,6 +75,18 @@ function Save() {
 		</Button>
 	);
 }
+function Open() {
+	const match = useMatch(() => "/app/widgets/:id/design");
+	const { setSidebarOpen } = useContext(widgetContext);
+
+	return (
+		<Show when={match()}>
+			<button type="button" onclick={() => setSidebarOpen((s) => !s)}>
+				<FiMenu font-size="25" />
+			</button>
+		</Show>
+	);
+}
 
 export default function WidgetDetailView(props: ParentProps) {
 	const params = useParams<{ id: string }>();
@@ -91,10 +103,13 @@ export default function WidgetDetailView(props: ParentProps) {
 			<div class="w-full flex-grow p-4">
 				<div class="flex min-h-full w-full flex-col rounded-xl border border-pv-blue-200 bg-pv-blue-50 shadow-lg">
 					<div class="flex flex-row flex-wrap justify-between gap-2 border-pv-blue-200 border-b p-5">
-						<div class="flex flex-row flex-wrap gap-2 font-semibold text-pv-blue-600 [&>*]:h-max [&>*]:rounded-3xl [&>*]:p-2 [&>*]:transition-all [&>*]:duration-300 [&_.active]:bg-pv-navy-500 [&_.active]:text-pv-blue-50">
-							<A href="general">{c.app.widget.detail.general()}</A>
-							<A href="testimonials">{c.app.testimonial.list.title()}</A>
-							<A href="design">{c.app.widget.detail.design.title()}</A>
+						<div class="flex items-center gap-4 text-pv-blue-600">
+							<Open />
+							<div class="flex flex-row flex-wrap gap-2 font-semibold text-pv-blue-600 [&>*]:h-max [&>*]:rounded-3xl [&>*]:p-2 [&>*]:transition-all [&>*]:duration-300 [&_.active]:bg-pv-navy-500 [&_.active]:text-pv-blue-50">
+								<A href="general">{c.app.widget.detail.general()}</A>
+								<A href="testimonials">{c.app.testimonial.list.title()}</A>
+								<A href="design">{c.app.widget.detail.design.title()}</A>
+							</div>
 						</div>
 						<Save />
 					</div>

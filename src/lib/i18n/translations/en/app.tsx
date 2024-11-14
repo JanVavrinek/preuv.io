@@ -166,6 +166,7 @@ const app = {
 			},
 			testimonial: {
 				add: "Add testimonials",
+				noSelected: "No testimonials selected for this widget",
 			},
 		},
 		create: {
