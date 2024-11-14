@@ -44,6 +44,10 @@ export const widgetRelations = relations(widget, ({ one, many }) => ({
 
 export const widgetSimpleTypeOptionsSchema = z.object({
 	accent: z.string().regex(new RegExp(/^#([0-9a-f]{3}){1,2}$/i), "invalid-color"),
+	userIcon: z.object({
+		show: z.boolean(),
+		radius: z.number().int().nonnegative().max(100),
+	}),
 });
 
 export const widgetCommentsTypeOptionsSchema = z.object({

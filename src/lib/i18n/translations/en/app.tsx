@@ -161,6 +161,9 @@ const app = {
 					},
 					properties: {
 						accent: "Accent",
+						userIcon: {
+							title: "User icon",
+						},
 					},
 				},
 			},

@@ -1,7 +1,9 @@
+import Collapsible from "@atoms/Collapsible";
 import Input from "@atoms/Input";
+import Toggle from "@atoms/Toggle";
 import { WidgetType, widgetSimpleTypeOptionsSchema as schema } from "@lib/db/schemas/widget";
 import useI18n from "@lib/i18n/hooks/useI18n";
-import { createForm, getValues, zodForm } from "@modular-forms/solid";
+import { createForm, getValues, setValue, zodForm } from "@modular-forms/solid";
 import { debounce } from "@solid-primitives/scheduled";
 import { type VoidProps, createEffect, createMemo, useContext } from "solid-js";
 import type { z } from "zod";
@@ -27,7 +29,7 @@ function Inner(props: VoidProps<{ options?: z.infer<typeof schema> }>) {
 	});
 
 	return (
-		<Form>
+		<Form class="flex flex-col gap-2">
 			<Field name="accent">
 				{(field, props) => (
 					<Input
@@ -40,6 +42,31 @@ function Inner(props: VoidProps<{ options?: z.infer<typeof schema> }>) {
 					/>
 				)}
 			</Field>
+			<Collapsible triggerChildren={c.app.widget.detail.design.editor.properties.userIcon.title()}>
+				<Field name="userIcon.show" type="boolean">
+					{(field, props) => (
+						<Toggle
+							inputProps={props}
+							checked={Boolean(field.value)}
+							onChange={(v) => setValue(form, "userIcon.show", v)}
+							label={c.generic.actions.show()}
+						/>
+					)}
+				</Field>
+				<Field name="userIcon.radius" type="number">
+					{(field, props) => (
+						<Input
+							inputProps={props}
+							value={String(field.value)}
+							required
+							label={c.app.widget.detail.design.editor.properties.accent()}
+							parseResult={schema.shape.userIcon.shape.radius.safeParse(field.value)}
+							showErrors
+							type="number"
+						/>
+					)}
+				</Field>
+			</Collapsible>
 		</Form>
 	);
 }

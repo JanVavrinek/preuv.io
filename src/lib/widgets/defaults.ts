@@ -6,11 +6,15 @@ import {
 import type { z } from "zod";
 
 export const simpleWidgetDefaultOptions: z.infer<typeof widgetSimpleTypeOptionsSchema> = {
-	accent: "#ff0000",
+	accent: "#fff",
+	userIcon: {
+		show: true,
+		radius: 10,
+	},
 } as const;
 
 export const commentsWidgetDefaultOptions: z.infer<typeof widgetCommentsTypeOptionsSchema> = {
-	accent: "#ff0000",
+	accent: "#fff",
 	radius: 10,
 } as const;
 

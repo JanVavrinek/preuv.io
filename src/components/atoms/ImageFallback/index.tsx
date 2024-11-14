@@ -1,5 +1,6 @@
 import getRandomInt from "@utils/random";
 import { type VoidProps, createMemo } from "solid-js";
+import { imageFallbackStyles } from "./styles";
 import type { ImageFallbackProps } from "./types";
 
 const COLOR = [
@@ -18,7 +19,7 @@ export default function ImageFallback(props: VoidProps<ImageFallbackProps>) {
 	const initials = createMemo(() => {
 		return props.text
 			.split(" ")
-			.slice(0, 6)
+			.slice(0, props.maxTextLength ?? 6)
 			.reduce((p, c) => p + (c.at(0) ?? ""), "");
 	});
 
@@ -28,10 +29,10 @@ export default function ImageFallback(props: VoidProps<ImageFallbackProps>) {
 
 	return (
 		<div
-			class="relative grid h-full w-full place-items-center before:absolute before:inset-0 before:bg-[--random-color] before:opacity-15 before:content-['']"
+			class={imageFallbackStyles().root({ class: [props.class, props.slotClasses?.root] })}
 			style={{ "--random-color": color() }}
 		>
-			<p class="font-black text-6xl text-[--random-color] uppercase">{initials()}</p>
+			<p class={imageFallbackStyles().text({ class: [props.slotClasses?.text] })}>{initials()}</p>
 		</div>
 	);
 }
