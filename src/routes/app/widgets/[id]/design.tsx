@@ -5,15 +5,12 @@ import options from "@lib/widgets";
 import { widgetOptionsDefaults } from "@lib/widgets/defaults";
 import widgetContext from "@molecules/App/views/Widget/context/Widget";
 import { Show, batch, createMemo, useContext } from "solid-js";
+import { reconcile } from "solid-js/store";
 import { Dynamic } from "solid-js/web";
 
 export default function WidgetDesignView() {
 	const { c } = useI18n();
 	const { widget, testimonials, setWidget, sidebarOpen } = useContext(widgetContext);
-	const components = createMemo(() => {
-		const d = options[widget.widget.type];
-		return d;
-	});
 
 	const widgetOptions = createMemo(() => {
 		const parse = widgetOptionsSchema.safeParse({
@@ -21,13 +18,13 @@ export default function WidgetDesignView() {
 			options: widget.widget.options,
 		});
 		if (parse.error) return;
-		return parse.data.options;
+		return { components: options[parse.data.type], options: parse.data.options };
 	});
 
 	const handleSetWidgetType = (widgetType: WidgetType) => {
 		batch(() => {
 			setWidget("widget", "type", widgetType);
-			setWidget("widget", "options", widgetOptionsDefaults[widgetType]);
+			setWidget("widget", "options", reconcile(widgetOptionsDefaults[widgetType]));
 		});
 	};
 
@@ -57,14 +54,14 @@ export default function WidgetDesignView() {
 					]}
 					onChange={(v) => (v?.value ? handleSetWidgetType(v.value as WidgetType) : undefined)}
 				/>
-				<Dynamic component={components().editor} />
+				<Dynamic component={widgetOptions()?.components.editor} />
 			</div>
 			<div class="flex-grow p-2">
 				<Show when={widgetOptions()} keyed>
 					{(o) => (
 						<Dynamic
-							component={components().component}
-							options={o}
+							component={o.components.component}
+							options={o.options as never}
 							testimonials={testimonials().filter((t) => t.testimonial.approved)}
 						/>
 					)}

@@ -164,6 +164,9 @@ const app = {
 						userIcon: {
 							title: "User icon",
 						},
+						quotes: {
+							title: "Quotes",
+						},
 					},
 				},
 			},

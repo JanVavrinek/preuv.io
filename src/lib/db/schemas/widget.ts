@@ -52,7 +52,14 @@ export const widgetSimpleTypeOptionsSchema = z.object({
 
 export const widgetCommentsTypeOptionsSchema = z.object({
 	accent: z.string().regex(new RegExp(/^#([0-9a-f]{3}){1,2}$/i), "invalid-color"),
-	radius: z.number().int().nonnegative().max(20),
+	userIcon: z.object({
+		radius: z.number().int().nonnegative().max(100),
+	}),
+	quotes: z.object({
+		show: z.boolean(),
+		accent: z.string().regex(new RegExp(/^#([0-9a-f]{3}){1,2}$/i), "invalid-color"),
+		size: z.number().int().min(5).max(30),
+	}),
 });
 
 export const widgetOptionsSchema = z.discriminatedUnion("type", [
@@ -62,6 +69,6 @@ export const widgetOptionsSchema = z.discriminatedUnion("type", [
 	}),
 	z.object({
 		type: z.literal(WidgetType.COMMENTS),
-		options: widgetSimpleTypeOptionsSchema,
+		options: widgetCommentsTypeOptionsSchema,
 	}),
 ]);

@@ -17,7 +17,9 @@ export default function WidgetView() {
 
 	return (
 		<Show when={widget()} keyed>
-			{(w) => <Dynamic component={options[w.type].component} testimonials={w.testimonials} options={w.options} />}
+			{(w) => (
+				<Dynamic component={options[w.type].component} testimonials={w.testimonials} options={w.options as never} />
+			)}
 		</Show>
 	);
 }

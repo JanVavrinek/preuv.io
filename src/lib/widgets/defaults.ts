@@ -15,7 +15,14 @@ export const simpleWidgetDefaultOptions: z.infer<typeof widgetSimpleTypeOptionsS
 
 export const commentsWidgetDefaultOptions: z.infer<typeof widgetCommentsTypeOptionsSchema> = {
 	accent: "#fff",
-	radius: 10,
+	userIcon: {
+		radius: 10,
+	},
+	quotes: {
+		accent: "#000",
+		show: true,
+		size: 20,
+	},
 } as const;
 
 export const widgetOptionsDefaults = {

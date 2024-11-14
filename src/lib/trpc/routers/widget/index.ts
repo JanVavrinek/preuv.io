@@ -88,7 +88,7 @@ export default router({
 
 				if (opts.input.data.options) {
 					const parse = widgetOptionsSchema.safeParse({
-						type: foundWidget.widget.type,
+						type: opts.input.data.type ?? foundWidget.widget.type,
 						options: opts.input.data.options,
 					});
 					if (parse.error) throw new TRPCError({ code: "BAD_REQUEST" });

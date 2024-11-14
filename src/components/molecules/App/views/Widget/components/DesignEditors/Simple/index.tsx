@@ -5,21 +5,21 @@ import { WidgetType, widgetSimpleTypeOptionsSchema as schema } from "@lib/db/sch
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { createForm, getValues, setValue, zodForm } from "@modular-forms/solid";
 import { debounce } from "@solid-primitives/scheduled";
-import { type VoidProps, createEffect, createMemo, useContext } from "solid-js";
+import { type VoidProps, createEffect, createMemo, mergeProps, useContext } from "solid-js";
 import type { z } from "zod";
 import widgetContext from "../../../context/Widget";
 
 function Inner(props: VoidProps<{ options?: z.infer<typeof schema> }>) {
 	const { c } = useI18n();
-	const { setWidget } = useContext(widgetContext);
+	const { setWidget, widget } = useContext(widgetContext);
 	const [form, { Form, Field }] = createForm({
 		validate: zodForm(schema),
 		initialValues: props.options,
 	});
 	const trigger = debounce((values: unknown) => {
-		const parse = schema.safeParse(values);
+		const parse = schema.partial().safeParse(values);
 		if (parse.error) return;
-		setWidget("widget", "options", parse.data);
+		setWidget("widget", "options", (s: unknown) => mergeProps(s, parse.data));
 	}, 500);
 
 	createEffect(() => {
