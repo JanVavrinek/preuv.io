@@ -2,7 +2,7 @@ import { db } from "@lib/db";
 import { selectListWidget, selectWidget } from "@lib/db/queries/widget";
 import { type ProjectSelectModel, project } from "@lib/db/schemas/project";
 import { RolePermissions } from "@lib/db/schemas/role";
-import { widget, widgetSelectModelSchema } from "@lib/db/schemas/widget";
+import { widget, widgetOptionsSchema, widgetSelectModelSchema } from "@lib/db/schemas/widget";
 import { procedure, router } from "@lib/trpc/init";
 import { isAuthorized } from "@lib/trpc/middlewares";
 import { hasOrganization } from "@lib/trpc/middlewares/hasOrganization";
@@ -86,6 +86,15 @@ export default router({
 						});
 				}
 
+				if (opts.input.data.options) {
+					const parse = widgetOptionsSchema.safeParse({
+						type: foundWidget.widget.type,
+						options: opts.input.data.options,
+					});
+					if (parse.error) throw new TRPCError({ code: "BAD_REQUEST" });
+					opts.input.data.options = parse.data.options;
+				}
+
 				const updated = (
 					await tx.update(widget).set(opts.input.data).where(eq(widget.id, foundWidget.widget.id)).returning()
 				).at(0);
@@ -116,6 +125,13 @@ export default router({
 		.mutation(async (opts): Promise<ListWidget> => {
 			if (!hasPermission(RolePermissions.WIDGET_CREATE, opts.ctx.role.role)) throw new TRPCError({ code: "FORBIDDEN" });
 			return await db.transaction(async (tx) => {
+				const parse = widgetOptionsSchema.safeParse({
+					type: opts.input.type,
+					options: opts.input.options,
+				});
+				if (parse.error) throw new TRPCError({ code: "BAD_REQUEST" });
+				opts.input.options = parse.data.options;
+
 				const foundProject = await tx.query.project.findFirst({
 					where: and(eq(project.id, opts.input.project_id), eq(project.organization_id, opts.ctx.role.organization.id)),
 				});

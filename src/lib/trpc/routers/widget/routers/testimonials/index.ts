@@ -55,10 +55,10 @@ export default router({
 				if (foundTestimonials.length !== opts.input.testimonials.size) throw new TRPCError({ code: "BAD_REQUEST" });
 
 				await tx.delete(widgetTestimonial).where(eq(widgetTestimonial.widget_id, opts.input.id));
-
-				await tx
-					.insert(widgetTestimonial)
-					.values(foundTestimonials.map((t) => ({ testimonial_id: t.testimonial.id, widget_id: opts.input.id })));
+				if (opts.input.testimonials.size)
+					await tx
+						.insert(widgetTestimonial)
+						.values(foundTestimonials.map((t) => ({ testimonial_id: t.testimonial.id, widget_id: opts.input.id })));
 				return foundTestimonials;
 			});
 		}),
