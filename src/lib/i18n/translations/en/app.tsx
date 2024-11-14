@@ -167,6 +167,8 @@ const app = {
 						quotes: {
 							title: "Quotes",
 						},
+						radius: "Radius",
+						size: "Size",
 					},
 				},
 			},

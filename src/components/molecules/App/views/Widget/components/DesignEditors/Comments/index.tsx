@@ -11,7 +11,7 @@ import widgetContext from "../../../context/Widget";
 
 function Inner(props: VoidProps<{ options?: z.infer<typeof schema> }>) {
 	const { c } = useI18n();
-	const { setWidget, widget } = useContext(widgetContext);
+	const { setWidget } = useContext(widgetContext);
 	const [form, { Form, Field }] = createForm({
 		validate: zodForm(schema),
 		initialValues: props.options,
@@ -20,7 +20,7 @@ function Inner(props: VoidProps<{ options?: z.infer<typeof schema> }>) {
 		(values: unknown) => {
 			const parse = schema.partial().safeParse(values);
 			if (parse.error) return;
-			setWidget("widget", "options", (s) => mergeProps(s, parse.data));
+			setWidget("widget", "options", (s: unknown) => mergeProps(s, parse.data));
 		},
 
 		500,
@@ -53,7 +53,7 @@ function Inner(props: VoidProps<{ options?: z.infer<typeof schema> }>) {
 							inputProps={props}
 							value={String(field.value)}
 							required
-							label={c.app.widget.detail.design.editor.properties.accent()}
+							label={c.app.widget.detail.design.editor.properties.radius()}
 							parseResult={schema.shape.userIcon.shape.radius.safeParse(field.value)}
 							showErrors
 							type="number"
@@ -78,7 +78,7 @@ function Inner(props: VoidProps<{ options?: z.infer<typeof schema> }>) {
 							inputProps={props}
 							value={String(field.value)}
 							required
-							label={c.app.widget.detail.design.editor.properties.accent()}
+							label={c.app.widget.detail.design.editor.properties.size()}
 							parseResult={schema.shape.quotes.shape.size.safeParse(field.value)}
 							showErrors
 							type="number"
