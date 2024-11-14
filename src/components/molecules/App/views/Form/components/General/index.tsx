@@ -3,6 +3,7 @@ import Collapsible from "@atoms/Collapsible";
 import Combobox from "@atoms/Combobox";
 import type { ComboboxItem } from "@atoms/Combobox/types";
 import Input from "@atoms/Input";
+import { toast } from "@atoms/Toaster";
 import Toggle from "@atoms/Toggle";
 import useAsync from "@hooks/useAsync";
 import type { ProjectSelectModel } from "@lib/db/schemas/project";
@@ -11,6 +12,7 @@ import { urlSlugSchema } from "@lib/schemas/url";
 import { client } from "@lib/trpc/client";
 import { getValue, setValue } from "@modular-forms/solid";
 import { debounce } from "@solid-primitives/scheduled";
+import { FaSolidShare } from "solid-icons/fa";
 import { batch, createEffect, createSignal, onMount, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 import { z } from "zod";
@@ -67,6 +69,11 @@ export default function General() {
 	});
 
 	onMount(handleLoadProjects);
+
+	const handleShare = () => {
+		window.navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}/form/${getValue(form, "slug")}`);
+		toast.show(c.generic.common.clipboard());
+	};
 
 	return (
 		<Collapsible triggerChildren={c.app.form.detail.general()}>
@@ -137,6 +144,9 @@ export default function General() {
 			<Content />
 			<Button type="submit" disabled={form.submitting || !form.dirty} class="mt-4 w-full">
 				{c.generic.actions.save()}
+			</Button>
+			<Button icon={<FaSolidShare />} onclick={handleShare} class="mt-4 w-full">
+				{c.generic.actions.share()}
 			</Button>
 		</Collapsible>
 	);

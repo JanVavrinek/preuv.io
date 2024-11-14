@@ -3,6 +3,7 @@ import { WidgetType, widgetOptionsSchema } from "@lib/db/schemas/widget";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import options from "@lib/widgets";
 import { widgetOptionsDefaults } from "@lib/widgets/defaults";
+import Share from "@molecules/App/views/Widget/components/Share";
 import widgetContext from "@molecules/App/views/Widget/context/Widget";
 import { Show, batch, createMemo, useContext } from "solid-js";
 import { reconcile } from "solid-js/store";
@@ -31,7 +32,7 @@ export default function WidgetDesignView() {
 	return (
 		<div class="relative flex w-full flex-grow flex-row overflow-hidden">
 			<div
-				class=" w-full max-w-96 flex-shrink-0 flex-grow rounded-bl-xl border-pv-blue-200 border-r bg-pv-blue-50 p-2 transition-all duration-150 ease-in-out"
+				class=" flex w-full max-w-96 flex-shrink-0 flex-grow flex-col gap-2 rounded-bl-xl border-pv-blue-200 border-r bg-pv-blue-50 p-2 transition-all duration-150 ease-in-out"
 				classList={{
 					"-ml-96": !sidebarOpen(),
 					"m-0": sidebarOpen(),
@@ -54,6 +55,8 @@ export default function WidgetDesignView() {
 					]}
 					onChange={(v) => (v?.value ? handleSetWidgetType(v.value as WidgetType) : undefined)}
 				/>
+				<Share />
+				<hr />
 				<Dynamic component={widgetOptions()?.components.editor} />
 			</div>
 			<div class="flex-grow p-2">

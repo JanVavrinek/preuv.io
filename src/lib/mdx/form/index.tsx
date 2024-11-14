@@ -47,6 +47,6 @@ const formConfig: ComponentProps<typeof SolidMarkdown>["components"] = {
 		</span>
 	),
 	img: (e) => <img {...e} class="my-1 rounded-2xl" alt={e.alt} />,
-	p: (e) => <p {...e} class="px-1 py-px" />,
+	// p: (e) => <p {...e} class="px-1 py-px" />,
 };
 export default formConfig;

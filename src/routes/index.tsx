@@ -39,6 +39,18 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
+			<div class="flex justify-center">
+				<Button as="a" href="https://preuv.io/form/preuvio-landing" class="min-w-64" target="_blank">
+					{c.landing.testimonial()}
+				</Button>
+			</div>
+			<div class="p-5">
+				<iframe
+					src="https://preuv.io/widget/84c6dea2-ebf9-446a-ae80-881801142e0f"
+					title="Landing Page"
+					class="h-60 w-full"
+				/>
+			</div>
 		</main>
 	);
 }
