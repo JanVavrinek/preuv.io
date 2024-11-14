@@ -170,6 +170,10 @@ const app = {
 						radius: "Radius",
 						size: "Size",
 					},
+					share: {
+						title: "Share widget",
+						description: "To implement the widget into your website you must include the following snippet.",
+					},
 				},
 			},
 			testimonial: {
