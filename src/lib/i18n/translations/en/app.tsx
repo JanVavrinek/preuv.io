@@ -161,11 +161,20 @@ const app = {
 					},
 					properties: {
 						accent: "Accent",
+						userIcon: {
+							title: "User icon",
+						},
+						quotes: {
+							title: "Quotes",
+						},
+						radius: "Radius",
+						size: "Size",
 					},
 				},
 			},
 			testimonial: {
 				add: "Add testimonials",
+				noSelected: "No testimonials selected for this widget",
 			},
 		},
 		create: {

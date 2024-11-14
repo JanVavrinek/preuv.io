@@ -14,7 +14,14 @@ export default function WidgetTestimonialsView() {
 	return (
 		<>
 			<div class="flex flex-grow flex-col gap-2 p-5">
-				<For each={testimonials()}>
+				<For
+					each={testimonials()}
+					fallback={
+						<p class="py-4 text-center font-semibold text-pv-blue-500">
+							{c.app.widget.detail.testimonial.noSelected()}
+						</p>
+					}
+				>
 					{(t) => (
 						<Testimonial
 							testimonial={t}

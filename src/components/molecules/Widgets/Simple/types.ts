@@ -1,9 +1,8 @@
-import type { CustomerSelectModel } from "@lib/db/schemas/customer";
-import type { TestimonialSelectModel } from "@lib/db/schemas/testimonial";
 import type { widgetSimpleTypeOptionsSchema } from "@lib/db/schemas/widget";
 import type { z } from "zod";
+import type { WidgetTestimonial } from "../types";
 
 export type SimpleWidgetProps = {
-	testimonials: { testimonial: TestimonialSelectModel; customer: CustomerSelectModel }[];
+	testimonials: WidgetTestimonial[];
 	options: z.infer<typeof widgetSimpleTypeOptionsSchema>;
 };

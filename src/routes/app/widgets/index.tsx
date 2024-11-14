@@ -178,7 +178,7 @@ export default function Widgets() {
 					</Show>
 					<div class="flex items-center justify-between">
 						<PermissionsGuard permissions={[RolePermissions.WIDGET_CREATE]}>
-							<Button icon={<FaSolidPlus />} as={A} href="/app/widgets/create/generic">
+							<Button icon={<FaSolidPlus />} as={A} href="/app/widgets/create/general">
 								{c.generic.actions.create()}
 							</Button>
 						</PermissionsGuard>
