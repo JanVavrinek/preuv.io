@@ -26,5 +26,6 @@
 			"@consts/*": ["./src/consts/*"],
 			"@assets/*": ["./src/assets/*"]
 		}
-	}
+	},
+	"include": ["./src/*"]
 }

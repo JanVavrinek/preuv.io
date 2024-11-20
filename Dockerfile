@@ -13,6 +13,8 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
+RUN pnpm typecheck
+
 RUN pnpm build
 
 # Production stage
