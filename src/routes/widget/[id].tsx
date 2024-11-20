@@ -13,7 +13,7 @@ export const route = {
 
 export default function WidgetView() {
 	const params = useParams<{ id: string }>();
-	const widget = createAsync(() => getWidget(params.id));
+	const widget = createAsync(() => getWidget(params.id), { deferStream: true });
 
 	return (
 		<Show when={widget()} keyed>
