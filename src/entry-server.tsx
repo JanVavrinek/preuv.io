@@ -1,7 +1,10 @@
 // @refresh reload
 import { StartServer, createHandler } from "@solidjs/start/server";
+import { config } from "dotenv";
 import { getCookie, getEvent } from "vinxi/http";
 import { CookieKey } from "./consts";
+
+config();
 
 export default createHandler(() => (
 	<StartServer

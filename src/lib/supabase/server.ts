@@ -6,5 +6,5 @@ import { createClient } from "@supabase/supabase-js";
  */
 
 export default function getServerSupabaseClient() {
-	return createClient(import.meta.env.VITE_SUPABASE, import.meta.env.VITE_SUPABASE_SERVICE_KEY);
+	return createClient(import.meta.env.VITE_SUPABASE, process.env.SUPABASE_SERVICE_KEY ?? "");
 }

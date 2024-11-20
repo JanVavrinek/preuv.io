@@ -11,7 +11,7 @@ type TransformOptions = NonNullable<
 
 export function createSignedUploadUrl(client: Client, entity: StorageEntity, objectName: string, upsert = false) {
 	return client.storage
-		.from(import.meta.env.VITE_STORAGE_BUCKET)
+		.from(process.env.STORAGE_BUCKET ?? "")
 		.createSignedUploadUrl(join(entity, objectName), { upsert });
 }
 
@@ -23,25 +23,25 @@ export function createSignedUrl(
 	transform?: TransformOptions,
 ) {
 	return client.storage
-		.from(import.meta.env.VITE_STORAGE_BUCKET)
+		.from(process.env.STORAGE_BUCKET ?? "")
 		.createSignedUrl(join(entity, objectName), expiresIn, { transform });
 }
 
 export function createSignedUrls(client: Client, entity: StorageEntity, objectNames: string[], expiresIn = 3600) {
-	return client.storage.from(import.meta.env.VITE_STORAGE_BUCKET).createSignedUrls(
+	return client.storage.from(process.env.STORAGE_BUCKET ?? "").createSignedUrls(
 		objectNames.map((i) => join(entity, i)),
 		expiresIn,
 	);
 }
 
 export function storageObjectExists(client: Client, entity: StorageEntity, objectName: string) {
-	return client.storage.from(import.meta.env.VITE_STORAGE_BUCKET).exists(join(entity, objectName));
+	return client.storage.from(process.env.STORAGE_BUCKET ?? "").exists(join(entity, objectName));
 }
 
 export function storageObjectInfo(client: Client, entity: StorageEntity, objectName: string) {
-	return client.storage.from(import.meta.env.VITE_STORAGE_BUCKET).info(join(entity, objectName));
+	return client.storage.from(process.env.STORAGE_BUCKET ?? "").info(join(entity, objectName));
 }
 
 export function storageObjectDelete(client: Client, entity: StorageEntity, objectNames: string[]) {
-	return client.storage.from(import.meta.env.VITE_STORAGE_BUCKET).remove(objectNames.map((i) => join(entity, i)));
+	return client.storage.from(process.env.STORAGE_BUCKET ?? "").remove(objectNames.map((i) => join(entity, i)));
 }

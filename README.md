@@ -23,13 +23,13 @@ The app is built using Supabase for auth, storage and db.
 ## Environment variables
 
 ```
-VITE_JWT_SECRET=""
+JWT_SECRET=""
 VITE_SUPABASE="" # url of your supabase instance
 VITE_SUPABASE_ANON_KEY=""
 VITE_BASE_URL="http://localhost:3000" # the root url of your app 
-VITE_DB_URL="" # postgres connection string
+DB_URL="" # postgres connection string
 VITE_EMAIL_CONFIRM_REDIRECT="http://localhost:3000/auth/signin" # the url and a path
-VITE_SUPABASE_SERVICE_KEY="" # This key should never be exposed to clients!
+SUPABASE_SERVICE_KEY="" # This key should never be exposed to clients!
 ```
 
 ## Deployment
