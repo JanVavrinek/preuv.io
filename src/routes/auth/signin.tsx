@@ -52,6 +52,7 @@ export default function SignInView() {
 							parseResult={loginSchema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
 							placeholder="jane@preuv.io"
+							type="email"
 						/>
 					)}
 				</Field>
@@ -63,7 +64,7 @@ export default function SignInView() {
 							required
 							type="password"
 							label={c.auth.signIn.password()}
-							placeholder="***"
+							placeholder="*********"
 							parseResult={loginSchema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
 						/>
@@ -74,9 +75,8 @@ export default function SignInView() {
 					Sign In
 				</Button>
 			</Form>
-			<A class="flex justify-center gap-1 p-1" href="/auth/signup">
-				{c.auth.signIn.noAccount()}
-				<span class="font-semibold text-pv-navy-500">{c.auth.signUp.title()}</span>
+			<A class="mx-auto w-max p-1 text-center" href="/auth/signup">
+				{c.auth.signIn.noAccount()} <span class="font-semibold text-pv-navy-500">{c.auth.signUp.title()}</span>
 			</A>
 		</div>
 	);

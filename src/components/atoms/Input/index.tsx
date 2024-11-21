@@ -47,7 +47,7 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 			<Show when={local.label}>
 				<TextField.Label class="pl-2 text-pv-blue-700">{local.label}</TextField.Label>
 			</Show>
-			<div class="focus-within:-translate-y-1 relative flex min-h-14 flex-row items-center rounded-2xl border border-pv-blue-200 bg-pv-blue-100 transition-all duration-300 focus-within:shadow-lg group-data-[invalid]:border-pv-red-400">
+			<div class="focus-within:-translate-y-1 relative flex min-h-14 flex-row items-center overflow-hidden rounded-2xl border border-pv-blue-200 bg-pv-blue-100 transition-all duration-300 focus-within:shadow-lg group-data-[invalid]:border-pv-red-400">
 				<Show
 					when={local.textArea}
 					fallback={
@@ -98,15 +98,15 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 					/{local.maxLength}
 				</p>
 			</Show>
-			<Show when={!!parseIssues()?.length && local.showErrors}>
-				<ol class="flex flex-col gap-1 pl-2 text-pv-red-500 text-sm">
+			<ol class="flex min-h-5 flex-col gap-1 pl-2 text-pv-red-500 text-sm">
+				<Show when={!!parseIssues()?.length && local.showErrors}>
 					<For each={parseIssues()}>
 						{(issue) => (
 							<TextField.ErrorMessage as="li">{c.errors.zod[issue.code](issue as never)}</TextField.ErrorMessage>
 						)}
 					</For>
-				</ol>
-			</Show>
+				</Show>
+			</ol>
 		</TextField>
 	);
 }
