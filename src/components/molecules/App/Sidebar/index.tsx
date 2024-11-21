@@ -1,16 +1,16 @@
 import Dropdown from "@atoms/Dropdown";
 import { organizationsContext } from "@contexts/Organizations";
 import { Button } from "@kobalte/core/button";
-import { Tabs } from "@kobalte/core/tabs";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { A, useIsRouting, useLocation } from "@solidjs/router";
 import { FaSolidXmark } from "solid-icons/fa";
 import { Suspense, type VoidProps, createEffect, createMemo, createSignal, lazy, useContext } from "solid-js";
 import type { SidebarProps } from "./types";
 const CreateOrganization = lazy(() => import("@molecules/App/CreateOrganization"));
+import styles from "./styles.module.css";
 
 const ITEM_CLASS =
-	"w-full relative flex flex-row gap-5 p-4 text-pv-blue-700 hover:text-pv-blue-600 hover:bg-pv-navy-200 data-[highlighted]:bg-transparent transition-all duration-150 data-[selected]:text-white hover:rounded-full data-[disabled]:pointer-events-none data-[disabled]:opacity-75";
+	"w-full relative flex flex-row gap-5 p-4 text-pv-blue-700 hover:text-pv-blue-600 hover:bg-pv-navy-200 data-[highlighted]:bg-transparent transition-all duration-150 data-[selected]:text-white hover:rounded-full data-[disabled]:pointer-events-none data-[disabled]:opacity-75 rounded-full";
 export const [openCreateOrganization, setOpenCreateOrganization] = createSignal(false);
 
 export default function Sidebar(props: VoidProps<SidebarProps>) {
@@ -42,13 +42,8 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 				}}
 				onclick={() => props.onOpen(false)}
 			/>
-			<Tabs
-				as="nav"
-				orientation="vertical"
+			<nav
 				class="fixed z-[1] flex h-dvh w-full max-w-72 flex-col gap-4 border border-pv-blue-200 bg-pv-blue-50 py-4 shadow-lg transition-all duration-500 lg:relative lg:left-0 lg:transition-none"
-				value={value()}
-				onChange={setValue}
-				defaultValue="/app/dashboard"
 				classList={{
 					"left-0": props.open,
 					"-left-full": !props.open,
@@ -57,53 +52,37 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 				<A href="/app/dashboard" class="text-center text-4xl text-pv-blue-300">
 					preuv.io
 				</A>
-				<Tabs.List class="relative z-0 flex h-full w-full flex-col gap-4 p-5 ">
-					<Tabs.Trigger value="/app/dashboard" href="/app/dashboard" as={A} class={ITEM_CLASS}>
+				<div class="relative z-0 flex h-full w-full flex-col gap-4 p-5 ">
+					<A href="/app/dashboard" class={ITEM_CLASS} activeClass={styles.active}>
 						{c.app.dashboard.title()}
-					</Tabs.Trigger>
-					<Tabs.Trigger
-						value="/app/projects"
+					</A>
+					<A
 						href="/app/projects"
-						as={A}
 						class={ITEM_CLASS}
-						disabled={!organizations.active}
+						aria-disabled={!organizations.active}
+						activeClass={styles.active}
+						end={false}
 					>
 						{c.app.project.list.title()}
-					</Tabs.Trigger>
-					<Tabs.Trigger
-						value="/app/customers"
-						href="/app/customers"
-						as={A}
-						class={ITEM_CLASS}
-						disabled={!organizations.active}
-					>
+					</A>
+					<A href="/app/customers" class={ITEM_CLASS} aria-disabled={!organizations.active} activeClass={styles.active}>
 						{c.app.customer.list.title()}
-					</Tabs.Trigger>
-					<Tabs.Trigger
-						value="/app/testimonials"
+					</A>
+					<A
 						href="/app/testimonials"
-						as={A}
 						class={ITEM_CLASS}
-						disabled={!organizations.active}
+						aria-disabled={!organizations.active}
+						activeClass={styles.active}
 					>
 						{c.app.testimonial.list.title()}
-					</Tabs.Trigger>
-					<Tabs.Trigger value="/app/forms" href="/app/forms" as={A} class={ITEM_CLASS} disabled={!organizations.active}>
+					</A>
+					<A href="/app/forms" class={ITEM_CLASS} aria-disabled={!organizations.active} activeClass={styles.active}>
 						{c.app.form.list.title()}
-					</Tabs.Trigger>
-					<Tabs.Trigger
-						value="/app/widgets"
-						href="/app/widgets"
-						as={A}
-						class={ITEM_CLASS}
-						disabled={!organizations.active}
-					>
+					</A>
+					<A href="/app/widget/" class={ITEM_CLASS} aria-disabled={!organizations.active} activeClass={styles.active}>
 						{c.app.widget.list.title()}
-					</Tabs.Trigger>
-					<Tabs.Indicator class="-z-10 pointer-events-none absolute top-0 left-0 w-full px-2 transition-all duration-150">
-						<div class="h-full w-full rounded-full bg-pv-navy-500" />
-					</Tabs.Indicator>
-				</Tabs.List>
+					</A>
+				</div>
 				<div class="px-5">
 					<Dropdown
 						items={[
@@ -134,7 +113,7 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 						{activeOrganization()}
 					</Dropdown>
 				</div>
-			</Tabs>
+			</nav>
 			<Button
 				class="fixed top-2 right-2 z-10 rounded-full bg-pv-blue-50 bg-opacity-50 p-2 text-3xl text-pv-blue-700 transition-[top] delay-100 duration-300 lg:hidden"
 				classList={{
