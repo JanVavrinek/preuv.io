@@ -4,7 +4,7 @@ import useI18n from "@lib/i18n/hooks/useI18n";
 import { submitFormAction } from "@lib/server/routes/form";
 import { createForm, zodForm } from "@modular-forms/solid";
 import formContext, { formContextDataSchema } from "@molecules/Form/contexts/Form";
-import { useAction, useParams, useSubmission } from "@solidjs/router";
+import { useAction, useParams } from "@solidjs/router";
 import { FaSolidArrowLeft, FaSolidArrowRight } from "solid-icons/fa";
 import { type VoidProps, useContext } from "solid-js";
 import { reconcile } from "solid-js/store";
@@ -22,7 +22,6 @@ export default function Customer(props: VoidProps<CustomerProps>) {
 		initialValues: data.customer,
 	});
 	const submitForm = useAction(submitFormAction);
-	const submission = useSubmission(submitFormAction);
 
 	const handleSubmit: FormSubmitHandler<typeof Form> = async (values) => {
 		setData("customer", reconcile(values));

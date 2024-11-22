@@ -2,7 +2,7 @@ import Dropdown from "@atoms/Dropdown";
 import { organizationsContext } from "@contexts/Organizations";
 import { Button } from "@kobalte/core/button";
 import useI18n from "@lib/i18n/hooks/useI18n";
-import { A, useIsRouting, useLocation } from "@solidjs/router";
+import { A, useIsRouting } from "@solidjs/router";
 import { FaSolidXmark } from "solid-icons/fa";
 import { Suspense, type VoidProps, createEffect, createMemo, createSignal, lazy, useContext } from "solid-js";
 import type { SidebarProps } from "./types";
@@ -15,8 +15,6 @@ export const [openCreateOrganization, setOpenCreateOrganization] = createSignal(
 
 export default function Sidebar(props: VoidProps<SidebarProps>) {
 	const { c } = useI18n();
-	const location = useLocation();
-	const [value, setValue] = createSignal(location.pathname ?? "/app/dashboard");
 	const { organizations, setOrganizations } = useContext(organizationsContext);
 	const routing = useIsRouting();
 

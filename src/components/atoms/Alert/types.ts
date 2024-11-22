@@ -9,7 +9,7 @@ export type AlertVariants = VariantProps<typeof alertStyles>;
 
 export type AlertSlots = keyof (typeof alertStyles)["slots"];
 
-export type AlertStatus = Exclude<AlertVariants["status"], undefined>;
+export type AlertStatus = Exclude<AlertVariants["variant"], undefined>;
 
 export interface AlertProps<T extends ValidComponent = "div">
 	extends AlertRootProps<T>,
