@@ -4,4 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "${PORT}:${PORT}"
+    expose:
+      - ${PORT}
+    environment:
+      - PORT=${PORT}
