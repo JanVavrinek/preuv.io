@@ -25,7 +25,8 @@
     "prepare": "husky",
     "biome:check": "pnpm biome check --write ./src",
     "drizzle:generate": "npx drizzle-kit generate",
-    "drizzle:migrate": "npx drizzle-kit migrate"
+    "drizzle:migrate": "npx drizzle-kit migrate",
+    "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -41,6 +42,7 @@
     "@trpc/client": "11.0.0-rc.571",
     "@trpc/server": "11.0.0-rc.571",
     "autoprefixer": "^10.4.19",
+    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.1",
     "drizzle-zod": "^0.5.1",
     "easymde": "^2.18.0",
@@ -67,6 +69,7 @@
     "drizzle-kit": "^0.28.0",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
+    "typescript": "^5.6.3",
     "vite-tsconfig-paths": "^5.1.2"
   },
   "lint-staged": {

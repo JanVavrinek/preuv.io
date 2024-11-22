@@ -13,6 +13,8 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
+RUN pnpm typecheck
+
 RUN pnpm build
 
 # Production stage
@@ -21,7 +23,5 @@ FROM node:23-alpine
 WORKDIR /app
 
 COPY --from=builder /app/.output ./.output
-
-EXPOSE 3000
 
 CMD ["node", ".output/server/index.mjs"]

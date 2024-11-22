@@ -1,5 +1,15 @@
 import { client } from "@lib/trpc/client";
-import { type Accessor, type ParentProps, createContext, createEffect, createMemo, on, onMount } from "solid-js";
+import {
+	type Accessor,
+	type ParentProps,
+	Show,
+	createContext,
+	createEffect,
+	createMemo,
+	createSignal,
+	on,
+	onMount,
+} from "solid-js";
 import { type SetStoreFunction, createStore } from "solid-js/store";
 import { LocalStorageKey } from "../../consts";
 import type { Organization, Role } from "./types";
@@ -27,6 +37,7 @@ export const organizationsContext = createContext<{
 
 export default function OrganizationsProvider(props: ParentProps) {
 	const [organizations, setOrganizations] = createStore(structuredClone(DEFAULT_ORGANIZATIONS_DATA));
+	const [loaded, setLoaded] = createSignal(false);
 
 	function handleLoad(offset = 0) {
 		client.organization.getMany.query({ offset, limit: LOAD_LIMIT }).then((res) => {
@@ -36,6 +47,7 @@ export default function OrganizationsProvider(props: ParentProps) {
 			else {
 				const index = organizations.organizations.findIndex((o) => o.organization.id === organizations.active);
 				if (index === -1) setOrganizations("active", organizations.organizations.at(0)?.organization.id);
+				setLoaded(true);
 			}
 		});
 	}
@@ -62,7 +74,7 @@ export default function OrganizationsProvider(props: ParentProps) {
 
 	return (
 		<organizationsContext.Provider value={{ organizations, setOrganizations, activeOrganization }}>
-			{props.children}
+			<Show when={loaded()}>{props.children}</Show>
 		</organizationsContext.Provider>
 	);
 }

@@ -17,7 +17,7 @@ export async function createContext(opts: FetchCreateContextFnOptions, event: AP
 
 	if (!token || token.length !== 2) return { organizationId, event };
 
-	const secretKey = createSecretKey(import.meta.env.VITE_JWT_SECRET, "utf-8");
+	const secretKey = createSecretKey(process.env.JWT_SECRET ?? "", "utf-8");
 	const user = payload.safeParse((await jose.jwtVerify(token[1], secretKey)).payload);
 
 	return { user: user.data, event, organizationId };

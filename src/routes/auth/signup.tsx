@@ -65,7 +65,7 @@ export default function SignUpView() {
 							required
 							type="password"
 							label={c.auth.signIn.password()}
-							placeholder="***"
+							placeholder="*********"
 							parseResult={loginSchema.shape[field.name].safeParse(field.value)}
 							showErrors={!!field.error.length}
 						/>
@@ -75,9 +75,8 @@ export default function SignUpView() {
 					{c.auth.signUp.title()}
 				</Button>
 			</Form>
-			<A class="flex justify-center gap-1 p-1" href="/auth/signin">
-				{c.auth.signUp.haveAccount()}
-				<span class="font-semibold text-pv-navy-500">{c.auth.signIn.title()}</span>
+			<A class="mx-auto w-max p-1 text-center" href="/auth/signin">
+				{c.auth.signUp.haveAccount()} <span class="font-semibold text-pv-navy-500">{c.auth.signIn.title()}</span>
 			</A>
 		</div>
 	);

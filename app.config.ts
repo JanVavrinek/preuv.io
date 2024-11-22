@@ -12,5 +12,6 @@ export default defineConfig({
 			crawlLinks: true,
 		},
 		compatibilityDate: "2024-11-12",
+		port: process.env.PORT,
 	},
 });

@@ -11,8 +11,8 @@ export default function AppLayout(props: ParentProps) {
 	const [open, setOpen] = createSignal(false);
 	return (
 		<AppLayoutTitleProvider>
-			<OrganizationsProvider>
-				<UserProvider>
+			<UserProvider>
+				<OrganizationsProvider>
 					<main class="flex h-dvh w-dvw flex-row">
 						<Sidebar onOpen={setOpen} open={open()} />
 						<section
@@ -25,8 +25,8 @@ export default function AppLayout(props: ParentProps) {
 							<Suspense>{props.children}</Suspense>
 						</section>
 					</main>
-				</UserProvider>
-			</OrganizationsProvider>
+				</OrganizationsProvider>
+			</UserProvider>
 		</AppLayoutTitleProvider>
 	);
 }

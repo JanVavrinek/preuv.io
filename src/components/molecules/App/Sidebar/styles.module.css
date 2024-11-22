@@ -1,0 +1,3 @@
+.active {
+	@apply bg-pv-navy-400 text-pv-blue-50 font-bold hover:bg-pv-navy-400 hover:text-pv-blue-50;
+}
