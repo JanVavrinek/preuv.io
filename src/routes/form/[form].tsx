@@ -1,9 +1,9 @@
 import { getForm } from "@lib/server/routes/form";
-import Customer from "@molecules/Form/Steps/Customer";
-import Testimonial from "@molecules/Form/Steps/Testimonial";
-import ThankYou from "@molecules/Form/Steps/ThankYou";
-import Welcome from "@molecules/Form/Steps/Welcome";
-import { FormContextProvider } from "@molecules/Form/contexts/Form";
+import Customer from "@molecules/layouts/Form/Steps/Customer";
+import Testimonial from "@molecules/layouts/Form/Steps/Testimonial";
+import ThankYou from "@molecules/layouts/Form/Steps/ThankYou";
+import Welcome from "@molecules/layouts/Form/Steps/Welcome";
+import { FormContextProvider } from "@molecules/layouts/Form/contexts/Form";
 import { Title } from "@solidjs/meta";
 import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { Match, Show, Switch, createSignal } from "solid-js";

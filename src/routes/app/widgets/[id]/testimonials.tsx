@@ -1,10 +1,10 @@
 import Button from "@atoms/Button";
 import { Dialog } from "@kobalte/core/dialog";
 import useI18n from "@lib/i18n/hooks/useI18n";
-import Testimonial from "@molecules/App/Testimonial";
-import AddTestimonial from "@molecules/App/views/Widget/components/AddTestimonial";
-import widgetContext from "@molecules/App/views/Widget/context/Widget";
 import ConfirmDelete from "@molecules/common/ConfirmDelete";
+import Testimonial from "@molecules/layouts/App/common/Testimonial";
+import AddTestimonial from "@molecules/layouts/App/views/Widget/components/AddTestimonial";
+import widgetContext from "@molecules/layouts/App/views/Widget/context/Widget";
 import { FaSolidPlus, FaSolidXmark } from "solid-icons/fa";
 import { For, useContext } from "solid-js";
 

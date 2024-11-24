@@ -6,7 +6,7 @@ import { client } from "@lib/trpc/client";
 import type { ListTestimonial } from "@lib/trpc/routers/testimonial/types";
 import { widgetCreateMutationInputSchema, widgetUpdateMutationInputSchema } from "@lib/trpc/routers/widget/schemas";
 import type { ListWidget } from "@lib/trpc/routers/widget/types";
-import widgetContext, { WidgetProvider } from "@molecules/App/views/Widget/context/Widget";
+import widgetContext, { WidgetProvider } from "@molecules/layouts/App/views/Widget/context/Widget";
 import { A, useMatch, useNavigate, useParams } from "@solidjs/router";
 import { FiMenu, FiSave } from "solid-icons/fi";
 import { type ParentProps, Show, Suspense, batch, createMemo, createSignal, onMount, useContext } from "solid-js";

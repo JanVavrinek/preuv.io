@@ -1,10 +1,10 @@
 import { organizationsContext } from "@contexts/Organizations";
 import useI18n from "@lib/i18n/hooks/useI18n";
-import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
-import General from "@molecules/App/views/Organization/General";
-import Invites from "@molecules/App/views/Organization/Invites";
-import Members from "@molecules/App/views/Organization/Members";
-import Roles from "@molecules/App/views/Organization/Roles";
+import AppLayoutTitle from "@molecules/layouts/App/layout/AppLayoutTitle";
+import General from "@molecules/layouts/App/views/Organization/General";
+import Invites from "@molecules/layouts/App/views/Organization/Invites";
+import Members from "@molecules/layouts/App/views/Organization/Members";
+import Roles from "@molecules/layouts/App/views/Organization/Roles";
 import { useNavigate } from "@solidjs/router";
 import { createEffect, useContext } from "solid-js";
 

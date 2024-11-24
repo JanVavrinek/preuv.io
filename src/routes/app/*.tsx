@@ -1,6 +1,6 @@
 import Button from "@atoms/Button";
 import useI18n from "@lib/i18n/hooks/useI18n";
-import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
+import AppLayoutTitle from "@molecules/layouts/App/layout/AppLayoutTitle";
 import { A } from "@solidjs/router";
 import { HttpStatusCode } from "@solidjs/start";
 import { FaSolidArrowLeft } from "solid-icons/fa";

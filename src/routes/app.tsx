@@ -1,8 +1,8 @@
 import { GridPattern } from "@atoms/GridPattern";
 import { AppLayoutTitleProvider } from "@contexts/AppLayoutTitle";
 import OrganizationsProvider from "@contexts/Organizations";
-import Header from "@molecules/App/Header";
-import Sidebar from "@molecules/App/Sidebar";
+import Header from "@molecules/layouts/App/layout/Header";
+import Sidebar from "@molecules/layouts/App/layout/Sidebar";
 import { clientOnly } from "@solidjs/start";
 import { type ParentProps, Suspense, createSignal } from "solid-js";
 
