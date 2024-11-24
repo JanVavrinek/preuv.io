@@ -77,7 +77,7 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 					<A href="/app/forms" class={ITEM_CLASS} aria-disabled={!organizations.active} activeClass={styles.active}>
 						{c.app.form.list.title()}
 					</A>
-					<A href="/app/widget/" class={ITEM_CLASS} aria-disabled={!organizations.active} activeClass={styles.active}>
+					<A href="/app/widgets" class={ITEM_CLASS} aria-disabled={!organizations.active} activeClass={styles.active}>
 						{c.app.widget.list.title()}
 					</A>
 				</div>

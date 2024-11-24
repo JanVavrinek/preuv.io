@@ -11,7 +11,7 @@ export default createHandler(() => (
 		document={({ assets, children, scripts }) => (
 			<html lang="en">
 				<head>
-					<link rel="preload" href="/fonts/space.ttf" as="font" type="font/ttf" crossOrigin="" />
+					<link rel="preload" href="/fonts/space.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
 					<meta charset="utf-8" />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />

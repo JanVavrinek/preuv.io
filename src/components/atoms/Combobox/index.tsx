@@ -41,7 +41,6 @@ export default function Combobox<T, U>(props: VoidProps<ComboboxProps<T, U>>) {
 			onInputChange={props.onInputChange}
 			readOnly={props.readOnly}
 			validationState={!!parseIssues()?.length && props.showErrors ? "invalid" : "valid"}
-			triggerMode="focus"
 		>
 			<Show when={props.label}>
 				<KCombobox.Label class="pl-2 text-pv-blue-700">{props.label}</KCombobox.Label>

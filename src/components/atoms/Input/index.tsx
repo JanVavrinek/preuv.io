@@ -98,7 +98,7 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 					/{local.maxLength}
 				</p>
 			</Show>
-			<ol class="flex min-h-5 flex-col gap-1 pl-2 text-pv-red-500 text-sm">
+			<ol class="flex flex-col gap-1 pl-2 text-pv-red-500 text-sm">
 				<Show when={!!parseIssues()?.length && local.showErrors}>
 					<For each={parseIssues()}>
 						{(issue) => (

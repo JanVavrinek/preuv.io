@@ -1,3 +1,4 @@
+import { GridPattern } from "@atoms/GridPattern";
 import { AppLayoutTitleProvider } from "@contexts/AppLayoutTitle";
 import OrganizationsProvider from "@contexts/Organizations";
 import Header from "@molecules/App/Header";
@@ -21,6 +22,10 @@ export default function AppLayout(props: ParentProps) {
 								"scale-95 overflow-hidden rounded-2xl lg:scale-100 lg:overflow-auto lg:rounded-none": open(),
 							}}
 						>
+							<GridPattern
+								class="-z-[1] animate-pulse [animation-duration:_6s] [mask-image:radial-gradient(transparent,white)]"
+								strokeDasharray="4"
+							/>
 							<Header onOpenSideBar={() => setOpen(!open())} />
 							<Suspense>{props.children}</Suspense>
 						</section>
