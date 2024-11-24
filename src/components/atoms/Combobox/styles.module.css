@@ -5,5 +5,5 @@
 }
 
 .item {
-	@apply p-2 min-h-7 flex flex-row items-center hover:bg-pv-blue-50 rounded-md cursor-pointer data-[disabled]:opacity-75 data-[disabled]:cursor-not-allowed;
+	@apply p-2 min-h-7 flex flex-row items-center hover:bg-pv-blue-50 rounded-md cursor-pointer data-[disabled]:opacity-75 data-[disabled]:cursor-not-allowed gap-1 transition-all duration-150 data-[selected]:bg-pv-blue-100;
 }
