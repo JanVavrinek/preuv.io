@@ -9,7 +9,7 @@ export default function ProjectCard(props: VoidProps<ProjectCardProps>) {
 	return (
 		<A
 			href={`/app/project/${props.project.id}`}
-			class="hover:-translate-y-1 flex flex-col overflow-hidden rounded-2xl border border-pv-blue-200 bg-pv-blue-50 transition-all delay-150 duration-150 hover:shadow-xl"
+			class="hover:-translate-y-1 flex flex-col overflow-hidden rounded-2xl border border-pv-blue-200 bg-pv-blue-50 transition-all delay-75 duration-300 ease-over hover:shadow-xl"
 		>
 			<Image class="flex h-60 w-full items-stretch">
 				<Show when={props.project.image} fallback={<ImageFallback text={props.project.name} />}>

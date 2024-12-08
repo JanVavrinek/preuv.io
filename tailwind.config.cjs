@@ -70,6 +70,9 @@ module.exports = {
 					950: "#02007a",
 				},
 			},
+			transitionTimingFunction: {
+				over: "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+			},
 		},
 	},
 	plugins: [require("@kobalte/tailwindcss")],
