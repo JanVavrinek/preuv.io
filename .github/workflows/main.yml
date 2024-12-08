@@ -1,0 +1,118 @@
+name: Test CI
+
+on:
+  pull_request:
+    branches: 
+      - dev
+      - main
+
+jobs:
+  install-deps:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 9.15.0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '23'
+        cache: 'pnpm'
+   
+    
+    - name: Install Dependencies
+      run: pnpm i --frozen-lockfile
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          node_modules
+          .pnpm-store
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
+  check:
+    needs: install-deps
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 9.15.0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '23'
+        cache: 'pnpm'
+
+    - name: Restore Dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          node_modules
+          .pnpm-store
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+    
+    - name: Biome lint and format
+      run: pnpm biome check ./src
+
+    - name: Typecheck
+      run: pnpm typecheck
+
+  test:
+    needs: [install-deps, check]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 9.15.0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '23'
+        cache: 'pnpm'
+    
+    - name: Restore Dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          node_modules
+          .pnpm-store
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+    - name: Install supabase
+      uses: supabase/setup-cli@v1
+      with:
+        version: latest
+
+    - name: Start Supabase Local Development
+      run: supabase start
+    
+    - name: Create .env file
+      run: |
+        touch .env
+        echo "${{ secrets.ENV_FILE }}" > .env
+
+    - name: Migrate database
+      run: pnpm drizzle:migrate
+    
+    - name: Run Vitest
+      run: pnpm test
+    
+    - name: Stop Supabase
+      if: always()
+      run: supabase stop
