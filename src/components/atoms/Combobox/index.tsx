@@ -1,7 +1,7 @@
 import InterSectionObserver from "@atoms/IntersectionObserver";
 import { Combobox as KCombobox } from "@kobalte/core/combobox";
 import useI18n from "@lib/i18n/hooks/useI18n";
-import { FaSolidAngleDown } from "solid-icons/fa";
+import { FaSolidAngleDown, FaSolidCheck } from "solid-icons/fa";
 import { For, Show, type VoidProps, createMemo } from "solid-js";
 import { comboBoxStyles } from "./styles";
 import styles from "./styles.module.css";
@@ -20,10 +20,15 @@ export default function Combobox<T, U>(props: VoidProps<ComboboxProps<T, U>>) {
 			optionDisabled="disabled"
 			itemComponent={({ item }) => (
 				<KCombobox.Item item={item} class={styles.item}>
-					<KCombobox.ItemLabel class="flex flex-row flex-wrap items-center gap-1">
+					<KCombobox.ItemLabel class="flex w-full flex-row flex-wrap items-center gap-1">
 						{item.rawValue.icon}
 						<p class="line-clamp-1">{item.rawValue.label}</p>
 					</KCombobox.ItemLabel>
+					<KCombobox.ItemIndicator>
+						<p class="text-pv-blue-400">
+							<FaSolidCheck />
+						</p>
+					</KCombobox.ItemIndicator>
 				</KCombobox.Item>
 			)}
 			class={comboBoxStyles().root({
@@ -32,7 +37,7 @@ export default function Combobox<T, U>(props: VoidProps<ComboboxProps<T, U>>) {
 			value={props.value}
 			onChange={props.onChange}
 			fitViewport
-			preventScroll
+			modal
 			onInputChange={props.onInputChange}
 			readOnly={props.readOnly}
 			validationState={!!parseIssues()?.length && props.showErrors ? "invalid" : "valid"}
@@ -43,8 +48,8 @@ export default function Combobox<T, U>(props: VoidProps<ComboboxProps<T, U>>) {
 			<KCombobox.HiddenSelect {...props.selectProps} hidden />
 			<KCombobox.Control class="flex w-full rounded-2xl border border-pv-blue-200 bg-pv-blue-100">
 				<KCombobox.Input class="h-14 w-full rounded-l-2xl bg-transparent px-2" />
-				<KCombobox.Trigger class="px-2 transition-all duration-150 data-[expanded]:rotate-180">
-					<KCombobox.Icon>
+				<KCombobox.Trigger class="rounded-r-2xl px-2 transition-all duration-150 hover:bg-pv-blue-200">
+					<KCombobox.Icon class="block transition-all duration-150 data-[expanded]:rotate-180">
 						<FaSolidAngleDown />
 					</KCombobox.Icon>
 				</KCombobox.Trigger>

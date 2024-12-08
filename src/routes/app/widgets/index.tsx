@@ -12,7 +12,7 @@ import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import type { ListWidget } from "@lib/trpc/routers/widget/types";
 import type { Collection } from "@lib/trpc/types";
-import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
+import AppLayoutTitle from "@molecules/layouts/App/layout/AppLayoutTitle";
 import { A, useNavigate, useSearchParams } from "@solidjs/router";
 import { FaSolidGear, FaSolidPlus } from "solid-icons/fa";
 import { FiExternalLink } from "solid-icons/fi";

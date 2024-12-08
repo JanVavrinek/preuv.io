@@ -25,20 +25,26 @@
 @keyframes dialogShow {
 	from {
 		opacity: 0;
+		scale: 0.7;
+		filter: blur(15px);
 	}
 
 	to {
 		opacity: 1;
+		scale: 1;
 	}
 }
 
 @keyframes dialogHide {
 	from {
 		opacity: 1;
+		scale: 1;
 	}
 
 	to {
 		opacity: 0;
+		scale: 0.7;
+		filter: blur(15px);
 	}
 }
 
@@ -53,9 +59,9 @@
 }
 
 .dialog__content {
-	animation: dialogHide .2s ease forwards;
+	animation: dialogHide .2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 
 	&:is([data-expanded]) {
-		animation: dialogShow .2s ease forwards;
+		animation: dialogShow .2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 	}
 }

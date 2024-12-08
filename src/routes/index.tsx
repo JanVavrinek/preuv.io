@@ -26,6 +26,7 @@ export default function Home() {
 						slotClasses={{ icon: "mr-0 ml-2" }}
 						as={A}
 						href="/auth/signin"
+						preload
 					>
 						{c.auth.signIn.title()}
 					</Button>
@@ -37,10 +38,10 @@ export default function Home() {
 						</h1>
 						<h2 class="text-center text-pv-blue-400 text-xl transition-all duration-200">{c.landing.subtitle()}</h2>
 						<div class="flex w-max flex-col gap-2 sm:flex-row">
-							<Button as={A} href="/auth/signup" class="min-w-64" variant="success">
+							<Button as={A} href="/auth/signup" class="min-w-64" variant="success" preload>
 								{c.auth.signUp.title()}
 							</Button>
-							<Button as={A} href="/auth/signin" class="min-w-64">
+							<Button as={A} href="/auth/signin" class="min-w-64" preload>
 								{c.auth.signIn.title()}
 							</Button>
 						</div>

@@ -7,7 +7,7 @@ import { RolePermissions } from "@lib/db/schemas/role";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { client } from "@lib/trpc/client";
 import { createForm, zodForm } from "@modular-forms/solid";
-import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
+import AppLayoutTitle from "@molecules/layouts/App/layout/AppLayoutTitle";
 import { Navigate, useNavigate } from "@solidjs/router";
 import type { FormSubmitHandler } from "../../../types/forms";
 

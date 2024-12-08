@@ -42,8 +42,8 @@ export function Dialog(props: DialogProps) {
 									</KDialog.Description>
 								</Show>
 							</div>
-							<KDialog.CloseButton class="grid h-9 w-9 shrink-0 place-content-center rounded-full">
-								<FaSolidXmark font-size="25px" />
+							<KDialog.CloseButton class="grid h-9 w-9 shrink-0 place-content-center rounded-full transition-all duration-150 hover:bg-pv-blue-100">
+								<FaSolidXmark font-size="1.75rem" />
 							</KDialog.CloseButton>
 						</div>
 						<div

@@ -7,7 +7,7 @@ import { client } from "@lib/trpc/client";
 import { userUpdateMutationInputSchema as schema } from "@lib/trpc/routers/user/schemas";
 import type { UserUpdateMutationInputSchema } from "@lib/trpc/routers/user/types";
 import { type SubmitHandler, createForm, zodForm } from "@modular-forms/solid";
-import AppLayoutTitle from "@molecules/App/AppLayoutTitle";
+import AppLayoutTitle from "@molecules/layouts/App/layout/AppLayoutTitle";
 import { useContext } from "solid-js";
 
 export default function AccountView() {

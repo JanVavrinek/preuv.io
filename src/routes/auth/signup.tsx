@@ -4,10 +4,12 @@ import { toast } from "@atoms/Toaster";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { type LoginSchema, loginSchema } from "@lib/schemas/routes/auth";
 import supabase from "@lib/supabase";
-import { type SubmitHandler, createForm, zodForm } from "@modular-forms/solid";
+import { type SubmitHandler, createForm, getValue, zodForm } from "@modular-forms/solid";
 import { Title } from "@solidjs/meta";
 import { A, useNavigate } from "@solidjs/router";
 import type { AuthResponse } from "@supabase/supabase-js";
+import { Suspense, lazy } from "solid-js";
+const PasswordStrength = lazy(() => import("@atoms/PasswordStrength"));
 
 export default function SignUpView() {
 	const { c } = useI18n();
@@ -71,6 +73,9 @@ export default function SignUpView() {
 						/>
 					)}
 				</Field>
+				<Suspense>
+					<PasswordStrength password={getValue(signUpForm, "password") ?? ""} onStrength={() => {}} />
+				</Suspense>
 				<Button disabled={signUpForm.invalid} type="submit">
 					{c.auth.signUp.title()}
 				</Button>
