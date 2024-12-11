@@ -4,6 +4,8 @@ import { member } from "@lib/db/schemas/member";
 import { organization } from "@lib/db/schemas/organization";
 import { RolePermissions, role } from "@lib/db/schemas/role";
 import { user } from "@lib/db/schemas/user";
+import { RealtimeBroadcastEvents } from "@lib/supabase/realtime";
+import { supabaseServiceClient } from "@lib/supabase/server";
 import { procedure, router } from "@lib/trpc/init";
 import { isAuthorized } from "@lib/trpc/middlewares";
 import { hasOrganization } from "@lib/trpc/middlewares/hasOrganization";
@@ -90,7 +92,13 @@ export default router({
 					role_id: inviteRole.id,
 				});
 			}
-			if (invites.length) await db.insert(invite).values(invites);
+			if (invites.length) {
+				await db.insert(invite).values(invites);
+				for (const invite of invites) {
+					const c = supabaseServiceClient.channel(invite.user_id, { config: { private: true } });
+					c.send({ type: "broadcast", event: RealtimeBroadcastEvents.INVITE_CREATE, payload: {} });
+				}
+			}
 		}),
 
 	delete: procedure
