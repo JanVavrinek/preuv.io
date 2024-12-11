@@ -185,6 +185,21 @@ const app = {
 			title: "Create new widget",
 		},
 	},
+	formShare: {
+		link: {
+			title: "Share link",
+			formLink: {
+				title: "Form link",
+				subtitle: "Share this link directly with people",
+			},
+			socials: {
+				title: "Share on social media",
+				subtitle: "Share link to your form on social media",
+				post: "Post text",
+				postExample: "Do you have a minute?",
+			},
+		},
+	},
 };
 
 export default app;
