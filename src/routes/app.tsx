@@ -23,7 +23,7 @@ export default function AppLayout(props: ParentProps) {
 							}}
 						>
 							<GridPattern
-								class="-z-[1] animate-pulse [animation-duration:_6s] [mask-image:radial-gradient(transparent,white)]"
+								class="-z-[1] fixed inset-0 animate-pulse [animation-duration:_6s] [mask-image:radial-gradient(transparent,white)]"
 								strokeDasharray="4"
 							/>
 							<Header onOpenSideBar={() => setOpen(!open())} />
