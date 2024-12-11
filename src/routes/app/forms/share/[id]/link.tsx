@@ -1,3 +1,5 @@
+import BSkyLogo from "@assets/icons/socials/bsky.svg";
+import XLogo from "@assets/icons/socials/x.svg";
 import Button from "@atoms/Button";
 import Collapsible from "@atoms/Collapsible";
 import Input from "@atoms/Input";
@@ -8,8 +10,8 @@ import { client } from "@lib/trpc/client";
 import { getValue } from "@modular-forms/solid";
 import formContext, { formEditContextSchema as schema } from "@molecules/layouts/App/views/Form/contexts/Form";
 import { debounce } from "@solid-primitives/scheduled";
-import { FaSolidCopy } from "solid-icons/fa";
-import { createEffect, createSignal, useContext } from "solid-js";
+import { FaBrandsFacebookF, FaBrandsLinkedinIn, FaBrandsWhatsapp, FaSolidCopy } from "solid-icons/fa";
+import { createEffect, createMemo, createSignal, useContext } from "solid-js";
 import { z } from "zod";
 
 export default function FormLinkShare() {
@@ -17,6 +19,8 @@ export default function FormLinkShare() {
 	const { formData, Field, Form, form } = useContext(formContext);
 	const [slugAvailable, setSlugAvailable] = createSignal<"taken" | "available">("available");
 	const [socialPost, setSocilaPost] = createSignal(c.app.formShare.link.socials.postExample());
+
+	const link = createMemo(() => `https://preuv.io/form/${formData()?.form.slug}`);
 
 	const trigger = debounce(
 		(slug: string) =>
@@ -34,7 +38,7 @@ export default function FormLinkShare() {
 	});
 
 	const handleShare = () => {
-		window.navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}/form/${formData()?.form.slug}`);
+		window.navigator.clipboard.writeText(link());
 		toast.show(c.generic.common.clipboard());
 	};
 
@@ -96,7 +100,64 @@ export default function FormLinkShare() {
 				}
 				defaultOpen
 			>
-				<Input value={socialPost()} onChange={setSocilaPost} textArea />
+				<Input
+					value={socialPost()}
+					onChange={setSocilaPost}
+					textArea
+					description={c.app.formShare.link.socials.onlyFor()}
+				/>
+				<div class="flex flex-row flex-wrap gap-2 pt-2">
+					<Button
+						as="a"
+						href={`https://x.com/intent/post?text=${encodeURIComponent(socialPost())}&url=${encodeURIComponent(link())}`}
+						target="_blank"
+						rel="noreferrer"
+						class="bg-black"
+						icon={<img src={XLogo} alt="x.com" class="h-5" />}
+					>
+						x.com
+					</Button>
+					<Button
+						as="a"
+						href={`https://bsky.app/intent/compose?text=${encodeURIComponent(`${socialPost()} ${link()}`)}`}
+						target="_blank"
+						rel="noreferrer"
+						class="bg-[#1185fe]"
+						icon={<img src={BSkyLogo} alt="x.com" class="h-5" />}
+					>
+						Bluesky
+					</Button>
+					<Button
+						as="a"
+						href={`https://wa.me/?text=${encodeURIComponent(`${socialPost()} ${link()}`)}`}
+						target="_blank"
+						rel="noreferrer"
+						class="bg-[#28d146]"
+						icon={<FaBrandsWhatsapp class="text-xl" />}
+					>
+						WhatsApp
+					</Button>
+					<Button
+						as="a"
+						href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link())}`}
+						target="_blank"
+						rel="noreferrer"
+						class="bg-[#0866ff]"
+						icon={<FaBrandsFacebookF class="text-xl" />}
+					>
+						Facebook
+					</Button>
+					<Button
+						as="a"
+						href={`https://www.LinkedIn.com/shareArticle?mini=true&url=${encodeURIComponent(link())}`}
+						target="_blank"
+						rel="noreferrer"
+						class="bg-[#0a66c2]"
+						icon={<FaBrandsLinkedinIn class="text-xl" />}
+					>
+						LinkedIn
+					</Button>
+				</div>
 			</Collapsible>
 		</div>
 	);

@@ -113,6 +113,9 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 					/{local.maxLength}
 				</p>
 			</Show>
+			<Show when={local.description}>
+				<p class="pl-2 text-pv-blue-400 text-sm">{local.description}</p>
+			</Show>
 			<ol class="flex flex-col gap-1 pl-2 text-pv-red-500 text-sm">
 				<Show when={!!parseIssues()?.length && local.showErrors}>
 					<For each={parseIssues()}>

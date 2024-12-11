@@ -17,7 +17,9 @@ function Inner() {
 	const { formData } = useContext(formContext);
 	return (
 		<>
-			<AppLayoutTitle>{`${formData()?.form.name} — ${c.generic.actions.share()}`}</AppLayoutTitle>
+			<AppLayoutTitle>
+				{formData()?.form.name ? `${formData()?.form.name} — ${c.generic.actions.share()}` : c.generic.actions.share()}
+			</AppLayoutTitle>
 		</>
 	);
 }
