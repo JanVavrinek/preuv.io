@@ -7,12 +7,12 @@ import { comboBoxStyles } from "./styles";
 import styles from "./styles.module.css";
 import type { ComboboxItem, ComboboxProps } from "./types";
 
-export default function Combobox<T, U>(props: VoidProps<ComboboxProps<T, U>>) {
+export default function Combobox<T, U, V extends string>(props: VoidProps<ComboboxProps<T, U, V>>) {
 	const { c } = useI18n();
 	const parseIssues = createMemo(() => (props.parseResult?.success ? undefined : props.parseResult?.error.issues));
 
 	return (
-		<KCombobox<ComboboxItem>
+		<KCombobox<ComboboxItem<V>>
 			options={props.options}
 			optionValue="value"
 			optionTextValue="label"

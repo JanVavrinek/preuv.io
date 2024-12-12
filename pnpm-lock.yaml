@@ -80,6 +80,9 @@ importers:
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
+      qr-code-styling:
+        specifier: ^1.8.4
+        version: 1.8.4
       solid-icons:
         specifier: file:src/assets/solid-icons.tar.gz
         version: file:src/assets/solid-icons.tar.gz(solid-js@1.9.3)
@@ -3626,6 +3629,13 @@ packages:
 
   property-information@6.5.0:
     resolution: {integrity: sha512-PgTgs/BlvHxOu8QuEN7wi5A0OmXaBcHpmCSTehcs6Uuu9IkDIEo13Hy7n898RHfrQ49vKCoGeWZSaAK01nwVig==}
+
+  qr-code-styling@1.8.4:
+    resolution: {integrity: sha512-uxykNuvXaPDK/jGDERDIdDvvocefbHu1oxVYi6K87FUdPPAezkBdcIeFJ8XVX2HSsyLFINile5uzfOMYpGu5ZA==}
+    engines: {node: '>=18.18.0'}
+
+  qrcode-generator@1.4.4:
+    resolution: {integrity: sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==}
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
@@ -7786,6 +7796,12 @@ snapshots:
   process@0.11.10: {}
 
   property-information@6.5.0: {}
+
+  qr-code-styling@1.8.4:
+    dependencies:
+      qrcode-generator: 1.4.4
+
+  qrcode-generator@1.4.4: {}
 
   queue-microtask@1.2.3: {}
 

@@ -1,5 +1,6 @@
 import { pt } from "@lib/i18n/utils";
 import permissions from "./app/permissions";
+import { qrCodeCornerDotType, qrCodeCornerSquareType, qrCodeDotsType, qrCodeShapes } from "./app/qrCodeOptions";
 import widgetTypes from "./app/widgetTypes";
 
 const app = {
@@ -198,6 +199,20 @@ const app = {
 				post: "Post text",
 				postExample: "Do you have a minute?",
 				onlyFor: "Only supported for x.com, Bluesky and WhatsApp",
+			},
+			qr: {
+				title: "Generate QR code",
+				subtitle: "Share link to your for with QR codes",
+				options: {
+					shape: qrCodeShapes,
+					shapeTitle: "Shape",
+					cornerSquareShape: qrCodeCornerSquareType,
+					cornerSquareShapeTitle: "Corner shape",
+					cornerDotShape: qrCodeCornerDotType,
+					cornerDotShapeTitle: "Corner dot shape",
+					dotsTypes: qrCodeDotsType,
+					dotsTypesTitle: "Dots shape",
+				},
 			},
 		},
 	},

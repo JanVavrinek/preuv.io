@@ -8,6 +8,7 @@ import useI18n from "@lib/i18n/hooks/useI18n";
 import { urlSlugSchema } from "@lib/schemas/url";
 import { client } from "@lib/trpc/client";
 import { getValue } from "@modular-forms/solid";
+import QRCodeEditor from "@molecules/common/QRCodeEditor";
 import formContext, { formEditContextSchema as schema } from "@molecules/layouts/App/views/Form/contexts/Form";
 import { debounce } from "@solid-primitives/scheduled";
 import { FaBrandsFacebookF, FaBrandsLinkedinIn, FaBrandsWhatsapp, FaSolidCopy } from "solid-icons/fa";
@@ -158,6 +159,17 @@ export default function FormLinkShare() {
 						LinkedIn
 					</Button>
 				</div>
+			</Collapsible>
+			<Collapsible
+				triggerChildren={
+					<div class="flex flex-col items-start text-start">
+						<p class="text-pv-blue-500 text-xl">{c.app.formShare.link.qr.title()}</p>
+						<p class="text-pv-blue-400 text-sm">{c.app.formShare.link.qr.subtitle()}</p>
+					</div>
+				}
+				defaultOpen
+			>
+				<QRCodeEditor link={link()} />
 			</Collapsible>
 		</div>
 	);

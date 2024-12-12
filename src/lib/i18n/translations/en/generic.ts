@@ -14,6 +14,7 @@ const generic = {
 		show: "Show",
 		share: "Share",
 		copy: "Copy",
+		download: "Download",
 	},
 	toasts: {
 		saving: {
