@@ -21,7 +21,7 @@ export default createHandler(() => (
 					<link rel="manifest" href="/site.webmanifest" />
 					<meta name="msapplication-TileColor" content="#a8b4d1" />
 					<meta name="theme-color" content="#a8b4d1" />
-					<meta name="og:title" content="preuiv.io" />
+					<meta name="og:title" content="preuv.io" />
 					<meta name="og:url" content={import.meta.env.VITE_BASE_URL} />
 					<meta name="og:type" content="article" />
 					<meta name="og:description" content="preuv.io is self hostable testimonial collection platform" />

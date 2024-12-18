@@ -4,15 +4,17 @@ import InterSectionObserver from "@atoms/IntersectionObserver";
 import Skeleton from "@atoms/Skeleton";
 import { toast } from "@atoms/Toaster";
 import { organizationsContext } from "@contexts/Organizations";
+import { userContext } from "@contexts/User";
 import useAsync from "@hooks/useAsync";
 import { Dialog as KDialog } from "@kobalte/core/dialog";
 import type { InviteSelectModel } from "@lib/db/schemas/invite";
 import type { OrganizationSelectModel } from "@lib/db/schemas/organization";
 import useI18n from "@lib/i18n/hooks/useI18n";
+import { RealtimeBroadcastEvents } from "@lib/supabase/realtime";
 import { client } from "@lib/trpc/client";
 import { formatDate } from "@utils/time";
 import { FaSolidBell, FaSolidCheck, FaSolidXmark } from "solid-icons/fa";
-import { For, Show, type VoidProps, batch, useContext } from "solid-js";
+import { For, Show, type VoidProps, batch, createEffect, createSignal, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 const LIMIT = 20;
@@ -76,6 +78,8 @@ export default function Invites() {
 	});
 	const { handler, loading } = useAsync(client.invite.getMany.query);
 	const { setOrganizations } = useContext(organizationsContext);
+	const { channel } = useContext(userContext);
+	const [newInvites, setNewInvites] = createSignal(false);
 
 	const handleLoad = () => {
 		if (loading() || invites.items.length === invites.total) return;
@@ -113,16 +117,24 @@ export default function Invites() {
 			});
 	};
 
+	createEffect(() => {
+		channel()?.on("broadcast", { event: RealtimeBroadcastEvents.INVITE_CREATE }, () => setNewInvites(true));
+	});
+
 	return (
 		<Dialog
 			openTrigger={
-				<KDialog.Trigger>
+				<KDialog.Trigger class="relative p-1 text-pv-blue-600">
 					<FaSolidBell />
+					<Show when={newInvites()}>
+						<div class="-top-1 absolute right-0 h-2 w-2 animate-bounce rounded-full bg-pv-red-600" />
+					</Show>
 				</KDialog.Trigger>
 			}
 			title={c.app.invite.title()}
 			onOpenChange={(v) => {
 				if (!v) setInvites("total", -1);
+				else setNewInvites(false);
 			}}
 		>
 			<InterSectionObserver onIntersection={handleLoad}>

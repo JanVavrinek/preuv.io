@@ -7,9 +7,13 @@ import { FormContextProvider } from "@molecules/layouts/Form/contexts/Form";
 import { Title } from "@solidjs/meta";
 import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { Match, Show, Switch, createSignal } from "solid-js";
+import { z } from "zod";
 
 export const route = {
 	preload: ({ params }) => getForm(params.form),
+	matchFilters: {
+		id: (id) => z.string().uuid().safeParse(id).success,
+	},
 } satisfies RouteDefinition;
 
 enum FormSteps {

@@ -1,18 +1,18 @@
 import type { JSX } from "solid-js";
 import type { z } from "zod";
 
-export type ComboboxItem<T extends string = string> = {
+export type SelectItem<T extends string = string> = {
 	label: string;
 	icon?: JSX.Element;
 	value: T;
 	disabled?: boolean;
 };
 
-export type ComboboxProps<T, U, V extends string> = {
-	options: ComboboxItem<V>[];
+export type SelectProps<T, U, V extends string> = {
+	options: SelectItem<V>[];
 	label?: string;
-	value?: ComboboxItem<V>;
-	onChange: (value: ComboboxItem<V> | null) => void;
+	value?: SelectItem<V>;
+	onChange: (value: SelectItem<V> | null) => void;
 	onInputChange?: (value: string) => void;
 	selectProps?: {
 		name?: string;

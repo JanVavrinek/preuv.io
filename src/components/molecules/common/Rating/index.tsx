@@ -1,3 +1,4 @@
+import { Button } from "@kobalte/core/button";
 import { RiSystemStarSFill, RiSystemStarSLine } from "solid-icons/ri";
 import { Index, Show, type VoidProps } from "solid-js";
 import styles from "./styles.module.css";
@@ -9,11 +10,11 @@ export default function Rating(props: VoidProps<RatingProps>) {
 			<input {...props.inputProps} type="number" hidden />
 			<Index each={new Array(5)}>
 				{(_, index) => (
-					<span class={styles.star} onclick={() => props.onValue?.(index + 1)}>
+					<Button class={styles.star} onclick={() => props.onValue?.(index + 1)}>
 						<Show when={props.value >= index + 1} fallback={<RiSystemStarSLine font-size={props.fontSize ?? "3rem"} />}>
 							<RiSystemStarSFill font-size={props.fontSize ?? "3rem"} />
 						</Show>
-					</span>
+					</Button>
 				)}
 			</Index>
 		</div>

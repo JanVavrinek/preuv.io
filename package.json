@@ -54,6 +54,7 @@
     "pg": "^8.13.1",
     "postcss": "^8.4.49",
     "postgres": "^3.4.5",
+    "qr-code-styling": "^1.8.4",
     "solid-icons": "file:src/assets/solid-icons.tar.gz",
     "solid-js": "^1.9.3",
     "solid-markdown": "^2.0.14",

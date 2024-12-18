@@ -7,7 +7,7 @@ import {
 	projectSelectModelSchema,
 } from "@lib/db/schemas/project";
 import { RolePermissions } from "@lib/db/schemas/role";
-import getServerSupabaseClient from "@lib/supabase/server";
+import { supabaseServiceClient } from "@lib/supabase/server";
 import {
 	StorageEntity,
 	createSignedUploadUrl,
@@ -25,8 +25,6 @@ import { hasPermission } from "@utils/permissions";
 import { and, asc, count, eq } from "drizzle-orm";
 import { mapProjectsWithImages } from "./mappers";
 import { updatePhotoMutationInputSchema } from "./schemas";
-
-const client = getServerSupabaseClient();
 
 export default router({
 	create: procedure
@@ -57,7 +55,11 @@ export default router({
 			});
 			if (!orgProject) throw new TRPCError({ code: "NOT_FOUND" });
 			const id = crypto.randomUUID();
-			const url = await createSignedUploadUrl(client, StorageEntity.PROJECT_COVER, `${orgProject.id}/${id}`);
+			const url = await createSignedUploadUrl(
+				supabaseServiceClient,
+				StorageEntity.PROJECT_COVER,
+				`${orgProject.id}/${id}`,
+			);
 			return {
 				url: url.data?.signedUrl,
 				id,
@@ -78,14 +80,14 @@ export default router({
 
 			const objectName = `${opts.input.project}/${opts.input.image}`;
 
-			const exists = await storageObjectInfo(client, StorageEntity.PROJECT_COVER, objectName);
+			const exists = await storageObjectInfo(supabaseServiceClient, StorageEntity.PROJECT_COVER, objectName);
 			if (!exists.data) throw new TRPCError({ code: "NOT_FOUND" });
 			if (!exists.data.contentType?.startsWith("image/")) {
-				storageObjectDelete(client, StorageEntity.PROJECT_COVER, [objectName]);
+				storageObjectDelete(supabaseServiceClient, StorageEntity.PROJECT_COVER, [objectName]);
 				throw new TRPCError({ code: "UNSUPPORTED_MEDIA_TYPE" });
 			}
 			await db.update(project).set({ image: opts.input.image });
-			return createSignedUrl(client, StorageEntity.PROJECT_COVER, objectName);
+			return createSignedUrl(supabaseServiceClient, StorageEntity.PROJECT_COVER, objectName);
 		}),
 
 	delete: procedure
@@ -115,7 +117,7 @@ export default router({
 				db.select({ count: count() }).from(project).where(eq(project.organization_id, opts.ctx.role.organization.id)),
 			]);
 
-			const items = await mapProjectsWithImages(projects, client);
+			const items = await mapProjectsWithImages(projects, supabaseServiceClient);
 			return {
 				items,
 				total: total.at(0)?.count ?? 0,
@@ -132,7 +134,7 @@ export default router({
 			});
 			if (!found) throw new TRPCError({ code: "NOT_FOUND" });
 
-			const items = await mapProjectsWithImages([found], client);
+			const items = await mapProjectsWithImages([found], supabaseServiceClient);
 
 			return items[0];
 		}),
@@ -158,7 +160,7 @@ export default router({
 					.returning()
 			).at(0);
 			if (!updated) throw new TRPCError({ code: "NOT_FOUND" });
-			const items = await mapProjectsWithImages([updated], client);
+			const items = await mapProjectsWithImages([updated], supabaseServiceClient);
 
 			return items[0];
 		}),

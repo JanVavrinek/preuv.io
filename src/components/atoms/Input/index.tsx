@@ -45,18 +45,33 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 			{...others}
 		>
 			<Show when={local.label}>
-				<TextField.Label class="pl-2 text-pv-blue-700">{local.label}</TextField.Label>
+				<TextField.Label class="pl-2 text-pv-blue-700 transition-all group-focus-within:translate-y-1">
+					{local.label}
+				</TextField.Label>
 			</Show>
-			<div class="focus-within:-translate-y-1 relative flex min-h-14 flex-row items-center overflow-hidden rounded-2xl border border-pv-blue-200 bg-pv-blue-100 transition-all duration-300 focus-within:shadow-lg group-data-[invalid]:border-pv-red-400">
+			<div
+				class={styles().wrapper({
+					class: [local.slotClasses?.wrapper],
+				})}
+			>
 				<Show
 					when={local.textArea}
 					fallback={
-						<TextField.Input
-							type={type()}
-							class="h-14 w-full border-none bg-transparent px-2 outline-none"
-							placeholder={local.placeholder}
-							{...inputProps.inputProps}
-						/>
+						<div class="relative h-max w-full">
+							<TextField.Input
+								type={type()}
+								class="peer h-14 w-full border-none bg-transparent px-4 outline-none"
+								placeholder={local.placeholder}
+								{...inputProps.inputProps}
+							/>
+							<Show when={local.placeholder}>
+								<div class="pointer-events-none absolute inset-0 flex h-full w-0 max-w-max items-center overflow-hidden transition-all duration-300 peer-placeholder-shown:w-96 peer-focus-within:w-0">
+									<p class="text-nowrap px-3">
+										<span class="rounded-md bg-pv-blue-200/40 p-1 text-pv-blue-400">{local.placeholder}</span>
+									</p>
+								</div>
+							</Show>
+						</div>
 					}
 				>
 					<TextField.TextArea
@@ -97,6 +112,9 @@ export default function Input<T, U, W extends ValidComponent = "div">(props: Pol
 					</span>
 					/{local.maxLength}
 				</p>
+			</Show>
+			<Show when={local.description}>
+				<p class="pl-2 text-pv-blue-400 text-sm">{local.description}</p>
 			</Show>
 			<ol class="flex flex-col gap-1 pl-2 text-pv-red-500 text-sm">
 				<Show when={!!parseIssues()?.length && local.showErrors}>

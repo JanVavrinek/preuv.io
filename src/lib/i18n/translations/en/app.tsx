@@ -1,5 +1,6 @@
 import { pt } from "@lib/i18n/utils";
 import permissions from "./app/permissions";
+import { qrCodeCornerDotType, qrCodeCornerSquareType, qrCodeDotsType, qrCodeShapes } from "./app/qrCodeOptions";
 import widgetTypes from "./app/widgetTypes";
 
 const app = {
@@ -183,6 +184,36 @@ const app = {
 		},
 		create: {
 			title: "Create new widget",
+		},
+	},
+	formShare: {
+		link: {
+			title: "Share link",
+			formLink: {
+				title: "Form link",
+				subtitle: "Share this link directly with people",
+			},
+			socials: {
+				title: "Share on social media",
+				subtitle: "Share link to your form on social media",
+				post: "Post text",
+				postExample: "Do you have a minute?",
+				onlyFor: "Only supported for X, Bluesky and WhatsApp",
+			},
+			qr: {
+				title: "Generate QR code",
+				subtitle: "Share link to your for with QR codes",
+				options: {
+					shape: qrCodeShapes,
+					shapeTitle: "Shape",
+					cornerSquareShape: qrCodeCornerSquareType,
+					cornerSquareShapeTitle: "Corner shape",
+					cornerDotShape: qrCodeCornerDotType,
+					cornerDotShapeTitle: "Corner dot shape",
+					dotsTypes: qrCodeDotsType,
+					dotsTypesTitle: "Dots shape",
+				},
+			},
 		},
 	},
 };

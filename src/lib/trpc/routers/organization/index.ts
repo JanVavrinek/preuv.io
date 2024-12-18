@@ -28,7 +28,9 @@ export default router({
 		.use(isAuthorized)
 		.input(organizationSelectModelSchema.shape.id)
 		.query(async (opts) => {
-			return (await getUsersOrganizations(opts.ctx.user.sub, opts.input, 0, 1)).at(0);
+			const org = (await getUsersOrganizations(opts.ctx.user.sub, opts.input, 0, 1)).at(0);
+			if (!org) throw new TRPCError({ code: "NOT_FOUND" });
+			return org;
 		}),
 	create: procedure
 		.use(isAuthorized)

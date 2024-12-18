@@ -14,6 +14,7 @@ const generic = {
 		show: "Show",
 		share: "Share",
 		copy: "Copy",
+		download: "Download",
 	},
 	toasts: {
 		saving: {
@@ -38,6 +39,9 @@ const generic = {
 	mdEditor: {
 		preview: "Preview",
 		editor: "Editor",
+	},
+	qr: {
+		fileType: "File type",
 	},
 };
 export default generic;

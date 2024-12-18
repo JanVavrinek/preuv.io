@@ -62,5 +62,5 @@ describe.sequential("user router", () => {
 });
 
 afterAll(async () => {
-	await db.delete(user).execute();
+	await db.delete(user).where(eq(user.id, USER.id));
 });
