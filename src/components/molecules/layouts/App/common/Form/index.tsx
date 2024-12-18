@@ -50,11 +50,6 @@ export default function Form(props: VoidProps<FormProps>) {
 		props.onDelete?.();
 	};
 
-	const handleShare = () => {
-		window.navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}/form/${props.form.form.slug}`);
-		toast.show(c.generic.common.clipboard());
-	};
-
 	return (
 		<div class="flex flex-col gap-2 rounded-xl border border-pv-blue-200 bg-pv-blue-100 p-2">
 			<div class="flex items-center justify-between gap-2">
@@ -80,7 +75,7 @@ export default function Form(props: VoidProps<FormProps>) {
 					</div>
 				</div>
 				<div class="flex gap-2">
-					<Button icon={<FaSolidShare />} onclick={handleShare}>
+					<Button icon={<FaSolidShare />} as={A} href={`/app/forms/share/${props.form.form.id}/link`}>
 						{c.app.form.detail.share()}
 					</Button>
 					<PermissionsGuard permissions={[RolePermissions.FORM_UPDATE]}>

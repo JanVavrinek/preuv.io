@@ -40,5 +40,8 @@ const generic = {
 		preview: "Preview",
 		editor: "Editor",
 	},
+	qr: {
+		fileType: "File type",
+	},
 };
 export default generic;

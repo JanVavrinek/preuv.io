@@ -64,7 +64,7 @@ export default function Combobox<T, U, V extends string>(props: VoidProps<Combob
 			</KCombobox.Portal>
 			<Show when={!!parseIssues()?.length && props.showErrors}>
 				<ol class="flex flex-col gap-1 pl-2 text-pv-red-500 text-sm">
-					<For each={parseIssues()} fallback="dasda">
+					<For each={parseIssues()}>
 						{(issue) => (
 							<KCombobox.ErrorMessage as="li">{c.errors.zod[issue.code](issue as never)}</KCombobox.ErrorMessage>
 						)}

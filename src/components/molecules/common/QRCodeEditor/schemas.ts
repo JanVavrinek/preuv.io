@@ -26,4 +26,7 @@ export const qrCodeOptionsSchema = z.object({
 		color: hexColorSchema,
 	}),
 	shape: qrCodeShape,
+	backgroundOptions: z.object({
+		color: hexColorSchema,
+	}),
 });

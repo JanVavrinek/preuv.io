@@ -198,7 +198,7 @@ const app = {
 				subtitle: "Share link to your form on social media",
 				post: "Post text",
 				postExample: "Do you have a minute?",
-				onlyFor: "Only supported for x.com, Bluesky and WhatsApp",
+				onlyFor: "Only supported for X, Bluesky and WhatsApp",
 			},
 			qr: {
 				title: "Generate QR code",

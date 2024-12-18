@@ -2,10 +2,11 @@ import { type VoidProps, createEffect, createMemo, createSignal } from "solid-js
 import type { QRCodeEditorProps } from "./types";
 
 import Button from "@atoms/Button";
-import Combobox from "@atoms/Combobox";
 import type { ComboboxItem } from "@atoms/Combobox/types";
+import Select from "@atoms/Select";
+import Toggle from "@atoms/Toggle";
 import useI18n from "@lib/i18n/hooks/useI18n";
-import { createForm, getValues, setValue, zodForm } from "@modular-forms/solid";
+import { createForm, getValue, getValues, setValue, zodForm } from "@modular-forms/solid";
 import QRCodeStyling, {
 	type DotType,
 	type CornerDotType,
@@ -32,17 +33,20 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 		initialValues: {
 			cornersDotOptions: {
 				type: "square",
-				color: "#000",
+				color: "#000000",
 			},
 			cornersSquareOptions: {
 				type: "square",
-				color: "#000",
+				color: "#000000",
 			},
 			dotsOptions: {
 				type: "square",
-				color: "#000",
+				color: "#000000",
 			},
 			shape: "square",
+			backgroundOptions: {
+				color: "#ffffff",
+			},
 		},
 	});
 
@@ -72,7 +76,7 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 				<Field name="shape">
 					{(field, props) => (
 						<>
-							<Combobox
+							<Select
 								options={QRCODE_SHAPES.map<ComboboxItem>((s) => ({
 									label: c.app.formShare.link.qr.options.shape[s](),
 									value: s,
@@ -90,11 +94,27 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 						</>
 					)}
 				</Field>
+				<Field name="backgroundOptions.color">
+					{(field, props) => (
+						<div class="flex gap-2">
+							<Toggle
+								checked={field.value !== "#00000000"}
+								onChange={(v) => setValue(optionsForm, "backgroundOptions.color", !v ? "#00000000" : "#ffffff")}
+							/>
+							<input
+								{...props}
+								type="color"
+								class="w-full rounded-xl border border-pv-blue-200 outline-none"
+								value={field.value}
+							/>
+						</div>
+					)}
+				</Field>
 				<hr />
 				<Field name="cornersSquareOptions.type">
 					{(field, props) => (
 						<>
-							<Combobox
+							<Select
 								options={QRCODE_CORNER_SQUARE_TYPES.map<ComboboxItem>((s) => ({
 									label: c.app.formShare.link.qr.options.cornerSquareShape[s](),
 									value: s,
@@ -115,9 +135,9 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 					)}
 				</Field>
 				<Field name="cornersSquareOptions.color">
-					{(_field, props) => (
+					{(field, props) => (
 						<>
-							<input {...props} type="color" class="w-full rounded-xl border border-pv-blue-200" />
+							<input {...props} type="color" class="w-full rounded-xl border border-pv-blue-200" value={field.value} />
 						</>
 					)}
 				</Field>
@@ -125,7 +145,7 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 				<Field name="cornersDotOptions.type">
 					{(field, props) => (
 						<>
-							<Combobox
+							<Select
 								options={QRCODE_CORNER_TYPES.map<ComboboxItem>((s) => ({
 									label: c.app.formShare.link.qr.options.cornerDotShape[s](),
 									value: s,
@@ -146,17 +166,15 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 					)}
 				</Field>
 				<Field name="cornersDotOptions.color">
-					{(_field, props) => (
-						<>
-							<input {...props} type="color" class="w-full rounded-xl border border-pv-blue-200" />
-						</>
+					{(field, props) => (
+						<input {...props} type="color" class="w-full rounded-xl border border-pv-blue-200" value={field.value} />
 					)}
 				</Field>
 				<hr />
 				<Field name="dotsOptions.type">
 					{(field, props) => (
 						<>
-							<Combobox
+							<Select
 								options={QRCODE_DOTS_TYPES.map<ComboboxItem>((s) => ({
 									label: c.app.formShare.link.qr.options.dotsTypes[s](),
 									value: s,
@@ -175,23 +193,28 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 					)}
 				</Field>
 				<Field name="dotsOptions.color">
-					{(_field, props) => (
-						<>
-							<input {...props} type="color" class="w-full rounded-xl border border-pv-blue-200" />
-						</>
+					{(field, props) => (
+						<input {...props} type="color" class="w-full rounded-xl border border-pv-blue-200" value={field.value} />
 					)}
 				</Field>
 			</div>
 			<div class="flex flex-col items-center justify-center gap-2">
-				<div ref={setRoot} class="aspect-square w-full max-w-60 flex-shrink-0 [&>*]:w-full" />
-				<Combobox
+				<div class="relative z-0 aspect-square w-full max-w-60 flex-shrink-0 overflow-hidden rounded-xl border border-pv-blue-200 p-2">
+					<div
+						class="-z-10 absolute inset-0 h-full w-full invert transition-all"
+						style={{ background: getValue(optionsForm, "backgroundOptions.color") }}
+					/>
+
+					<div ref={setRoot} class="h-full w-full [&>canvas]:w-full" />
+				</div>
+				<Select
 					options={QRCODE_EXTENSIONS.map<ComboboxItem<FileExtension>>((s) => ({
 						label: s.toUpperCase(),
 						value: s,
 					}))}
 					value={extension()}
 					onChange={setExtension}
-					label={c.app.formShare.link.qr.options.dotsTypesTitle()}
+					label={c.generic.qr.fileType()}
 					class="max-w-60"
 				/>
 				<Button onclick={handleDownload} icon={<FaSolidDownload />} class="w-full max-w-60">

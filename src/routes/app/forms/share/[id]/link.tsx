@@ -21,7 +21,7 @@ export default function FormLinkShare() {
 	const [slugAvailable, setSlugAvailable] = createSignal<"taken" | "available">("available");
 	const [socialPost, setSocilaPost] = createSignal(c.app.formShare.link.socials.postExample());
 
-	const link = createMemo(() => `https://preuv.io/form/${formData()?.form.slug}`);
+	const link = createMemo(() => `${import.meta.env.VITE_BASE_URL}/form/${formData()?.form.slug}`);
 
 	const trigger = debounce(
 		(slug: string) =>
