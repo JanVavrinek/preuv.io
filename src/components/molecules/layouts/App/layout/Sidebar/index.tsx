@@ -3,14 +3,21 @@ import { organizationsContext } from "@contexts/Organizations";
 import { Button } from "@kobalte/core/button";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { A, useIsRouting } from "@solidjs/router";
-import { FaSolidXmark } from "solid-icons/fa";
+import {
+	FaRegularObjectGroup,
+	FaSolidClipboardQuestion,
+	FaSolidHouse,
+	FaSolidUser,
+	FaSolidXmark,
+} from "solid-icons/fa";
 import { Suspense, type VoidProps, createEffect, createMemo, createSignal, lazy, useContext } from "solid-js";
 import type { SidebarProps } from "./types";
 const CreateOrganization = lazy(() => import("@molecules/layouts/App/layout/CreateOrganization"));
 import styles from "./styles.module.css";
+import { BiSolidDashboard, BiSolidNote } from "solid-icons/bi";
 
 const ITEM_CLASS =
-	"w-full relative flex flex-row gap-5 p-4 text-pv-blue-700 hover:text-pv-blue-600 hover:bg-pv-navy-200 data-[highlighted]:bg-transparent transition-all duration-150 data-[selected]:text-white hover:rounded-full data-[disabled]:pointer-events-none data-[disabled]:opacity-75 rounded-full";
+	"w-full relative flex flex-row items-center gap-2 hover:gap-4 px-4 py-3 text-pv-blue-700 hover:bg-pv-blue-100 data-[highlighted]:bg-transparent transition-all duration-150 data-[selected]:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-75 rounded-2xl tracking-wide";
 export const [openCreateOrganization, setOpenCreateOrganization] = createSignal(false);
 
 export default function Sidebar(props: VoidProps<SidebarProps>) {
@@ -50,8 +57,9 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 				<A href="/app/dashboard" class="text-center text-4xl text-pv-blue-300">
 					preuv.io
 				</A>
-				<div class="relative z-0 flex h-full w-full flex-col gap-4 p-5 ">
+				<div class="relative z-0 flex h-full w-full flex-col gap-2 p-5 ">
 					<A href="/app/dashboard" class={ITEM_CLASS} activeClass={styles.active}>
+						<FaSolidHouse />
 						{c.app.dashboard.title()}
 					</A>
 					<A
@@ -61,9 +69,11 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 						activeClass={styles.active}
 						end={false}
 					>
+						<FaRegularObjectGroup class="text-lg" />
 						{c.app.project.list.title()}
 					</A>
 					<A href="/app/customers" class={ITEM_CLASS} aria-disabled={!organizations.active} activeClass={styles.active}>
+						<FaSolidUser />
 						{c.app.customer.list.title()}
 					</A>
 					<A
@@ -72,12 +82,15 @@ export default function Sidebar(props: VoidProps<SidebarProps>) {
 						aria-disabled={!organizations.active}
 						activeClass={styles.active}
 					>
+						<BiSolidNote class="text-lg" />
 						{c.app.testimonial.list.title()}
 					</A>
 					<A href="/app/forms" class={ITEM_CLASS} aria-disabled={!organizations.active} activeClass={styles.active}>
+						<FaSolidClipboardQuestion />
 						{c.app.form.list.title()}
 					</A>
 					<A href="/app/widgets" class={ITEM_CLASS} aria-disabled={!organizations.active} activeClass={styles.active}>
+						<BiSolidDashboard class="text-lg" />
 						{c.app.widget.list.title()}
 					</A>
 				</div>
