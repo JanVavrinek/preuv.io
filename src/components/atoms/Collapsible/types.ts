@@ -9,5 +9,5 @@ export interface CollapsibleProps<T extends ValidComponent = "div"> extends Coll
 	class?: string;
 
 	/** The children of the trigger element */
-	triggerChildren: JSX.Element;
+	triggerChildren: string | [string, string] | JSX.Element;
 }

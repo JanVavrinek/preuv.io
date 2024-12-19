@@ -44,7 +44,28 @@ const app = {
 			owner: "Owner",
 			permissions: {
 				title: "Permissions",
+				subtitle: "Tweak individual permissions",
 				names: permissions,
+				name: "Permission name",
+				presets: {
+					title: "Role presets",
+					subtitle: "Use presets to setup roles with sensible permissions",
+					items: [
+						{
+							name: "Admin",
+							description: "User can perform every action the owner can except for deleting organizations",
+						},
+						{
+							name: "Manager",
+							description:
+								"User can manage testimonial, customers, widgets, etc. They can't update organization, handle members, etc",
+						},
+						{
+							name: "Guest",
+							description: "A read-only role, perfect for guests",
+						},
+					],
+				},
 			},
 			new: "Create new role",
 		},

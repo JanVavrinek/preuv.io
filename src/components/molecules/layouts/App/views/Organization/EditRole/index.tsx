@@ -14,6 +14,7 @@ import { createForm, zodForm } from "@modular-forms/solid";
 import ConfirmDelete from "@molecules/common/ConfirmDelete";
 import { FaSolidTrash } from "solid-icons/fa";
 import { type ComponentProps, Index, Show, type VoidProps, createSignal } from "solid-js";
+import RolePreset from "../RolePreset";
 import type { EditRoleProps } from "./types";
 const schema = roleSelectModelSchema.pick({
 	name: true,
@@ -96,12 +97,30 @@ export default function EditRole(props: VoidProps<EditRoleProps>) {
 						/>
 					)}
 				</Field>
-				<Collapsible triggerChildren={c.app.organization.roles.permissions.title()}>
+				<Collapsible
+					triggerChildren={[
+						c.app.organization.roles.permissions.presets.title(),
+						c.app.organization.roles.permissions.presets.subtitle(),
+					]}
+					defaultOpen
+				>
+					<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+						<Index each={c.app.organization.roles.permissions.presets.items()}>
+							{(i) => <RolePreset description={i().description} name={i().name} active />}
+						</Index>
+					</div>
+				</Collapsible>
+				<Collapsible
+					triggerChildren={[
+						c.app.organization.roles.permissions.title(),
+						c.app.organization.roles.permissions.subtitle(),
+					]}
+				>
 					<table class="w-full border-separate border-spacing-0 rounded-xl border border-pv-blue-200">
 						<thead>
 							<tr>
 								<th class="rounded-tl-xl border-pv-blue-200 border-b bg-pv-blue-200 p-2 text-start">
-									{c.app.organization.roles.name()}
+									{c.app.organization.roles.permissions.name()}
 								</th>
 								<th class="w-9 rounded-tr-xl border-pv-blue-200 border-b bg-pv-blue-200 p-2 text-start" />
 							</tr>

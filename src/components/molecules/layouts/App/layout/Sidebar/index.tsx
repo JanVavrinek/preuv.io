@@ -13,8 +13,8 @@ import {
 import { Suspense, type VoidProps, createEffect, createMemo, createSignal, lazy, useContext } from "solid-js";
 import type { SidebarProps } from "./types";
 const CreateOrganization = lazy(() => import("@molecules/layouts/App/layout/CreateOrganization"));
-import styles from "./styles.module.css";
 import { BiSolidDashboard, BiSolidNote } from "solid-icons/bi";
+import styles from "./styles.module.css";
 
 const ITEM_CLASS =
 	"w-full relative flex flex-row items-center gap-2 hover:gap-4 px-4 py-3 text-pv-blue-700 hover:bg-pv-blue-100 data-[highlighted]:bg-transparent transition-all duration-150 data-[selected]:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-75 rounded-2xl tracking-wide";
