@@ -1,0 +1,12 @@
+import type { JSX } from "solid-js";
+
+export interface ColorPickerProps {
+	inputProps?: {
+		name?: string;
+		ref: (element: HTMLInputElement | HTMLTextAreaElement) => void;
+		onInput: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, InputEvent>;
+		onChange: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, Event>;
+		onBlur: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, FocusEvent>;
+	};
+	value?: string;
+}

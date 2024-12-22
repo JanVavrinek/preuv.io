@@ -2,9 +2,9 @@ import { type VoidProps, createEffect, createMemo, createSignal } from "solid-js
 import type { QRCodeEditorProps } from "./types";
 
 import Button from "@atoms/Button";
+import ColorPicker from "@atoms/ColorPicker";
 import type { ComboboxItem } from "@atoms/Combobox/types";
 import Select from "@atoms/Select";
-import Toggle from "@atoms/Toggle";
 import useI18n from "@lib/i18n/hooks/useI18n";
 import { createForm, getValue, getValues, setValue, zodForm } from "@modular-forms/solid";
 import QRCodeStyling, {
@@ -97,16 +97,7 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 				<Field name="backgroundOptions.color">
 					{(field, props) => (
 						<div class="flex gap-2">
-							<Toggle
-								checked={field.value !== "#00000000"}
-								onChange={(v) => setValue(optionsForm, "backgroundOptions.color", !v ? "#00000000" : "#ffffff")}
-							/>
-							<input
-								{...props}
-								type="color"
-								class="w-full rounded-xl border border-pv-blue-200 outline-none"
-								value={field.value}
-							/>
+							<ColorPicker inputProps={props} value={field.value} />
 						</div>
 					)}
 				</Field>
