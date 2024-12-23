@@ -33,19 +33,19 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 		initialValues: {
 			cornersDotOptions: {
 				type: "square",
-				color: "#000000",
+				color: "#000000ff",
 			},
 			cornersSquareOptions: {
 				type: "square",
-				color: "#000000",
+				color: "#000000ff",
 			},
 			dotsOptions: {
 				type: "square",
-				color: "#000000",
+				color: "#000000ff",
 			},
 			shape: "square",
 			backgroundOptions: {
-				color: "#ffffff",
+				color: "#ffffffff",
 			},
 		},
 	});
@@ -126,11 +126,7 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 					)}
 				</Field>
 				<Field name="cornersSquareOptions.color">
-					{(field, props) => (
-						<>
-							<input {...props} type="color" class="w-full rounded-xl border border-pv-blue-200" value={field.value} />
-						</>
-					)}
+					{(field, props) => <ColorPicker inputProps={props} value={field.value} />}
 				</Field>
 				<hr />
 				<Field name="cornersDotOptions.type">
@@ -157,9 +153,7 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 					)}
 				</Field>
 				<Field name="cornersDotOptions.color">
-					{(field, props) => (
-						<input {...props} type="color" class="w-full rounded-xl border border-pv-blue-200" value={field.value} />
-					)}
+					{(field, props) => <ColorPicker inputProps={props} value={field.value} />}
 				</Field>
 				<hr />
 				<Field name="dotsOptions.type">
@@ -184,9 +178,7 @@ export default function QRCodeEditor(props: VoidProps<QRCodeEditorProps>) {
 					)}
 				</Field>
 				<Field name="dotsOptions.color">
-					{(field, props) => (
-						<input {...props} type="color" class="w-full rounded-xl border border-pv-blue-200" value={field.value} />
-					)}
+					{(field, props) => <ColorPicker inputProps={props} value={field.value} />}
 				</Field>
 			</div>
 			<div class="flex flex-col items-center justify-center gap-2">

@@ -1,17 +1,25 @@
 import Input from "@atoms/Input";
 import { DropdownMenu } from "@kobalte/core/dropdown-menu";
 import { Slider } from "@kobalte/core/slider";
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { hexColorSchema } from "@lib/schemas/color";
+import { createEffect, createMemo, createSignal, on } from "solid-js";
 import styles from "./styles.module.css";
 import type { ColorPickerProps } from "./types";
-import { toHex } from "./utils";
+import { getHSLAComponents, toHex } from "./utils";
+
+function getDefaultValue(v?: string) {
+	return hexColorSchema.safeParse(v).data ?? "#000000ff";
+}
 
 export default function ColorPicker(props: ColorPickerProps) {
-	const [hue, setHue] = createSignal<[number]>([0]);
-	const [saturation, setSaturation] = createSignal(1);
-	const [lightness, setLightness] = createSignal(1);
-	const [alpha, setAlpha] = createSignal<[number]>([1]);
+	const { h, s, l, a } = getHSLAComponents(getDefaultValue(props.value));
+	const [value, setValue] = createSignal(getDefaultValue(props.value));
+	const [hue, setHue] = createSignal<[number]>([h]);
+	const [saturation, setSaturation] = createSignal(s);
+	const [lightness, setLightness] = createSignal(1 - l);
+	const [alpha, setAlpha] = createSignal<[number]>([a]);
 	const [dragging, setDragging] = createSignal(false);
+	const [swatch, setSwatch] = createSignal(getDefaultValue(props.value));
 	let ref: HTMLInputElement | HTMLTextAreaElement | undefined;
 
 	const handleSet = (value: string) => {
@@ -31,6 +39,8 @@ export default function ColorPicker(props: ColorPickerProps) {
 
 		ref.dispatchEvent(inputEvent);
 		ref.dispatchEvent(changeEvent);
+		setSwatch(value);
+		setValue(value);
 	};
 
 	const handleMouseDown = (
@@ -77,12 +87,12 @@ export default function ColorPicker(props: ColorPickerProps) {
 		const green = Math.round((g + m) * 255);
 		const blue = Math.round((b + m) * 255);
 		const a = Math.round(alpha()[0]);
+
 		return [red, green, blue, a];
 	});
 
 	createEffect(() => {
 		const [r, g, b, a] = colorComponents();
-
 		handleSet(`#${toHex(r)}${toHex(g)}${toHex(b)}${toHex(a)}`);
 	});
 
@@ -95,25 +105,30 @@ export default function ColorPicker(props: ColorPickerProps) {
 		else window.removeEventListener("mousemove", mouseMove);
 	});
 
+	createEffect(
+		on(value, (next, prev) => {
+			if (prev === next) return;
+			const parse = hexColorSchema.safeParse(next);
+			if (parse.error) return;
+			handleSet(parse.data);
+		}),
+	);
+
 	return (
 		<div class="flex w-full flex-row gap-2">
-			<Input
-				inputProps={
-					props.inputProps
-						? {
-								...props.inputProps,
-								ref: (r) => {
-									ref = r;
-									props.inputProps?.ref(r);
-								},
-							}
-						: undefined
-				}
-				value={props.value}
+			<input
+				{...props.inputProps}
+				ref={(r) => {
+					ref = r;
+					props.inputProps?.ref(r);
+				}}
+				hidden
 			/>
+			<Input value={value()} onChange={setValue} />
+
 			<DropdownMenu gutter={4} modal>
 				<DropdownMenu.Trigger class="relative grid aspect-square h-14 place-items-center rounded-xl border border-pv-blue-200 p-2">
-					<div style={{ background: props.value }} class="h-full w-full rounded-lg" />
+					<div style={{ background: swatch() }} class="h-full w-full rounded-lg" />
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Portal>
 					<DropdownMenu.Content class={styles.content}>

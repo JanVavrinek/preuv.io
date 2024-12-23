@@ -8,5 +8,6 @@ export interface ColorPickerProps {
 		onChange: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, Event>;
 		onBlur: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, FocusEvent>;
 	};
+	onChange?: (value: string) => void;
 	value?: string;
 }
